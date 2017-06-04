@@ -24,11 +24,11 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
-     * Where to redirect users after login / registration.
+     * Where to redirect users after login / registration and Logout.
      *
      * @var string
      */
-    protected $redirectTo = '/employeeList';
+    protected $redirectTo = '/home';
     protected $redirectAfterLogout = '/login';
 
     /**

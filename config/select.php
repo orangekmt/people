@@ -22,13 +22,9 @@ return [
         'Cairo' => 'Cairo'
     ],
     'domain' => [
-        'Hybrid' => 'Hybrid',
-        'UC' => 'UC'
-    ],
-    'subdomain' => [
-        'Security' => 'Security',
-        'APM' => 'APM',
-        'Network' => 'Network',
+        'Hybrid Security' => 'Hybrid Security',
+        'Hybrid APM' => 'Hybrid APM',
+        'Hybrid Network' => 'Hybrid Network',
         'UC' => 'UC'
     ]
 ];

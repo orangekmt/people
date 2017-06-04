@@ -10,7 +10,6 @@
                 <i class="fa fa-files-o"></i> <span>XLS Uploads</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{!!route('otluploadform')!!}"><i class="fa fa-circle-o"></i> OTL</a></li>
                 </ul>
             </li>
             <li class="treeview">
@@ -18,7 +17,12 @@
                 <i class="fa fa-table"></i> <span>Data Management</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{!!route('employeeList')!!}"><i class="fa fa-circle-o"></i> Employees List</a></li>
+                    @permission('user-list')
+                      <li><a href="{!!route('userList')!!}"><i class="fa fa-circle-o"></i> Users List</a></li>
+                    @endpermission
+                    @permission('role-list')
+                      <li><a href="{!!route('roles.index')!!}"><i class="fa fa-circle-o"></i> Roles List</a></li>
+                    @endpermission
                 </ul>
             </li>
         </ul>

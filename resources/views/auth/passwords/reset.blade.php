@@ -1,4 +1,4 @@
-@extends('layouts.app-auth',['main_title' => 'Reset','second_title'=>'','url'=>[['name'=>'home','url'=>route('home')],['name'=>'reset','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'Reset','second_title'=>'','url'=>[['name'=>'home','url'=>route('home')],['name'=>'reset','url'=>'#']]])
 
 @section('content')
 <div class="container">

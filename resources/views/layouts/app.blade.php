@@ -54,21 +54,31 @@
 <body class="skin-blue">
 
     <div class="wrapper">
-        @include('includes.header')
-        @include('includes.sidebar')
+        @if(Auth::user())
+          @include('includes.header')
+          @include('includes.sidebar')
+        @endif
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                {!! $main_title !!}
-                <small>{!! $second_title !!}</small>
+                @if(isset($main_title))
+                  {!! $main_title !!}
+                @endif
+                <small>
+                  @if(isset($second_title))
+                    {!! $second_title !!}
+                  @endif
+                </small>
                 </h1>
                 <ol class="breadcrumb">
                     <i class="fa fa-dashboard"></i>
+                    @if(isset($url))
                     @foreach ($url as $pos)
                     <li><a href="{!! $pos['url'] !!}"> {!! $pos['name'] !!}</a></li>
                     @endforeach
+                    @endif
                 </ol>
             </section>
             <!-- Main content -->

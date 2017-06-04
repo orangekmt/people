@@ -122,7 +122,7 @@ return [
     */
 
     'providers' => [
-	
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -155,11 +155,12 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-	Collective\Html\HtmlServiceProvider::class,
-	Bestmomo\NiceArtisan\NiceArtisanServiceProvider::class,
-	Barryvdh\Debugbar\ServiceProvider::class,
+      	Collective\Html\HtmlServiceProvider::class,
+      	Bestmomo\NiceArtisan\NiceArtisanServiceProvider::class,
+      	Barryvdh\Debugbar\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class
     ],
 
     /*
@@ -205,11 +206,12 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-	'Form'  => Collective\Html\FormFacade::class,
-	'Html'  => Collective\Html\HtmlFacade::class,
+      	'Form'  => Collective\Html\FormFacade::class,
+      	'Html'  => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
-	'Debugbar' => Barryvdh\Debugbar\Facade::class,
+      	'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class
     ],
 
 ];
