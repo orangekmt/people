@@ -116,7 +116,12 @@ class UserRepository
     *   In the ajax datatables (view), there will be a parameter name that is going to be used here for the extra parameters so if we use a join,
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
-    $userList = $this->user->select('id', 'name','email','is_manager', 'region', 'country', 'domain', 'management_code', 'job_role', 'employee_type');
+    $userList = DB::table('users')
+      ->select( 'users.id', 'users.name','users.email','users.is_manager', 'users.region',
+                'users.country', 'users.domain', 'users.management_code', 'users.job_role',
+                'users.employee_type','users_users.manager_id','u2.name AS manager_name')
+      ->leftjoin('users_users', 'users.id', '=', 'users_users.user_id')
+      ->leftjoin('users AS u2', 'u2.id', '=', 'users_users.manager_id');
     $data = Datatables::of($userList)->make(true);
     return $data;
   }

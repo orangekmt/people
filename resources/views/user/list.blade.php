@@ -6,23 +6,7 @@
     <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}">
-
-    <style>
-        td.details-control {
-        background: url("{{ asset('/plugins/datatables/details_open.png') }}") no-repeat center center;
-        cursor: pointer;
-        }
-        tr.shown td.details-control {
-            background: url("{{ asset('/plugins/datatables/details_close.png') }}") no-repeat center center;
-        }
-        th {
-            padding-top: 5 px;
-            padding-bottom: 5px;
-        }
-        table .extra_info {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
 @stop
 
 @section('scriptsrc')
@@ -64,11 +48,12 @@
             @endif
             <div id="delete_message">
             </div>
-            <table id="userTable" class="display table-bordered table-hover table-responsive" cellspacing="0" width="100%">
+            <table id="userTable" class="display table-bordered table-hover table-responsive">
                 <thead>
                     <tr>
-                        <th width="10px"></th>
+                        <th class="first_column"></th>
                         <th>ID</th>
+                        <th>Manager name</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Is Manager</th>
@@ -78,17 +63,18 @@
                         <th>Management Code</th>
                         <th>Job role</th>
                         <th>Type</th>
-                        <th width="10px">
+                        <th class="last_column">
                           @permission('user-create')
-                            <a data-toggle="tooltip" title="Create new" href="{{ route('userFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
+                            <a href="{{ route('userFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
                           @endpermission
                         </th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th></th>
+                        <th class="first_column"></th>
                         <th>ID</th>
+                        <th>Manager name</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Is Manager</th>
@@ -98,12 +84,12 @@
                         <th>Management Code</th>
                         <th>Job role</th>
                         <th>Type</th>
-                        <th></th>
+                        <th class="last_column"></th>
                     </tr>
                 </tfoot>
             </table>
             <script id="details-template" type="text/x-handlebars-template">
-            <table class="extra_info table-bordered" cellspacing="0" width="100%" align="left">
+            <table class="extra_info table-bordered">
                 <thead>
                     <th width="20px"></th>
                     <th width="100px"></th>
@@ -115,6 +101,11 @@
                     <td></td>
                     <td><b>Name</b>:</td>
                     <td>@{{ name }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Manager name</b>:</td>
+                    <td>@{{ manager_name }}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -163,6 +154,21 @@
         var userTable;
         var record_id;
 
+        // Here we are going to get from PHP the list of roles and their value for the logged in user
+
+        <?php
+          $options = array(
+              'validate_all' => true,
+              'return_type' => 'both'
+          );
+          list($validate, $allValidations) = Entrust::ability(null,array('user-view','user-edit','user-delete','user-create'),$options);
+          echo "var permissions = jQuery.parseJSON('".json_encode($allValidations['permissions'])."');";
+        ?>
+        // Roles check finished.
+
+        //console.log(permissions);
+
+
         $(document).ready(function() {
             var template = Handlebars.compile($("#details-template").html());
 
@@ -175,11 +181,12 @@
             userTable = $('#userTable').DataTable({
                 serverSide: true,
                 processing: true,
+                scrollX: true,
                 ajax: {
                         url: "{!! route('listOfUsersAjax') !!}",
                         type: "GET",
                         dataSrc: function ( json ) {
-                          console.log(json);;
+                          //console.log(json);;
                             for ( var i=0, ien=json.data.length ; i<ien ; i++ ) {
                                 if (json.data[i].is_manager == 1){
                                     json.data[i].is_manager = 'Yes';
@@ -199,16 +206,17 @@
                         data:           null,
                         defaultContent: ''
                     },
-                    { name: 'id', data: 'id' },
-                    { name: 'name', data: 'name' },
-                    { name: 'email', data: 'email' },
-                    { name: 'is_manager', data: 'is_manager'},
-                    { name: 'region', data: 'region' },
-                    { name: 'country', data: 'country' },
-                    { name: 'domain', data: 'domain' },
-                    { name: 'management_code', data: 'management_code' },
-                    { name: 'job_role', data: 'job_role' },
-                    { name: 'employee_type', data: 'employee_type' },
+                    { name: 'users.id', data: 'id' },
+                    { name: 'u2.name', data: 'manager_name' },
+                    { name: 'users.name', data: 'name' },
+                    { name: 'users.email', data: 'email' },
+                    { name: 'users.is_manager', data: 'is_manager'},
+                    { name: 'users.region', data: 'region' },
+                    { name: 'users.country', data: 'country' },
+                    { name: 'users.domain', data: 'domain' },
+                    { name: 'users.management_code', data: 'management_code' },
+                    { name: 'users.job_role', data: 'job_role' },
+                    { name: 'users.employee_type', data: 'employee_type' },
                     {
                         name: 'actions',
                         data: null,
@@ -217,9 +225,15 @@
                         render: function (data) {
                             var actions = '';
                             actions += '<div class="btn-group btn-group-xs">';
-                            actions += '<button data-toggle="tooltip" title="view" id="'+data.id+'" class="buttonView btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></button>';
-                            actions += '<button data-toggle="tooltip" title="edit" id="'+data.id+'" class="buttonUpdate btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>';
-                            actions += '<button data-toggle="tooltip" title="delete" id="'+data.id+'" class="buttonDelete btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>';
+                            if (permissions['user-view']){
+                              actions += '<button id="'+data.id+'" class="buttonView btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></button>';
+                            };
+                            if (permissions['user-edit']){
+                              actions += '<button id="'+data.id+'" class="buttonUpdate btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>';
+                            };
+                            if (permissions['user-delete']){
+                              actions += '<button id="'+data.id+'" class="buttonDelete btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>';
+                            };
                             actions += '</div>';
                             return actions;
                         }
@@ -227,23 +241,32 @@
                     ],
                 columnDefs: [
                     {
-                        "targets": [1,3,4], "visible": false, "searchable": false
+                        "targets": [1,4,5], "visible": false, "searchable": false
                     }
                     ],
                 order: [[2, 'asc']],
                 initComplete: function () {
+                    var columns = this.api().init().columns;
                     this.api().columns().every(function () {
                         var column = this;
-                        // Now we need to skip the first column as it is used for the drawer...
-                        if(column[0][0] == '0' || column[0][0] == '13'){return true;};
-                        var input = document.createElement("input");
-                        $(input).appendTo($(column.footer()).empty())
-                        .on('keyup change', function () {
-                            column.search($(this).val(), false, false, true).draw();
-                        });
+                        // this will get us the index of the column
+                        index = column[0][0];
+                        //console.log(columns[index].searchable);
+
+                        // Now we need to skip the column if it is not searchable and we return true, meaning we go to next iteration
+                        if (columns[index].searchable == false) {
+                          return true;
+                        }
+                        else {
+                          var input = document.createElement("input");
+                          $(input).appendTo($(column.footer()).empty())
+                          .on('keyup change', function () {
+                              column.search($(this).val(), false, false, true).draw();
+                          });
+                        }
                     });
                 }
-            } );
+            });
 
             // Add event listener for opening and closing details
             $('#userTable tbody').on('click', 'td.details-control', function () {

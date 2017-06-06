@@ -1,0 +1,31 @@
+table {
+  margin: 0 auto;
+  width: 100%;
+  clear: both;
+  border-collapse: collapse;
+  table-layout: fixed;
+  word-wrap:break-word;
+}
+td.details-control {
+background: url("../plugins/datatables/details_open.png") no-repeat center center;
+cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url("../plugins/datatables/details_close.png") no-repeat center center;
+}
+th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+table .extra_info {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+th.first_column {
+  width: 15px;
+}
+
+th.last_column {
+  width: 40px;
+}
