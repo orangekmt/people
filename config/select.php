@@ -28,5 +28,15 @@ return [
         'Hybrid APM' => 'Hybrid APM',
         'Hybrid Network' => 'Hybrid Network',
         'UC' => 'UC'
+    ],
+    'meta_activity' => [
+        'BILLABLE' => 'BILLABLE',
+        'ABS' => 'ABS',
+        'OTHER' => 'OTHER',
+        'CF' => 'CF'
+    ],
+    'project_status' => [
+        'Open' => 'Open',
+        'Closed' => 'Closed'
     ]
 ];

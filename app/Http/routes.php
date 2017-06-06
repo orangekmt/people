@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth']], function() {
 
       //User
       //  Main user list
-      Route::get('userList', ['uses'=>'UserController@getList','as'=>'userList','middleware' => ['permission:user-view']]);
+      Route::get('userList', ['uses'=>'UserController@getList','as'=>'userList','middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
       //  user information
       Route::get('user/{n}', ['uses'=>'UserController@show','as'=>'user','middleware' => ['permission:user-view']]);
       //  Create new user
@@ -50,10 +50,10 @@ Route::group(['middleware' => ['auth']], function() {
       Route::get('profile/{n}', ['uses'=>'UserController@profile','as'=>'profile']);
       Route::post('passwordUpdate/{n}', ['uses'=>'UserController@passwordUpdate','as'=>'passwordUpdate']);
       //  AJAX
-      Route::get('listOfUsersAjax', ['uses'=>'UserController@listOfUsers','as'=>'listOfUsersAjax','middleware' => ['permission:user-view']]);
+      Route::get('listOfUsersAjax', ['uses'=>'UserController@listOfUsers','as'=>'listOfUsersAjax','middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);
 
       // Roles
-      Route::get('roles',['as'=>'roles.index','uses'=>'RoleController@index','middleware' => ['permission:role-view']]);
+      Route::get('roles',['as'=>'roles.index','uses'=>'RoleController@index','middleware' => ['permission:role-view|role-create|role-edit|role-delete']]);
       Route::get('roles/{id}',['as'=>'roles.show','uses'=>'RoleController@show','middleware' => ['permission:role-view']]);
       Route::get('roles/create',['as'=>'roles.create','uses'=>'RoleController@create','middleware' => ['permission:role-create']]);
       Route::post('roles/create',['as'=>'roles.store','uses'=>'RoleController@store','middleware' => ['permission:role-create']]);
@@ -61,5 +61,21 @@ Route::group(['middleware' => ['auth']], function() {
       Route::get('roles/{id}/edit',['as'=>'roles.edit','uses'=>'RoleController@edit','middleware' => ['permission:role-edit']]);
       Route::patch('roles/{id}',['as'=>'roles.update','uses'=>'RoleController@update','middleware' => ['permission:role-edit']]);
       Route::delete('roles/{id}',['as'=>'roles.destroy','uses'=>'RoleController@destroy','middleware' => ['permission:role-delete']]);
+
+      //Project
+      //  Main project list
+      Route::get('projectList', ['uses'=>'ProjectController@getList','as'=>'projectList','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
+      //  project information
+      Route::get('project/{n}', ['uses'=>'ProjectController@show','as'=>'project','middleware' => ['permission:project-view']]);
+      //  Create new project
+      Route::get('projectFormCreate', ['uses'=>'ProjectController@getFormCreate','as'=>'projectFormCreate','middleware' => ['permission:project-create']]);
+      Route::post('projectFormCreate', ['uses'=>'ProjectController@postFormCreate','middleware' => ['permission:project-create']]);
+      //  Update project
+      Route::get('projectFormUpdate/{n}', ['uses'=>'ProjectController@getFormUpdate','as'=>'projectFormUpdate','middleware' => ['permission:project-edit']]);
+      Route::post('projectFormUpdate/{n}', ['uses'=>'ProjectController@postFormUpdate','middleware' => ['permission:project-edit']]);
+      //  Delete project
+      Route::get('projectDelete/{n}', ['uses'=>'ProjectController@delete','as'=>'projectDelete','middleware' => ['permission:project-delete']]);
+      //  AJAX
+      Route::get('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
 
 });

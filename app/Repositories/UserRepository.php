@@ -62,15 +62,16 @@ class UserRepository
     }
 
     // Nullable
-    $user->country = isset($inputs['country'])?$inputs['country']:null;
-    $user->region = isset($inputs['region'])?$inputs['region']:null;
-    $user->domain = isset($inputs['domain'])?$inputs['domain']:null;
-    $user->management_code = isset($inputs['management_code'])?$inputs['management_code']:null;
-    $user->job_role = isset($inputs['job_role'])?$inputs['job_role']:null;
-    $user->employee_type = isset($inputs['employee_type'])?$inputs['employee_type']:null;
+    if (isset($inputs['country'])) {$user->country = $inputs['country'];}
+    if (isset($inputs['region'])) {$user->region = $inputs['region'];}
+    if (isset($inputs['domain'])) {$user->domain = $inputs['domain'];}
+    if (isset($inputs['management_code'])) {$user->management_code = $inputs['management_code'];}
+    if (isset($inputs['job_role'])) {$user->job_role = $inputs['job_role'];}
+    if (isset($inputs['employee_type'])) {$user->employee_type = $inputs['employee_type'];}
     // Boolean
-    $user->is_manager = isset($inputs['is_manager']);
-    $user->from_otl = isset($inputs['from_otl']);
+    if (isset($inputs['is_manager'])) {$user->is_manager = $inputs['is_manager'];}
+    if (isset($inputs['from_otl'])) {$user->from_otl = $inputs['from_otl'];}
+
     $user->save();
 
     // Now we have to treat the manager
