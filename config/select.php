@@ -22,6 +22,8 @@ return [
         'Cairo' => 'Cairo'
     ],
     'domain' => [
+        'OGSB' => 'OGSB',
+        'Hybrid' => 'Hybrid',
         'Hybrid Security' => 'Hybrid Security',
         'Hybrid APM' => 'Hybrid APM',
         'Hybrid Network' => 'Hybrid Network',

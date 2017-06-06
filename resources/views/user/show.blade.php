@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'User','second_title'=>'show','url'=>[['name'=>'home','url'=>route('home')],['name'=>'show','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'User','second_title'=>'show','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>route('userList')],['name'=>'show','url'=>'#']]])
 
 @section('style')
     <!-- Select2 -->

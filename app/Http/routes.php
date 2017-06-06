@@ -46,6 +46,9 @@ Route::group(['middleware' => ['auth']], function() {
       Route::get('userDelete/{n}', ['uses'=>'UserController@delete','as'=>'userDelete']);
       //  user information
       Route::get('user/{n}', ['uses'=>'UserController@show','as'=>'user']);
+      //  user profile
+      Route::get('profile/{n}', ['uses'=>'UserController@profile','as'=>'profile']);
+      Route::post('passwordUpdate/{n}', ['uses'=>'UserController@passwordUpdate','as'=>'passwordUpdate']);
       //  AJAX
       Route::get('listOfUsersAjax', ['uses'=>'UserController@listOfUsers','as'=>'listOfUsersAjax']);
 

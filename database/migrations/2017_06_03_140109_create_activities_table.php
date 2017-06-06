@@ -19,7 +19,7 @@ class CreateActivitiesTable extends Migration {
 			$table->timestamp('created_at')->nullable();
 			$table->timestamp('updated_at')->nullable();
 		});
-		DB::statement("ALTER TABLE `activities` ADD UNIQUE( `year`, `month`, `project_id`, `user_id`);");
+		DB::statement("ALTER TABLE `activities` ADD UNIQUE( `year`, `month`, `project_id`, `user_id`, `from_otl`);");
 	}
 
 	public function down()

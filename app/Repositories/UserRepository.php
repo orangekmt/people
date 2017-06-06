@@ -41,6 +41,15 @@ class UserRepository
 		$this->save($this->getById($id), $inputs);
 	}
 
+  public function update_password($id, Array $inputs)
+	{
+    $user = $this->getById($id);
+    if (isset($inputs['password']) && trim($inputs['password']) != ''){
+      $user->password = bcrypt($inputs['password']);
+    }
+		$user->save();
+	}
+
 	private function save(User $user, Array $inputs)
 	{
 

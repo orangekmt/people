@@ -217,6 +217,7 @@
                         render: function (data) {
                             var actions = '';
                             actions += '<div class="btn-group btn-group-xs">';
+                            actions += '<button data-toggle="tooltip" title="view" id="'+data.id+'" class="buttonView btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></button>';
                             actions += '<button data-toggle="tooltip" title="edit" id="'+data.id+'" class="buttonUpdate btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>';
                             actions += '<button data-toggle="tooltip" title="delete" id="'+data.id+'" class="buttonDelete btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>';
                             actions += '</div>';
@@ -263,6 +264,10 @@
 
             $(document).on('click', '.buttonUpdate', function () {
                 window.location.href = "{!! route('userFormUpdate','') !!}/"+this.id;
+            } );
+
+            $(document).on('click', '.buttonView', function () {
+                window.location.href = "{!! route('user','') !!}/"+this.id;
             } );
 
             $(document).on('click', '.buttonDelete', function () {

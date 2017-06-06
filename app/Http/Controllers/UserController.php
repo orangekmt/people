@@ -10,6 +10,7 @@ use App\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\PasswordUpdateRequest;
 use DB;
 use Entrust;
 use Auth;
@@ -32,6 +33,19 @@ class UserController extends Controller {
     $user = $this->userRepository->getById($id);
 		return view('user/show',  compact('user'));
 	}
+
+  public function profile($id)
+	{
+    $user = $this->userRepository->getById($id);
+		return view('user/profile',  compact('user'));
+	}
+
+  public function passwordUpdate(PasswordUpdateRequest $request, $id)
+  {
+        $inputs = $request->all();
+        $user = $this->userRepository->update_password($id, $inputs);
+        return redirect('profile/'.$id)->with('success','Password updated !');
+  }
 
 	public function getFormCreate()
 	{
@@ -106,7 +120,7 @@ class UserController extends Controller {
           $result->msg = 'User '.Auth::user()->name.' cannot delete himself';
           return json_encode($result);
         }
-        
+
         try {
             $user = $this->userRepository->destroy($id);
         }
