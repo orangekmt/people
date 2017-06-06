@@ -15,9 +15,9 @@ class PermissionTableSeeder extends Seeder
         $permission = [
         	[
             'id' => 1,
-        		'name' => 'role-list',
-        		'display_name' => 'Display Role Listing',
-        		'description' => 'See only Listing Of Role'
+        		'name' => 'role-view',
+        		'display_name' => 'Display Role',
+        		'description' => 'See Role'
         	],
         	[
             'id' => 2,
@@ -45,9 +45,9 @@ class PermissionTableSeeder extends Seeder
         	],
         	[
             'id' => 6,
-        		'name' => 'user-list',
-        		'display_name' => 'Display User Listing',
-        		'description' => 'See only Listing Of User'
+        		'name' => 'user-view',
+        		'display_name' => 'Display User',
+        		'description' => 'See User'
         	],
         	[
             'id' => 7,
@@ -69,9 +69,9 @@ class PermissionTableSeeder extends Seeder
         	],
         	[
             'id' => 10,
-        		'name' => 'activity-list',
-        		'display_name' => 'Display Activity Listing',
-        		'description' => 'See only Listing Of Activity'
+        		'name' => 'activity-view',
+        		'display_name' => 'Display Activity',
+        		'description' => 'See Activity'
         	],
         	[
             'id' => 11,
@@ -93,9 +93,9 @@ class PermissionTableSeeder extends Seeder
         	],
         	[
             'id' => 14,
-        		'name' => 'project-list',
-        		'display_name' => 'Display Project Listing',
-        		'description' => 'See only Listing Of Project'
+        		'name' => 'project-view',
+        		'display_name' => 'Display Project',
+        		'description' => 'See Project'
         	],
         	[
             'id' => 15,

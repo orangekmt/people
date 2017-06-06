@@ -17,10 +17,10 @@
                 <i class="fa fa-table"></i> <span>Data Management</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    @permission('user-list')
+                    @permission('user-view')
                       <li><a href="{!!route('userList')!!}"><i class="fa fa-circle-o"></i> Users List</a></li>
                     @endpermission
-                    @permission('role-list')
+                    @permission('role-view')
                       <li><a href="{!!route('roles.index')!!}"><i class="fa fa-circle-o"></i> Roles List</a></li>
                     @endpermission
                 </ul>

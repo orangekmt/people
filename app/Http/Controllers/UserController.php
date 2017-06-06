@@ -30,9 +30,6 @@ class UserController extends Controller {
 
 	public function show($id)
 	{
-    if (!Entrust::can('user-list')){
-      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to see users');
-    }
     $user = $this->userRepository->getById($id);
 		return view('user/show',  compact('user'));
 	}
@@ -59,9 +56,6 @@ class UserController extends Controller {
 
 	public function getFormCreate()
 	{
-    if (!Entrust::can('user-create')){
-      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to create users');
-    }
     $roles = Role::lists('display_name','id');
 		$manager_list = $this->userRepository->getManagersList();
     //\Debugbar::info($manager_list);
@@ -77,10 +71,6 @@ class UserController extends Controller {
 
 	public function getFormUpdate($id)
 	{
-    if (!Entrust::can('user-edit')){
-      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to edit users');
-    }
-
     $user = User::find($id);
     $roles = Role::lists('display_name','id');
     $userRole = $user->roles->lists('id','id')->toArray();
@@ -101,9 +91,6 @@ class UserController extends Controller {
 
   public function postFormCreate(UserCreateRequest $request)
 	{
-    if (!Entrust::can('user-create')){
-      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to create users');
-    }
     $inputs = $request->all();
     $user = $this->userRepository->createIfNotFound($inputs);
     return redirect('userList')->with('success','Record '.$inputs['name'].' created !');
@@ -111,9 +98,6 @@ class UserController extends Controller {
 
 	public function postFormUpdate(UserUpdateRequest $request, $id)
 	{
-    if (!Entrust::can('user-edit')){
-      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to edit users');
-    }
     $inputs = $request->all();
     $user = $this->userRepository->update($id, $inputs);
     return redirect('userList')->with('success','Record '.$inputs['name'].' updated !');
@@ -126,11 +110,6 @@ class UserController extends Controller {
     $result = new \stdClass();
     $result->result = true;
     $result->msg = '';
-    if (!Entrust::can('user-delete')){
-      $result->result = false;
-      $result->msg = 'User '.Auth::user()->name.' doesn\'t have rights to delete users';
-      return json_encode($result);
-    }
     if (Auth::user()->id == $id){
       $result->result = false;
       $result->msg = 'User '.Auth::user()->name.' cannot delete himself';

@@ -17,9 +17,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id','DESC')->paginate(5);
-        return view('roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+      $roles = Role::orderBy('id','DESC')->paginate(5);
+      return view('roles.index',compact('roles'))
+          ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -29,8 +29,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permission = Permission::get();
-        return view('roles.create',compact('permission'));
+      $permission = Permission::get();
+      return view('roles.create',compact('permission'));
     }
 
     /**
@@ -41,25 +41,25 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'display_name' => 'required',
-            'description' => 'required',
-            'permission' => 'required',
-        ]);
+      $this->validate($request, [
+          'name' => 'required|unique:roles,name',
+          'display_name' => 'required',
+          'description' => 'required',
+          'permission' => 'required',
+      ]);
 
-        $role = new Role();
-        $role->name = $request->input('name');
-        $role->display_name = $request->input('display_name');
-        $role->description = $request->input('description');
-        $role->save();
+      $role = new Role();
+      $role->name = $request->input('name');
+      $role->display_name = $request->input('display_name');
+      $role->description = $request->input('description');
+      $role->save();
 
-        foreach ($request->input('permission') as $key => $value) {
-            $role->attachPermission($value);
-        }
+      foreach ($request->input('permission') as $key => $value) {
+          $role->attachPermission($value);
+      }
 
-        return redirect()->route('roles.index')
-                        ->with('success','Role created successfully');
+      return redirect()->route('roles.index')
+                      ->with('success','Role created successfully');
     }
     /**
      * Display the specified resource.
