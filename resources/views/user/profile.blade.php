@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'User','second_title'=>'profile','url'=>[['name'=>'home','url'=>route('home')],['name'=>'profile','url'=>'#']]])
+@extends('layouts.app',['main_title' => $user->name,'second_title'=>'profile','url'=>[['name'=>'home','url'=>route('home')],['name'=>'profile','url'=>'#']]])
 
 @section('content')
     <!-- upload widget -->

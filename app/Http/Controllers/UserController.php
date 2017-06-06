@@ -30,6 +30,9 @@ class UserController extends Controller {
 
 	public function show($id)
 	{
+    if (!Entrust::can('user-list')){
+      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to see users');
+    }
     $user = $this->userRepository->getById($id);
 		return view('user/show',  compact('user'));
 	}
@@ -37,14 +40,21 @@ class UserController extends Controller {
   public function profile($id)
 	{
     $user = $this->userRepository->getById($id);
+    if (Auth::user()->id != $id){
+      return redirect('userList')->with('error','You are not user '.  $user->name.'!!!');
+    }
 		return view('user/profile',  compact('user'));
 	}
 
   public function passwordUpdate(PasswordUpdateRequest $request, $id)
   {
-        $inputs = $request->all();
-        $user = $this->userRepository->update_password($id, $inputs);
-        return redirect('profile/'.$id)->with('success','Password updated !');
+    if (Auth::user()->id != $id){
+      $user = $this->userRepository->getById($id);
+      return redirect('userList')->with('error','You are not user '.  $user->name.'!!!');
+    }
+    $inputs = $request->all();
+    $user = $this->userRepository->update_password($id, $inputs);
+    return redirect('profile/'.$id)->with('success','Password updated !');
   }
 
 	public function getFormCreate()
@@ -91,46 +101,52 @@ class UserController extends Controller {
 
   public function postFormCreate(UserCreateRequest $request)
 	{
-        $inputs = $request->all();
-        $user = $this->userRepository->createIfNotFound($inputs);
-        return redirect('userList')->with('success','Record '.$inputs['name'].' created !');
+    if (!Entrust::can('user-create')){
+      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to create users');
+    }
+    $inputs = $request->all();
+    $user = $this->userRepository->createIfNotFound($inputs);
+    return redirect('userList')->with('success','Record '.$inputs['name'].' created !');
 	}
 
 	public function postFormUpdate(UserUpdateRequest $request, $id)
 	{
-        $inputs = $request->all();
-        $user = $this->userRepository->update($id, $inputs);
-        return redirect('userList')->with('success','Record '.$inputs['name'].' updated !');
+    if (!Entrust::can('user-edit')){
+      return redirect('userList')->with('error','User '.Auth::user()->name.' doesn\'t have rights to edit users');
+    }
+    $inputs = $request->all();
+    $user = $this->userRepository->update($id, $inputs);
+    return redirect('userList')->with('success','Record '.$inputs['name'].' updated !');
 	}
 
 	public function delete($id)
 	{
-        $name = $this->userRepository->getById($id)->name;
-        // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
-        $result = new \stdClass();
-        $result->result = true;
-        $result->msg = '';
-        if (!Entrust::can('user-delete')){
-          $result->result = false;
-          $result->msg = 'User '.Auth::user()->name.' doesn\'t have rights to delete users';
-          return json_encode($result);
-        }
-        if (Auth::user()->id == $id){
-          $result->result = false;
-          $result->msg = 'User '.Auth::user()->name.' cannot delete himself';
-          return json_encode($result);
-        }
+    $name = $this->userRepository->getById($id)->name;
+    // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
+    $result = new \stdClass();
+    $result->result = true;
+    $result->msg = '';
+    if (!Entrust::can('user-delete')){
+      $result->result = false;
+      $result->msg = 'User '.Auth::user()->name.' doesn\'t have rights to delete users';
+      return json_encode($result);
+    }
+    if (Auth::user()->id == $id){
+      $result->result = false;
+      $result->msg = 'User '.Auth::user()->name.' cannot delete himself';
+      return json_encode($result);
+    }
 
-        try {
-            $user = $this->userRepository->destroy($id);
-        }
-        catch (\Illuminate\Database\QueryException $ex){
-            $result->result = false;
-            $result->msg = 'Message:</BR>'.$ex->getMessage();
-            return json_encode($result);
-        }
-		//\Debugbar::info($manager_list);
-        $result->msg = 'Record '.$name.' deleted successfully';
+    try {
+        $user = $this->userRepository->destroy($id);
+    }
+    catch (\Illuminate\Database\QueryException $ex){
+        $result->result = false;
+        $result->msg = 'Message:</BR>'.$ex->getMessage();
+        return json_encode($result);
+    }
+//\Debugbar::info($manager_list);
+    $result->msg = 'Record '.$name.' deleted successfully';
 		return json_encode($result);
 	}
 
