@@ -24,13 +24,11 @@ class ActivityUpdateRequest extends Request
   public function rules()
   {
     $id = $this->id;
-    $activity_name = $this->activity_name;
-
-    $customer_name = $this->customer_name;
-    $otl_activity_code = $this->otl_activity_code;
-    $meta_activity = $this->meta_activity;
-    $task_name = $this->task_name;
-
+    $year = $this->year;
+    $month = $this->month;
+    $project_id = $this->project_id;
+    $user_id = $this->user_id;
+    $from_otl = $this->from_otl;
 
     /**
     *          Forcing A Unique Rule To Ignore A Given ID:
@@ -46,19 +44,12 @@ class ActivityUpdateRequest extends Request
 
 
     return [
-      'activity_name' => 'required|max:255|unique:activities,activity_name,' . $id . ',id',
-      'customer_name' => 'required|max:255|unique:activities,customer_name,' . $id . ',id,task_name,'.$task_name.',otl_activity_code,'.$otl_activity_code.',meta_activity,'.$meta_activity,
-      'otl_activity_code' => 'required|max:255|unique:activities,otl_activity_code,' . $id . ',id,customer_name,'.$customer_name.',task_name,'.$task_name.',meta_activity,'.$meta_activity,
-      'meta_activity' => 'required|max:255|unique:activities,meta_activity,' . $id . ',id,customer_name,'.$customer_name.',otl_activity_code,'.$otl_activity_code.',task_name,'.$task_name,
-      'task_name' => 'required|max:255|unique:activities,task_name,' . $id . ',id,customer_name,'.$customer_name.',otl_activity_code,'.$otl_activity_code.',meta_activity,'.$meta_activity,
-      'estimated_start_date' => 'date',
-      'estimated_end_date' => 'date',
-      'LoE_onshore' => 'numeric',
-      'LoE_nearshore' => 'numeric',
-      'LoE_offshore' => 'numeric',
-      'LoE_contractor' => 'numeric',
-      'revenue' => 'numeric',
-      'win_ratio' => 'integer'
+      'year' => 'integer|required|unique:activities,year,' . $id . ',id,month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'month' => 'integer|required|unique:activities,month,' . $id . ',id,year,'.$year.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'project_id' => 'integer|required|unique:activities,project_id,' . $id . ',id,year,'.$year.',month,'.$month.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'user_id' => 'integer|required|unique:activities,user_id,' . $id . ',id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',from_otl,'.$from_otl,
+      'from_otl' => 'unique:activities,from_otl,' . $id . ',id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id,
+      'task_hour' => 'numeric|required'
     ];
   }
 }

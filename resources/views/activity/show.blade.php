@@ -16,7 +16,7 @@
             </div><!-- /.box-tools -->
         </div>
         <div class="box-body">
-            <p>{!! $activity->activity_name !!}</p>
+            <p>{!! $activity->task_hour !!}</p>
         </div>
         <div class="box-footer">
         </div>

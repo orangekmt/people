@@ -90,6 +90,6 @@ Route::group(['middleware' => ['auth']], function() {
       //  Delete activity
       Route::get('activityDelete/{n}', ['uses'=>'ActivityController@delete','as'=>'activityDelete','middleware' => ['permission:activity-delete']]);
       //  AJAX
-      Route::get('listOfActivitysAjax', ['uses'=>'ActivityController@listOfActivitys','as'=>'listOfActivitysAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+      Route::get('listOfActivitiesAjax', ['uses'=>'ActivityController@listOfActivities','as'=>'listOfActivitiesAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
 
 });

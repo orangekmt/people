@@ -26,6 +26,9 @@
                     @permission(['project-view','project-edit','project-create','project-delete'])
                       <li><a href="{!!route('projectList')!!}"><i class="fa fa-circle-o"></i> Projects List</a></li>
                     @endpermission
+                    @permission(['activity-view','activity-edit','activity-create','activity-delete'])
+                      <li><a href="{!!route('activityList')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                    @endpermission
                 </ul>
             </li>
         </ul>

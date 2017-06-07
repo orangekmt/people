@@ -31,6 +31,7 @@
 
     @if($action == 'create')
     {!! Form::open(['url' => 'projectFormCreate', 'method' => 'post', 'class' => 'form-horizontal']) !!}
+    {!! Form::hidden('from_otl', 0, ['class' => 'form-control']) !!}
     @elseif($action == 'update')
     {!! Form::open(['url' => 'projectFormUpdate/'.$project->id, 'method' => 'post', 'class' => 'form-horizontal']) !!}
     {!! Form::hidden('id', $project->id, ['class' => 'form-control']) !!}

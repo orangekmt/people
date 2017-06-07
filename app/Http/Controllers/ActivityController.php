@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Activity;
 use App\Role;
 use App\Repositories\ActivityRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\ProjectRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActivityCreateRequest;
 use App\Http\Requests\ActivityUpdateRequest;
@@ -18,10 +20,14 @@ use Auth;
 class ActivityController extends Controller {
 
   protected $activityRepository;
+  protected $userRepository;
+  protected $projectRepository;
 
-  public function __construct(ActivityRepository $activityRepository)
+  public function __construct(ActivityRepository $activityRepository,UserRepository $userRepository,ProjectRepository $projectRepository)
   {
     $this->activityRepository = $activityRepository;
+    $this->userRepository = $userRepository;
+    $this->projectRepository = $projectRepository;
 	}
 	public function getList()
 	{
@@ -36,14 +42,17 @@ class ActivityController extends Controller {
 
 	public function getFormCreate()
 	{
-		return view('activity/create_update')->with('action','create');
+    $allUsers_list = $this->userRepository->getAllUsersList();
+    $allProjects_list = $this->projectRepository->getAllProjectsList();
+		return view('activity/create_update', compact('allUsers_list','allProjects_list'))->with('action','create');
 	}
 
 	public function getFormUpdate($id)
 	{
     $activity = $this->activityRepository->getById($id);
-
-		return view('activity/create_update', compact('activity'))->with('action','update');
+    $allUsers_list = $this->userRepository->getAllUsersList();
+    $allProjects_list = $this->projectRepository->getAllProjectsList();
+		return view('activity/create_update', compact('activity','allUsers_list','allProjects_list'))->with('action','update');
 	}
 
   public function postFormCreate(ActivityCreateRequest $request)

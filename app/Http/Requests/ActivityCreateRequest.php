@@ -23,34 +23,20 @@ class ActivityCreateRequest extends Request
   */
   public function rules()
   {
-    $activity_name = $this->activity_name;
-
-    $customer_name = $this->customer_name;
-    $otl_activity_code = $this->otl_activity_code;
-    $meta_activity = $this->meta_activity;
-    $task_name = $this->task_name;
+    $year = $this->year;
+    $month = $this->month;
+    $project_id = $this->project_id;
+    $user_id = $this->user_id;
+    $from_otl = $this->from_otl;
+    //\Debugbar::info($manager_list);
 
     return [
-      'activity_name' => 'required|max:255|unique:activities',
-      'customer_name' => 'required|max:255|unique:activities,customer_name,NULL,id,task_name,'.$task_name.',otl_activity_code,'.$otl_activity_code.',meta_activity,'.$meta_activity,
-      'otl_activity_code' => 'required|max:255|unique:activities,otl_activity_code,NULL,id,customer_name,'.$customer_name.',task_name,'.$task_name.',meta_activity,'.$meta_activity,
-      'meta_activity' => 'required|max:255|unique:activities,meta_activity,NULL,id,customer_name,'.$customer_name.',otl_activity_code,'.$otl_activity_code.',task_name,'.$task_name,
-      'task_name' => 'required|max:255|unique:activities,task_name,NULL,id,customer_name,'.$customer_name.',otl_activity_code,'.$otl_activity_code.',meta_activity,'.$meta_activity,
-      'estimated_start_date' => 'date',
-      'estimated_end_date' => 'date',
-      'LoE_onshore' => 'numeric',
-      'LoE_nearshore' => 'numeric',
-      'LoE_offshore' => 'numeric',
-      'LoE_contractor' => 'numeric',
-      'revenue' => 'numeric',
-      'win_ratio' => 'integer'
-    ];
-  }
-
-  public function messages()
-  {
-    return [
-      'task_name.unique' => 'This task name needs to be unique.'
+      'year' => 'unique:activities,year,NULL,id,month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'month' => 'unique:activities,month,NULL,id,year,'.$year.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'project_id' => 'unique:activities,project_id,NULL,id,year,'.$year.',month,'.$month.',user_id,'.$user_id.',from_otl,'.$from_otl,
+      'user_id' => 'unique:activities,user_id,NULL,id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',from_otl,'.$from_otl,
+      'from_otl' => 'unique:activities,from_otl,NULL,id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id,
+      'task_hour' => 'numeric|required'
     ];
   }
 }

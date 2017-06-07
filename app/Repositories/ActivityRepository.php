@@ -41,32 +41,14 @@ class ActivityRepository
     $result->msg = '';
 
     // Required fields
-    if (isset($inputs['activity_name'])) {$activity->activity_name = $inputs['activity_name'];}
-    if (isset($inputs['customer_name'])) {$activity->customer_name = $inputs['customer_name'];}
-    if (isset($inputs['task_name'])) {$activity->task_name = $inputs['task_name'];}
-    if (isset($inputs['meta_activity'])) {$activity->meta_activity = $inputs['meta_activity'];}
-    if (isset($inputs['otl_activity_code'])) {$activity->otl_activity_code = $inputs['otl_activity_code'];}
-    // Nullable
-    if (isset($inputs['activity_type'])) {$activity->activity_type = $inputs['activity_type'];}
-    if (isset($inputs['task_category'])) {$activity->task_category = $inputs['task_category'];}
-    if (isset($inputs['region'])) {$activity->region = $inputs['region'];}
-    if (isset($inputs['country'])) {$activity->country = $inputs['country'];}
-    if (isset($inputs['customer_location'])) {$activity->customer_location = $inputs['customer_location'];}
-    if (isset($inputs['domain'])) {$activity->domain = $inputs['domain'];}
-    if (isset($inputs['estimated_start_date'])) {$activity->estimated_start_date = $inputs['estimated_start_date'];}
-    if (isset($inputs['estimated_end_date'])) {$activity->estimated_end_date = $inputs['estimated_end_date'];}
-    if (isset($inputs['LoE_onshore'])) {$activity->LoE_onshore = $inputs['LoE_onshore'];}
-    if (isset($inputs['LoE_nearshore'])) {$activity->LoE_nearshore = $inputs['LoE_nearshore'];}
-    if (isset($inputs['LoE_offshore'])) {$activity->LoE_offshore = $inputs['LoE_offshore'];}
-    if (isset($inputs['LoE_contractor'])) {$activity->LoE_contractor = $inputs['LoE_contractor'];}
-    if (isset($inputs['gold_order_number'])) {$activity->gold_order_number = $inputs['gold_order_number'];}
-    if (isset($inputs['product_code'])) {$activity->product_code = $inputs['product_code'];}
-    if (isset($inputs['revenue'])) {$activity->revenue = $inputs['revenue'];}
-    if (isset($inputs['activity_status'])) {$activity->activity_status = $inputs['activity_status'];}
-    if (isset($inputs['win_ratio'])) {$activity->comments = $inputs['win_ratio'];}
+    if (isset($inputs['year'])) {$activity->year = $inputs['year'];}
+    if (isset($inputs['month'])) {$activity->month = $inputs['month'];}
+    if (isset($inputs['project_id'])) {$activity->project_id = $inputs['project_id'];}
+    if (isset($inputs['user_id'])) {$activity->user_id = $inputs['user_id'];}
+    if (isset($inputs['task_hour'])) {$activity->task_hour = $inputs['task_hour'];}
 
     // Boolean
-    $activity->from_otl = isset($inputs['from_otl']);
+    if (isset($inputs['from_otl'])) {$activity->from_otl = $inputs['from_otl'];}
 
     try {
       $activity->save();
@@ -77,7 +59,7 @@ class ActivityRepository
         return $result;
     }
 
-    $result->msg = 'Activity '.$activity->name.' saved successfully.';
+    $result->msg = 'Activity saved successfully.';
 
     return $result;
 	}
@@ -89,7 +71,6 @@ class ActivityRepository
     $result->msg = '';
 
     $activity = $this->getById($id);
-    $name = $activity->activity_name;
 
     try {
 		    $activity->delete();
@@ -99,7 +80,7 @@ class ActivityRepository
           return $result;
       }
 
-      $result->msg = 'Activity '.$name.' deleted successfully.';
+      $result->msg = 'Activity deleted successfully.';
     return $result;
 	}
 
@@ -110,8 +91,12 @@ class ActivityRepository
     *   In the ajax datatables (view), there will be a parameter name that is going to be used here for the extra parameters so if we use a join,
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
+
     $activityList = DB::table('activities')
-      ->select( '*');
+    ->select( 'activities.id', 'activities.year','activities.month','activities.task_hour','activities.from_otl',
+    'activities.project_id','projects.project_name','activities.user_id','users.name')
+    ->leftjoin('projects', 'projects.id', '=', 'activities.project_id')
+    ->leftjoin('users', 'users.id', '=', 'activities.user_id');
     $data = Datatables::of($activityList)->make(true);
     return $data;
   }

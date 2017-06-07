@@ -74,8 +74,8 @@ class UserRepository
     if (isset($inputs['job_role'])) {$user->job_role = $inputs['job_role'];}
     if (isset($inputs['employee_type'])) {$user->employee_type = $inputs['employee_type'];}
     // Boolean
+    if (isset($inputs['from_otl'])) {$user->from_otl = $inputs['from_otl'];}
     $user->is_manager = isset($inputs['is_manager']);
-    $user->from_otl = isset($inputs['from_otl']);
 
     try {
       $user->save();
@@ -169,5 +169,9 @@ class UserRepository
   public function getManagersList()
   {
     return $this->user->where('is_manager', '=','1')->lists('name','id');
+  }
+  public function getAllUsersList()
+  {
+    return $this->user->lists('name','id');
   }
 }

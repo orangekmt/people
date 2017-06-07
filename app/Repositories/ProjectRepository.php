@@ -66,7 +66,7 @@ class ProjectRepository
     if (isset($inputs['win_ratio'])) {$project->comments = $inputs['win_ratio'];}
 
     // Boolean
-    $project->from_otl = isset($inputs['from_otl']);
+    if (isset($inputs['from_otl'])) {$project->from_otl = $inputs['from_otl'];}
 
     try {
       $project->save();
@@ -114,5 +114,9 @@ class ProjectRepository
       ->select( '*');
     $data = Datatables::of($projectList)->make(true);
     return $data;
+  }
+  public function getAllProjectsList()
+  {
+    return $this->project->lists('project_name','id');
   }
 }

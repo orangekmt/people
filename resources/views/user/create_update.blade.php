@@ -31,6 +31,7 @@
 
     @if($action == 'create')
       {!! Form::open(['url' => 'userFormCreate', 'method' => 'post', 'class' => 'form-horizontal']) !!}
+      {!! Form::hidden('from_otl', 0, ['class' => 'form-control']) !!}
     @elseif($action == 'update')
       {!! Form::open(['url' => 'userFormUpdate/'.$user->id, 'method' => 'post', 'class' => 'form-horizontal']) !!}
       {!! Form::hidden('id', $user->id, ['class' => 'form-control']) !!}

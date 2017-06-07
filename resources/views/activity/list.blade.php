@@ -53,29 +53,12 @@
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Activity name</th>
-                        <th>Customer name</th>
-                        <th>OTL activity code</th>
-                        <th>Activity type</th>
-                        <th>Task name</th>
-                        <th>Task category</th>
-                        <th>Meta-activity</th>
-                        <th>Region</th>
-                        <th>Country</th>
-                        <th>Domain</th>
-                        <th>Description</th>
-                        <th>Estimated start date</th>
-                        <th>Estimated end date</th>
-                        <th>Comments</th>
-                        <th>LoE onshore</th>
-                        <th>LoE nearshore</th>
-                        <th>LoE offshore</th>
-                        <th>LoE contractor</th>
-                        <th>Gold order</th>
-                        <th>FPC</th>
-                        <th>Revenue (€)</th>
-                        <th>Activity status</th>
-                        <th>Win ratio (%)</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>User name</th>
+                        <th>Project name</th>
+                        <th>Task hours</th>
+                        <th>From OTL</th>
                         <th class="last_column">
                           @permission('activity-create')
                             <a href="{{ route('activityFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
@@ -87,29 +70,12 @@
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Activity name</th>
-                        <th>Customer name</th>
-                        <th>OTL activity code</th>
-                        <th>Activity type</th>
-                        <th>Task name</th>
-                        <th>Task category</th>
-                        <th>Meta-activity</th>
-                        <th>Region</th>
-                        <th>Country</th>
-                        <th>Domain</th>
-                        <th>Description</th>
-                        <th>Estimated start date</th>
-                        <th>Estimated end date</th>
-                        <th>Comments</th>
-                        <th>LoE onshore</th>
-                        <th>LoE nearshore</th>
-                        <th>LoE offshore</th>
-                        <th>LoE contractor</th>
-                        <th>Gold order</th>
-                        <th>FPC</th>
-                        <th>Revenue (€)</th>
-                        <th>Activity status</th>
-                        <th>Win ratio (%)</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>User name</th>
+                        <th>Project name</th>
+                        <th>Task hours</th>
+                        <th>From OTL</th>
                         <th class="last_column"></th>
                     </tr>
                 </tfoot>
@@ -125,123 +91,33 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Activity name</b>:</td>
-                    <td>@{{ activity_name }}</td>
+                    <td><b>Year</b>:</td>
+                    <td>@{{ year }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Customer name</b>:</td>
-                    <td>@{{ customer_name }}</td>
+                    <td><b>Month</b>:</td>
+                    <td>@{{ month }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>OTL activity code</b>:</td>
-                    <td>@{{ otl_activity_code }}</td>
+                    <td><b>User name</b>:</td>
+                    <td>@{{ name }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Activity type</b>:</td>
-                    <td>@{{ activity_type }}</td>
+                    <td><b>Project name</b>:</td>
+                    <td>@{{ project_name }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Task name</b>:</td>
-                    <td>@{{ task_name }}</td>
+                    <td><b>Task hours</b>:</td>
+                    <td>@{{ task_hour }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Task category</b>:</td>
-                    <td>@{{ task_category }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Meta-activity</b>:</td>
-                    <td>@{{ meta_activity }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Activity type</b>:</td>
-                    <td>@{{ employee_type }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Region</b>:</td>
-                    <td>@{{ region }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Country</b>:</td>
-                    <td>@{{ country }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Domain</b>:</td>
-                    <td>@{{ domain }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Description</b>:</td>
-                    <td>@{{ description }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Comments</b>:</td>
-                    <td>@{{ comments }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Estimated start date</b>:</td>
-                    <td>@{{ estimated_start_date }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Estimated end date</b>:</td>
-                    <td>@{{ estimated_end_date }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>LoE onshore</b>:</td>
-                    <td>@{{ LoE_onshore }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>LoE nearshore</b>:</td>
-                    <td>@{{ LoE_nearshore }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>LoE offshore</b>:</td>
-                    <td>@{{ LoE_offshore }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>LoE contractor</b>:</td>
-                    <td>@{{ LoE_contractor }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Gold order</b>:</td>
-                    <td>@{{ gold_order_number }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>FPC</b>:</td>
-                    <td>@{{ product_code }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Revenue (€)</b>:</td>
-                    <td>@{{ revenue }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Activity status</b>:</td>
-                    <td>@{{ activity_status }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Win ratio (€)</b>:</td>
-                    <td>@{{ win_ratio }}</td>
+                    <td><b>From OTL</b>:</td>
+                    <td>@{{ from_otl }}</td>
                 </tr>
             </table>
             </script>
@@ -295,30 +171,13 @@
                         data:           null,
                         defaultContent: ''
                     },
-                    { name: 'id', data: 'id' },
-                    { name: 'activity_name', data: 'activity_name' },
-                    { name: 'customer_name', data: 'customer_name' },
-                    { name: 'otl_activity_code', data: 'otl_activity_code' },
-                    { name: 'activity_type', data: 'activity_type'},
-                    { name: 'task_name', data: 'task_name' },
-                    { name: 'task_category', data: 'task_category' },
-                    { name: 'meta_activity', data: 'meta_activity' },
-                    { name: 'region', data: 'region' },
-                    { name: 'country', data: 'country' },
-                    { name: 'domain', data: 'domain' },
-                    { name: 'description', data: 'description' },
-                    { name: 'estimated_start_date', data: 'estimated_start_date' },
-                    { name: 'estimated_end_date', data: 'estimated_end_date' },
-                    { name: 'comments', data: 'comments' },
-                    { name: 'LoE_onshore', data: 'LoE_onshore' },
-                    { name: 'LoE_nearshore', data: 'LoE_nearshore' },
-                    { name: 'LoE_offshore', data: 'LoE_offshore' },
-                    { name: 'LoE_contractor', data: 'LoE_contractor' },
-                    { name: 'gold_order_number', data: 'gold_order_number' },
-                    { name: 'product_code', data: 'product_code' },
-                    { name: 'revenue', data: 'revenue' },
-                    { name: 'activity_status', data: 'activity_status' },
-                    { name: 'win_ratio', data: 'win_ratio' },
+                    { name: 'activities.id', data: 'id' },
+                    { name: 'activities.year', data: 'year' },
+                    { name: 'activities.month', data: 'month' },
+                    { name: 'users.name', data: 'name'},
+                    { name: 'projects.project_name', data: 'project_name' },
+                    { name: 'activities.task_hour', data: 'task_hour' },
+                    { name: 'activities.from_otl', data: 'from_otl' },
                     {
                         name: 'actions',
                         data: null,
@@ -343,7 +202,7 @@
                     ],
                 columnDefs: [
                     {
-                        "targets": [1,4,5,6,7,8,12,13,14,15,16,17,18,19,20], "visible": false, "searchable": false
+                        "targets": [1], "visible": false, "searchable": false
                     }
                     ],
                 order: [[2, 'asc']],
