@@ -152,7 +152,7 @@ class UserRepository
     **/
     $userList = DB::table('users')
     ->select( 'users.id', 'users.name','users.email','users.is_manager', 'users.region',
-    'users.country', 'users.domain', 'users.management_code', 'users.job_role',
+    'users.country', 'users.domain', 'users.management_code', 'users.job_role','users.from_otl',
     'users.employee_type','users_users.manager_id','u2.name AS manager_name')
     ->leftjoin('users_users', 'users.id', '=', 'users_users.user_id')
     ->leftjoin('users AS u2', 'u2.id', '=', 'users_users.manager_id');

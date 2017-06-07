@@ -63,6 +63,7 @@
                         <th>Management Code</th>
                         <th>Job role</th>
                         <th>Type</th>
+                        <th>From OTL</th>
                         <th class="last_column">
                           @permission('user-create')
                             <a href="{{ route('userFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
@@ -84,6 +85,7 @@
                         <th>Management Code</th>
                         <th>Job role</th>
                         <th>Type</th>
+                        <th>From OTL</th>
                         <th class="last_column"></th>
                     </tr>
                 </tfoot>
@@ -141,6 +143,11 @@
                     <td></td>
                     <td><b>Is a Manager</b>:</td>
                     <td>@{{ is_manager }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>From OTL</b>:</td>
+                    <td>@{{ from_otl }}</td>
                 </tr>
             </table>
             </script>
@@ -217,6 +224,7 @@
                     { name: 'users.management_code', data: 'management_code' },
                     { name: 'users.job_role', data: 'job_role' },
                     { name: 'users.employee_type', data: 'employee_type' },
+                    { name: 'users.from_otl', data: 'from_otl' },
                     {
                         name: 'actions',
                         data: null,

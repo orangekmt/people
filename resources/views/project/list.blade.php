@@ -76,6 +76,7 @@
                         <th>Revenue (€)</th>
                         <th>Project status</th>
                         <th>Win ratio (%)</th>
+                        <th>From OTL</th>
                         <th class="last_column">
                           @permission('project-create')
                             <a href="{{ route('projectFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
@@ -110,6 +111,7 @@
                         <th>Revenue (€)</th>
                         <th>Project status</th>
                         <th>Win ratio (%)</th>
+                        <th>From OTL</th>
                         <th class="last_column"></th>
                     </tr>
                 </tfoot>
@@ -243,6 +245,11 @@
                     <td><b>Win ratio (€)</b>:</td>
                     <td>@{{ win_ratio }}</td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td><b>From OTL</b>:</td>
+                    <td>@{{ from_otl }}</td>
+                </tr>
             </table>
             </script>
         </div>
@@ -319,6 +326,7 @@
                     { name: 'revenue', data: 'revenue' },
                     { name: 'project_status', data: 'project_status' },
                     { name: 'win_ratio', data: 'win_ratio' },
+                    { name: 'from_otl', data: 'from_otl' },
                     {
                         name: 'actions',
                         data: null,
