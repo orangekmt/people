@@ -87,7 +87,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('manager_id') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('manager_id', 'Manager', ['class' => 'control-label']) !!}
             </div>
@@ -99,7 +99,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('employee_type') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('employee_type', 'Type', ['class' => 'control-label']) !!}
             </div>
@@ -111,7 +111,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('job_role') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('job_role', 'Team', ['class' => 'control-label']) !!}
             </div>
@@ -123,7 +123,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('region') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('region', 'Region', ['class' => 'control-label']) !!}
             </div>
@@ -135,7 +135,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('country') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('country', 'Country', ['class' => 'control-label']) !!}
             </div>
@@ -147,7 +147,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('domain') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('domain', 'Domain', ['class' => 'control-label']) !!}
             </div>
@@ -159,7 +159,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('management_code') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('management_code', 'MC', ['class' => 'control-label']) !!}
             </div>
@@ -171,7 +171,7 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12">
+        <div class="form-group {!! $errors->has('is_manager') ? 'has-error' : '' !!} col-md-12">
             <div class="col-md-2">
                 {!! Form::label('is_manager', 'Is manager?', ['class' => 'control-label']) !!}
             </div>
@@ -182,7 +182,7 @@
         </div>
     </div>
     @permission('role-assign')
-    <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="{!! $errors->has('roles') ? 'has-error' : '' !!} col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Role:</strong>
             {!! Form::select('roles[]', $roles,(isset($userRole))?$userRole:[2], array('class' => 'form-control','multiple')) !!}

@@ -45,11 +45,14 @@ class ActivityUpdateRequest extends Request
 
     return [
       'year' => 'integer|required|unique:activities,year,' . $id . ',id,month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
-      'month' => 'integer|required|unique:activities,month,' . $id . ',id,year,'.$year.',project_id,'.$project_id.',user_id,'.$user_id.',from_otl,'.$from_otl,
-      'project_id' => 'integer|required|unique:activities,project_id,' . $id . ',id,year,'.$year.',month,'.$month.',user_id,'.$user_id.',from_otl,'.$from_otl,
-      'user_id' => 'integer|required|unique:activities,user_id,' . $id . ',id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',from_otl,'.$from_otl,
-      'from_otl' => 'unique:activities,from_otl,' . $id . ',id,year,'.$year.',month,'.$month.',project_id,'.$project_id.',user_id,'.$user_id,
       'task_hour' => 'numeric|required'
+    ];
+  }
+
+  public function messages()
+  {
+    return [
+      'year.unique' => 'This record needs to have a unique year, month, project name and user name.'
     ];
   }
 }

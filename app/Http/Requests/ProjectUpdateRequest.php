@@ -47,9 +47,6 @@ class ProjectUpdateRequest extends Request
 
     return [
       'project_name' => 'required|max:255|unique:projects,project_name,' . $id . ',id',
-      'customer_name' => 'required|max:255|unique:projects,customer_name,' . $id . ',id,task_name,'.$task_name.',otl_project_code,'.$otl_project_code.',meta_activity,'.$meta_activity,
-      'otl_project_code' => 'required|max:255|unique:projects,otl_project_code,' . $id . ',id,customer_name,'.$customer_name.',task_name,'.$task_name.',meta_activity,'.$meta_activity,
-      'meta_activity' => 'required|max:255|unique:projects,meta_activity,' . $id . ',id,customer_name,'.$customer_name.',otl_project_code,'.$otl_project_code.',task_name,'.$task_name,
       'task_name' => 'required|max:255|unique:projects,task_name,' . $id . ',id,customer_name,'.$customer_name.',otl_project_code,'.$otl_project_code.',meta_activity,'.$meta_activity,
       'estimated_start_date' => 'date',
       'estimated_end_date' => 'date',
@@ -59,6 +56,13 @@ class ProjectUpdateRequest extends Request
       'LoE_contractor' => 'numeric',
       'revenue' => 'numeric',
       'win_ratio' => 'integer'
+    ];
+  }
+
+  public function messages()
+  {
+    return [
+      'task_name.unique' => 'This record needs to have a unique customer name, OTL project code, meta-activity and task name.'
     ];
   }
 }

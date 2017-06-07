@@ -40,49 +40,49 @@
     @endif
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('year', 'Year', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
-          {!! Form::select('year', config('select.year'), (isset($activity)) ? $activity->year : '', ['class' => 'form-control']) !!}
+          {!! Form::select('year', config('select.year'), (isset($activity)) ? $activity->year : date("Y"), ['class' => 'form-control']) !!}
           {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('month', 'Month', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
-          {!! Form::select('month', config('select.month'), (isset($activity)) ? $activity->month : '', ['class' => 'form-control']) !!}
-          {!! $errors->first('month', '<small class="help-block">:message</small>') !!}
+          {!! Form::select('month', config('select.month'), (isset($activity)) ? $activity->month : date("m"), ['class' => 'form-control']) !!}
+          {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('user_id', 'User', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
           {!! Form::select('user_id', $allUsers_list, (isset($activity)) ? $activity->user_id : '', ['class' => 'form-control']) !!}
-          {!! $errors->first('user_id', '<small class="help-block">:message</small>') !!}
+          {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('project_id', 'Project', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
           {!! Form::select('project_id', $allProjects_list, (isset($activity)) ? $activity->project_id : '', ['class' => 'form-control']) !!}
-          {!! $errors->first('project_id', '<small class="help-block">:message</small>') !!}
+          {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>

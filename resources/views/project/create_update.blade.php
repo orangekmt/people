@@ -51,25 +51,25 @@
     </div>
 
     <div class="row">
-      <div class="form-group {!! $errors->has('customer_name') ? 'has-error' : '' !!} col-md-12">
+      <div class="form-group {!! $errors->has('task_name') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('customer_name', 'Customer name', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
           {!! Form::text('customer_name', (isset($project)) ? $project->customer_name : '', ['class' => 'form-control', 'placeholder' => 'customer name']) !!}
-          {!! $errors->first('customer_name', '<small class="help-block">:message</small>') !!}
+          {!! $errors->first('task_name', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="form-group {!! $errors->has('otl_project_code') ? 'has-error' : '' !!} col-md-12">
+      <div class="form-group {!! $errors->has('task_name') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('otl_project_code', 'OTL project code', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
           {!! Form::text('otl_project_code', (isset($project)) ? $project->otl_project_code : '', ['class' => 'form-control', 'placeholder' => 'OTL project code']) !!}
-          {!! $errors->first('otl_project_code', '<small class="help-block">:message</small>') !!}
+          {!! $errors->first('task_name', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
@@ -87,13 +87,13 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('task_name') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('meta_activity', 'Meta-activity', ['class' => 'control-label']) !!}
         </div>
         <div class="col-md-10">
           {!! Form::select('meta_activity', config('select.meta_activity'), (isset($project)) ? $project->meta_activity : '', ['class' => 'form-control']) !!}
-          {!! $errors->first('meta_activity', '<small class="help-block">:message</small>') !!}
+          {!! $errors->first('task_name', '<small class="help-block">:message</small>') !!}
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('region') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('region', 'Region', ['class' => 'control-label']) !!}
         </div>
@@ -135,7 +135,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('country') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('country', 'Country', ['class' => 'control-label']) !!}
         </div>
@@ -159,7 +159,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('domain') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('domain', 'Domain', ['class' => 'control-label']) !!}
         </div>
@@ -303,7 +303,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-md-12">
+      <div class="form-group {!! $errors->has('project_status') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">
           {!! Form::label('project_status', 'Project status', ['class' => 'control-label']) !!}
         </div>
