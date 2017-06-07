@@ -27,8 +27,6 @@ Route::get('logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController@logo
 Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\PasswordController@reset');
-
-
 // All routes in this function will be protected by user needed to be logged in.
 Route::group(['middleware' => ['auth']], function() {
       Route::get('/home', ['uses'=>'HomeController@index','as'=>'home']);
@@ -77,5 +75,21 @@ Route::group(['middleware' => ['auth']], function() {
       Route::get('projectDelete/{n}', ['uses'=>'ProjectController@delete','as'=>'projectDelete','middleware' => ['permission:project-delete']]);
       //  AJAX
       Route::get('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
+
+      //Activity
+      //  Main activity list
+      Route::get('activityList', ['uses'=>'ActivityController@getList','as'=>'activityList','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+      //  activity information
+      Route::get('activity/{n}', ['uses'=>'ActivityController@show','as'=>'activity','middleware' => ['permission:activity-view']]);
+      //  Create new activity
+      Route::get('activityFormCreate', ['uses'=>'ActivityController@getFormCreate','as'=>'activityFormCreate','middleware' => ['permission:activity-create']]);
+      Route::post('activityFormCreate', ['uses'=>'ActivityController@postFormCreate','middleware' => ['permission:activity-create']]);
+      //  Update activity
+      Route::get('activityFormUpdate/{n}', ['uses'=>'ActivityController@getFormUpdate','as'=>'activityFormUpdate','middleware' => ['permission:activity-edit']]);
+      Route::post('activityFormUpdate/{n}', ['uses'=>'ActivityController@postFormUpdate','middleware' => ['permission:activity-edit']]);
+      //  Delete activity
+      Route::get('activityDelete/{n}', ['uses'=>'ActivityController@delete','as'=>'activityDelete','middleware' => ['permission:activity-delete']]);
+      //  AJAX
+      Route::get('listOfActivitysAjax', ['uses'=>'ActivityController@listOfActivitys','as'=>'listOfActivitysAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
 
 });

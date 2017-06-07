@@ -40,7 +40,7 @@ class UserUpdateRequest extends Request
 **/
 
 			'name' => 'required|max:255|unique:users,name,' . $id . ',id',
-      'email' => 'required|max:255|unique:users,email,' . $id . ',id',
+      'email' => 'email|required|max:255|unique:users,email,' . $id . ',id',
       'password' => 'same:confirm-password'
 
         ];

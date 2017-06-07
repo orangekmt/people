@@ -21,7 +21,7 @@ class CreateProjectsTable extends Migration {
 			$table->string('customer_location', 100)->nullable();
 			$table->string('domain', 100)->nullable();
 			$table->string('description', 255)->nullable();
-			$table->string('estimated_start_date');
+			$table->date('estimated_start_date')->nullable();
 			$table->date('estimated_end_date')->nullable();
 			$table->string('comments', 255)->nullable();
 			$table->float('LoE_onshore')->nullable();
