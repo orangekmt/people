@@ -24,9 +24,10 @@ class ProjectUpdateRequest extends Request
   public function rules()
   {
     $id = $this->id;
+    $project_name = $this->project_name;
+
     $customer_name = $this->customer_name;
     $otl_project_code = $this->otl_project_code;
-    $project_name = $this->project_name;
     $meta_activity = $this->meta_activity;
     $task_name = $this->task_name;
 

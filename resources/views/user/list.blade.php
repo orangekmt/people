@@ -53,8 +53,8 @@
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Manager name</th>
                         <th>Name</th>
+                        <th>Manager name</th>
                         <th>Email</th>
                         <th>Is Manager</th>
                         <th>Region</th>
@@ -74,8 +74,8 @@
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Manager name</th>
                         <th>Name</th>
+                        <th>Manager name</th>
                         <th>Email</th>
                         <th>Is Manager</th>
                         <th>Region</th>
@@ -207,8 +207,8 @@
                         defaultContent: ''
                     },
                     { name: 'users.id', data: 'id' },
-                    { name: 'u2.name', data: 'manager_name' },
                     { name: 'users.name', data: 'name' },
+                    { name: 'u2.name', data: 'manager_name' },
                     { name: 'users.email', data: 'email' },
                     { name: 'users.is_manager', data: 'is_manager'},
                     { name: 'users.region', data: 'region' },
@@ -303,7 +303,7 @@
                             dataType: 'json',
                             success: function(data) {
                                 //console.log(data);
-                                if (data.result){
+                                if (data.result == 'success'){
                                     box_type = 'success';
                                 }
                                 else {

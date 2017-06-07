@@ -16,14 +16,25 @@
     </div><!-- /.box-tools -->
   </div>
   <div class="box-body">
-    @if(session()->has('ok'))
-    <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
+    @if ($message = Session::get('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        {{ $message }}
+    </div>
     @endif
+    @if ($message = Session::get('error'))
+    <div class="alert alert-danger alert-dismissible">
+        <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        {{ $message }}
+    </div>
+    @endif
+
     @if($action == 'create')
       {!! Form::open(['url' => 'userFormCreate', 'method' => 'post', 'class' => 'form-horizontal']) !!}
     @elseif($action == 'update')
       {!! Form::open(['url' => 'userFormUpdate/'.$user->id, 'method' => 'post', 'class' => 'form-horizontal']) !!}
-      {!! Form::hidden('id', $user->id, ['class' => 'form-control', 'placeholder' => 'id']) !!}
+      {!! Form::hidden('id', $user->id, ['class' => 'form-control']) !!}
+      {!! Form::hidden('from_otl', $user->from_otl, ['class' => 'form-control']) !!}
     @endif
 
     <div class="row">

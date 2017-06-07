@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'User','second_title'=>'show','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>route('userList')],['name'=>'show','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'Project','second_title'=>'show','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>route('projectList')],['name'=>'show','url'=>'#']]])
 
 @section('style')
     <!-- Select2 -->
@@ -9,14 +9,14 @@
     <!-- upload widget -->
     <div class="box box-info">
         <div class="box-header">
-            <i class="fa fa-user"></i>
-            <h3 class="box-title">User</h3>
+            <i class="fa fa-project"></i>
+            <h3 class="box-title">Project</h3>
             <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div><!-- /.box-tools -->
         </div>
         <div class="box-body">
-            <p>{!! $user->name !!}</p>
+            <p>{!! $project->project_name !!}</p>
         </div>
         <div class="box-footer">
         </div>

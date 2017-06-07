@@ -33,7 +33,8 @@
     {!! Form::open(['url' => 'projectFormCreate', 'method' => 'post', 'class' => 'form-horizontal']) !!}
     @elseif($action == 'update')
     {!! Form::open(['url' => 'projectFormUpdate/'.$project->id, 'method' => 'post', 'class' => 'form-horizontal']) !!}
-    {!! Form::hidden('id', $project->id, ['class' => 'form-control', 'placeholder' => 'id']) !!}
+    {!! Form::hidden('id', $project->id, ['class' => 'form-control']) !!}
+    {!! Form::hidden('from_otl', $project->from_otl, ['class' => 'form-control']) !!}
     @endif
 
     <div class="row">
@@ -95,7 +96,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="form-group {!! $errors->has('task_category') ? 'has-error' : '' !!} col-md-12">
         <div class="col-md-2">

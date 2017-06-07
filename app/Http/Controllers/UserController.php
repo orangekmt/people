@@ -50,8 +50,8 @@ class UserController extends Controller {
       return redirect('userList')->with('error','You are not user '.  $user->name.'!!!');
     }
     $inputs = $request->all();
-    $user = $this->userRepository->update_password($id, $inputs);
-    return redirect('profile/'.$id)->with('success','Password updated !');
+    $result = $this->userRepository->update_password($id, $inputs);
+    return redirect('profile/'.$id)->with($result->result,$result->msg);
   }
 
 	public function getFormCreate()
@@ -92,40 +92,33 @@ class UserController extends Controller {
   public function postFormCreate(UserCreateRequest $request)
 	{
     $inputs = $request->all();
-    $user = $this->userRepository->createIfNotFound($inputs);
-    return redirect('userList')->with('success','Record '.$inputs['name'].' created !');
+    $result = $this->userRepository->create($inputs);
+    return redirect('userList')->with($result->result,$result->msg);
 	}
 
 	public function postFormUpdate(UserUpdateRequest $request, $id)
 	{
     $inputs = $request->all();
-    $user = $this->userRepository->update($id, $inputs);
-    return redirect('userList')->with('success','Record '.$inputs['name'].' updated !');
+    $result = $this->userRepository->update($id, $inputs);
+    return redirect('userList')->with($result->result,$result->msg);
 	}
 
 	public function delete($id)
 	{
-    $name = $this->userRepository->getById($id)->name;
     // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
     $result = new \stdClass();
-    $result->result = true;
+    $result->result = 'success';
     $result->msg = '';
+
+    // First we need to verify that we don't try to delete ourselve.
     if (Auth::user()->id == $id){
-      $result->result = false;
+      $result->result = 'error';
       $result->msg = 'User '.Auth::user()->name.' cannot delete himself';
       return json_encode($result);
     }
 
-    try {
-        $user = $this->userRepository->destroy($id);
-    }
-    catch (\Illuminate\Database\QueryException $ex){
-        $result->result = false;
-        $result->msg = 'Message:</BR>'.$ex->getMessage();
-        return json_encode($result);
-    }
-//\Debugbar::info($manager_list);
-    $result->msg = 'Record '.$name.' deleted successfully';
+    $result = $this->userRepository->destroy($id);
+
 		return json_encode($result);
 	}
 

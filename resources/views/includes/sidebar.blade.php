@@ -23,6 +23,9 @@
                     @permission(['role-view','role-edit','role-create','role-delete'])
                       <li><a href="{!!route('roles.index')!!}"><i class="fa fa-circle-o"></i> Roles List</a></li>
                     @endpermission
+                    @permission(['project-view','project-edit','project-create','project-delete'])
+                      <li><a href="{!!route('projectList')!!}"><i class="fa fa-circle-o"></i> Projects List</a></li>
+                    @endpermission
                 </ul>
             </li>
         </ul>

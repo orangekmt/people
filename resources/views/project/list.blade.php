@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'User','second_title'=>'list','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'Project','second_title'=>'list','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
 
 @section('style')
     <!-- CSS -->
@@ -27,7 +27,7 @@
 
         <div class="box-header">
             <i class="fa fa-cloud-download"></i>
-            <h3 class="box-title">User List</h3>
+            <h3 class="box-title">Project List</h3>
             <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div><!-- /.box-tools -->
@@ -48,24 +48,37 @@
             @endif
             <div id="delete_message">
             </div>
-            <table id="userTable" class="display table-bordered table-hover table-responsive">
+            <table id="projectTable" class="display table-bordered table-hover table-responsive">
                 <thead>
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Manager name</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Is Manager</th>
+                        <th>Project name</th>
+                        <th>Customer name</th>
+                        <th>OTL project code</th>
+                        <th>Project type</th>
+                        <th>Task name</th>
+                        <th>Task category</th>
+                        <th>Meta-activity</th>
                         <th>Region</th>
                         <th>Country</th>
                         <th>Domain</th>
-                        <th>Management Code</th>
-                        <th>Job role</th>
-                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Estimated start date</th>
+                        <th>Estimated end date</th>
+                        <th>Comments</th>
+                        <th>LoE onshore</th>
+                        <th>LoE nearshore</th>
+                        <th>LoE offshore</th>
+                        <th>LoE contractor</th>
+                        <th>Gold order</th>
+                        <th>FPC</th>
+                        <th>Revenue (€)</th>
+                        <th>Project status</th>
+                        <th>Win ratio (%)</th>
                         <th class="last_column">
-                          @permission('user-create')
-                            <a href="{{ route('userFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
+                          @permission('project-create')
+                            <a href="{{ route('projectFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
                           @endpermission
                         </th>
                     </tr>
@@ -74,16 +87,29 @@
                     <tr>
                         <th class="first_column"></th>
                         <th>ID</th>
-                        <th>Manager name</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Is Manager</th>
+                        <th>Project name</th>
+                        <th>Customer name</th>
+                        <th>OTL project code</th>
+                        <th>Project type</th>
+                        <th>Task name</th>
+                        <th>Task category</th>
+                        <th>Meta-activity</th>
                         <th>Region</th>
                         <th>Country</th>
                         <th>Domain</th>
-                        <th>Management Code</th>
-                        <th>Job role</th>
-                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Estimated start date</th>
+                        <th>Estimated end date</th>
+                        <th>Comments</th>
+                        <th>LoE onshore</th>
+                        <th>LoE nearshore</th>
+                        <th>LoE offshore</th>
+                        <th>LoE contractor</th>
+                        <th>Gold order</th>
+                        <th>FPC</th>
+                        <th>Revenue (€)</th>
+                        <th>Project status</th>
+                        <th>Win ratio (%)</th>
                         <th class="last_column"></th>
                     </tr>
                 </tfoot>
@@ -99,28 +125,43 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Name</b>:</td>
-                    <td>@{{ name }}</td>
+                    <td><b>Project name</b>:</td>
+                    <td>@{{ project_name }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Manager name</b>:</td>
-                    <td>@{{ manager_name }}</td>
+                    <td><b>Customer name</b>:</td>
+                    <td>@{{ customer_name }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Email</b>:</td>
-                    <td>@{{ email }}</td>
+                    <td><b>OTL project code</b>:</td>
+                    <td>@{{ otl_project_code }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Management code</b>:</td>
-                    <td>@{{ management_code }}</td>
+                    <td><b>Project type</b>:</td>
+                    <td>@{{ project_type }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Domain</b>:</td>
-                    <td>@{{ domain }}</td>
+                    <td><b>Task name</b>:</td>
+                    <td>@{{ task_name }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Task category</b>:</td>
+                    <td>@{{ task_category }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Meta-activity</b>:</td>
+                    <td>@{{ meta_activity }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Project type</b>:</td>
+                    <td>@{{ employee_type }}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -129,18 +170,78 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Job role</b>:</td>
-                    <td>@{{ job_role }}</td>
+                    <td><b>Country</b>:</td>
+                    <td>@{{ country }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>User type</b>:</td>
-                    <td>@{{ employee_type }}</td>
+                    <td><b>Domain</b>:</td>
+                    <td>@{{ domain }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><b>Is a Manager</b>:</td>
-                    <td>@{{ is_manager }}</td>
+                    <td><b>Description</b>:</td>
+                    <td>@{{ description }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Comments</b>:</td>
+                    <td>@{{ comments }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Estimated start date</b>:</td>
+                    <td>@{{ estimated_start_date }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Estimated end date</b>:</td>
+                    <td>@{{ estimated_end_date }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>LoE onshore</b>:</td>
+                    <td>@{{ LoE_onshore }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>LoE nearshore</b>:</td>
+                    <td>@{{ LoE_nearshore }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>LoE offshore</b>:</td>
+                    <td>@{{ LoE_offshore }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>LoE contractor</b>:</td>
+                    <td>@{{ LoE_contractor }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Gold order</b>:</td>
+                    <td>@{{ gold_order_number }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>FPC</b>:</td>
+                    <td>@{{ product_code }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Revenue (€)</b>:</td>
+                    <td>@{{ revenue }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Project status</b>:</td>
+                    <td>@{{ project_status }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Win ratio (€)</b>:</td>
+                    <td>@{{ win_ratio }}</td>
                 </tr>
             </table>
             </script>
@@ -151,17 +252,17 @@
 
 @section('script')
     <script>
-        var userTable;
+        var projectTable;
         var record_id;
 
-        // Here we are going to get from PHP the list of roles and their value for the logged in user
+        // Here we are going to get from PHP the list of roles and their value for the logged in project
 
         <?php
           $options = array(
               'validate_all' => true,
               'return_type' => 'both'
           );
-          list($validate, $allValidations) = Entrust::ability(null,array('user-view','user-edit','user-delete','user-create'),$options);
+          list($validate, $allValidations) = Entrust::ability(null,array('project-view','project-edit','project-delete','project-create'),$options);
           echo "var permissions = jQuery.parseJSON('".json_encode($allValidations['permissions'])."');";
         ?>
         // Roles check finished.
@@ -178,25 +279,13 @@
                 }
             });
 
-            userTable = $('#userTable').DataTable({
+            projectTable = $('#projectTable').DataTable({
                 serverSide: true,
                 processing: true,
                 scrollX: true,
                 ajax: {
-                        url: "{!! route('listOfUsersAjax') !!}",
+                        url: "{!! route('listOfProjectsAjax') !!}",
                         type: "GET",
-                        dataSrc: function ( json ) {
-                          //console.log(json);;
-                            for ( var i=0, ien=json.data.length ; i<ien ; i++ ) {
-                                if (json.data[i].is_manager == 1){
-                                    json.data[i].is_manager = 'Yes';
-                                }
-                                else {
-                                    json.data[i].is_manager = 'No';
-                                }
-                            }
-                            return json.data;
-                        }
                     },
                 columns: [
                     {
@@ -206,17 +295,30 @@
                         data:           null,
                         defaultContent: ''
                     },
-                    { name: 'users.id', data: 'id' },
-                    { name: 'u2.name', data: 'manager_name' },
-                    { name: 'users.name', data: 'name' },
-                    { name: 'users.email', data: 'email' },
-                    { name: 'users.is_manager', data: 'is_manager'},
-                    { name: 'users.region', data: 'region' },
-                    { name: 'users.country', data: 'country' },
-                    { name: 'users.domain', data: 'domain' },
-                    { name: 'users.management_code', data: 'management_code' },
-                    { name: 'users.job_role', data: 'job_role' },
-                    { name: 'users.employee_type', data: 'employee_type' },
+                    { name: 'id', data: 'id' },
+                    { name: 'project_name', data: 'project_name' },
+                    { name: 'customer_name', data: 'customer_name' },
+                    { name: 'otl_project_code', data: 'otl_project_code' },
+                    { name: 'project_type', data: 'project_type'},
+                    { name: 'task_name', data: 'task_name' },
+                    { name: 'task_category', data: 'task_category' },
+                    { name: 'meta_activity', data: 'meta_activity' },
+                    { name: 'region', data: 'region' },
+                    { name: 'country', data: 'country' },
+                    { name: 'domain', data: 'domain' },
+                    { name: 'description', data: 'description' },
+                    { name: 'estimated_start_date', data: 'estimated_start_date' },
+                    { name: 'estimated_end_date', data: 'estimated_end_date' },
+                    { name: 'comments', data: 'comments' },
+                    { name: 'LoE_onshore', data: 'LoE_onshore' },
+                    { name: 'LoE_nearshore', data: 'LoE_nearshore' },
+                    { name: 'LoE_offshore', data: 'LoE_offshore' },
+                    { name: 'LoE_contractor', data: 'LoE_contractor' },
+                    { name: 'gold_order_number', data: 'gold_order_number' },
+                    { name: 'product_code', data: 'product_code' },
+                    { name: 'revenue', data: 'revenue' },
+                    { name: 'project_status', data: 'project_status' },
+                    { name: 'win_ratio', data: 'win_ratio' },
                     {
                         name: 'actions',
                         data: null,
@@ -225,13 +327,13 @@
                         render: function (data) {
                             var actions = '';
                             actions += '<div class="btn-group btn-group-xs">';
-                            if (permissions['user-view']){
+                            if (permissions['project-view']){
                               actions += '<button id="'+data.id+'" class="buttonView btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></button>';
                             };
-                            if (permissions['user-edit']){
+                            if (permissions['project-edit']){
                               actions += '<button id="'+data.id+'" class="buttonUpdate btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>';
                             };
-                            if (permissions['user-delete']){
+                            if (permissions['project-delete']){
                               actions += '<button id="'+data.id+'" class="buttonDelete btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>';
                             };
                             actions += '</div>';
@@ -241,7 +343,7 @@
                     ],
                 columnDefs: [
                     {
-                        "targets": [1,4,5], "visible": false, "searchable": false
+                        "targets": [1,4,5,6,7,8,12,13,14,15,16,17,18,19,20], "visible": false, "searchable": false
                     }
                     ],
                 order: [[2, 'asc']],
@@ -269,9 +371,9 @@
             });
 
             // Add event listener for opening and closing details
-            $('#userTable tbody').on('click', 'td.details-control', function () {
+            $('#projectTable tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
-                var row = userTable.row( tr );
+                var row = projectTable.row( tr );
 
                 if ( row.child.isShown() ) {
                     // This row is already open - close it
@@ -286,11 +388,11 @@
             });
 
             $(document).on('click', '.buttonUpdate', function () {
-                window.location.href = "{!! route('userFormUpdate','') !!}/"+this.id;
+                window.location.href = "{!! route('projectFormUpdate','') !!}/"+this.id;
             } );
 
             $(document).on('click', '.buttonView', function () {
-                window.location.href = "{!! route('user','') !!}/"+this.id;
+                window.location.href = "{!! route('project','') !!}/"+this.id;
             } );
 
             $(document).on('click', '.buttonDelete', function () {
@@ -299,11 +401,11 @@
                     if (result){
                         $.ajax({
                             type: 'get',
-                            url: "{!! route('userDelete','') !!}/"+record_id,
+                            url: "{!! route('projectDelete','') !!}/"+record_id,
                             dataType: 'json',
                             success: function(data) {
                                 //console.log(data);
-                                if (data.result){
+                                if (data.result == 'success'){
                                     box_type = 'success';
                                 }
                                 else {
@@ -312,7 +414,7 @@
                                 $('#delete_message').empty();
                                 var box = $('<div class="alert alert-'+box_type+' alert-dismissible"><button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>'+data.msg+'</div>');
                                 $('#delete_message').append(box);
-                                userTable.ajax.reload();
+                                projectTable.ajax.reload();
                             }
                         });
                     }

@@ -23,38 +23,29 @@ class ProjectRepository
 		return $this->project->findOrFail($id);
 	}
 
-  public function createIfNotFound(Array $inputs)
+  public function create(Array $inputs)
   {
-    $project = $this->project->where([
-      ['customer_name', $inputs['customer_name']],
-      ['otl_project_code', $inputs['otl_project_code']],
-      ['meta_activity', $inputs['meta_activity']],
-      ['task_name', $inputs['task_name']],
-      ])->first();
-
-    if (!isset($project)){
-        $project = new $this->project;
-        return $this->save($project, $inputs);
-    }
-    else {
-      return $project;
-    }
+    $project = new $this->project;
+    return $this->save($project, $inputs);
   }
 
   public function update($id, Array $inputs)
 	{
-		$this->save($this->getById($id), $inputs);
+		return $this->save($this->getById($id), $inputs);
 	}
 
 	private function save(Project $project, Array $inputs)
 	{
+    $result = new \stdClass();
+    $result->result = 'success';
+    $result->msg = '';
 
     // Required fields
-		$project->customer_name = $inputs['customer_name'];
-    $project->project_name = $inputs['project_name'];
-    $project->task_name = $inputs['task_name'];
-    $project->meta_activity = $inputs['meta_activity'];
-    $project->otl_project_code = $inputs['otl_project_code'];
+    if (isset($inputs['project_name'])) {$project->project_name = $inputs['project_name'];}
+    if (isset($inputs['customer_name'])) {$project->customer_name = $inputs['customer_name'];}
+    if (isset($inputs['task_name'])) {$project->task_name = $inputs['task_name'];}
+    if (isset($inputs['meta_activity'])) {$project->meta_activity = $inputs['meta_activity'];}
+    if (isset($inputs['otl_project_code'])) {$project->otl_project_code = $inputs['otl_project_code'];}
     // Nullable
     if (isset($inputs['project_type'])) {$project->project_type = $inputs['project_type'];}
     if (isset($inputs['task_category'])) {$project->task_category = $inputs['task_category'];}
@@ -75,17 +66,41 @@ class ProjectRepository
     if (isset($inputs['win_ratio'])) {$project->comments = $inputs['win_ratio'];}
 
     // Boolean
-    if (isset($inputs['from_otl'])) {$project->from_otl = $inputs['from_otl'];}
+    $project->from_otl = isset($inputs['from_otl']);
 
-    $project->save();
+    try {
+      $project->save();
+    }
+    catch (\Illuminate\Database\QueryException $ex){
+        $result->result = 'error';
+        $result->msg = 'Message:</BR>'.$ex->getMessage();
+        return $result;
+    }
 
-    return $project;
+    $result->msg = 'Project '.$project->name.' saved successfully.';
+
+    return $result;
 	}
 
 	public function destroy($id)
 	{
-		$this->getById($id)->delete();
-    return 'success';
+    $result = new \stdClass();
+    $result->result = 'success';
+    $result->msg = '';
+
+    $project = $this->getById($id);
+    $name = $project->project_name;
+
+    try {
+		    $project->delete();
+      } catch (\Illuminate\Database\QueryException $ex){
+          $result->result = 'error';
+          $result->msg = '</BR>Message:</BR>'.$ex->getMessage();
+          return $result;
+      }
+
+      $result->msg = 'Project '.$name.' deleted successfully.';
+    return $result;
 	}
 
   public function getListOfProjects()
@@ -96,23 +111,8 @@ class ProjectRepository
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
     $projectList = DB::table('projects')
-      ->select( 'projects.id', 'projects.name','projects.email','projects.is_manager', 'projects.region',
-                'projects.country', 'projects.domain', 'projects.management_code', 'projects.job_role',
-                'projects.employee_type','projects_projects.manager_id','u2.name AS manager_name')
-      ->leftjoin('projects_projects', 'projects.id', '=', 'projects_projects.project_id')
-      ->leftjoin('projects AS u2', 'u2.id', '=', 'projects_projects.manager_id');
+      ->select( '*');
     $data = Datatables::of($projectList)->make(true);
     return $data;
   }
-
-  public function getMyManagersList($id)
-	{
-    $data = $this->project->findOrFail($id)->managers()->select('manager_id','name')->get();
-    return $data;
-	}
-
-  public function getManagersList()
-	{
-    return $this->project->where('is_manager', '=','1')->lists('name','id');
-	}
 }

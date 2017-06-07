@@ -49,34 +49,20 @@ class ProjectController extends Controller {
   public function postFormCreate(ProjectCreateRequest $request)
 	{
     $inputs = $request->all();
-    $project = $this->projectRepository->createIfNotFound($inputs);
-    return redirect('projectFormCreate')->with('success','Record '.$inputs['project_name'].' created !');
+    $result = $this->projectRepository->create($inputs);
+    return redirect('projectList')->with($result->result,$result->msg);
 	}
 
 	public function postFormUpdate(ProjectUpdateRequest $request, $id)
 	{
     $inputs = $request->all();
-    $project = $this->projectRepository->update($id, $inputs);
-    return redirect('projectFormUpdate/'.$id)->with('success','Record '.$inputs['project_name'].' updated !');
+    $result = $this->projectRepository->update($id, $inputs);
+    return redirect('projectList')->with($result->result,$result->msg);
 	}
 
 	public function delete($id)
 	{
-    $name = $this->projectRepository->getById($id)->name;
-    // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
-    $result = new \stdClass();
-    $result->result = true;
-    $result->msg = '';
-
-    try {
-        $project = $this->projectRepository->destroy($id);
-    }
-    catch (\Illuminate\Database\QueryException $ex){
-        $result->result = false;
-        $result->msg = 'Message:</BR>'.$ex->getMessage();
-        return json_encode($result);
-    }
-    $result->msg = 'Record '.$name.' deleted successfully';
+    $result = $this->projectRepository->destroy($id);
 		return json_encode($result);
 	}
 
