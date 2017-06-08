@@ -1,0 +1,127 @@
+<?php
+namespace App\Http\Controllers;
+use App\Http\Requests\OtlUploadRequest;
+use App\Repositories\UserRepository;
+use App\Repositories\ProjectRepository;
+use App\Repositories\ActivityRepository;
+class OtlUploadController extends Controller
+{
+  protected $userRepository;
+  public function __construct(UserRepository $userRepository, ProjectRepository $projectRepository, ActivityRepository $activityRepository)
+  {
+    $this->userRepository = $userRepository;
+    $this->projectRepository = $projectRepository;
+    $this->activityRepository = $activityRepository;
+  }
+  public function getForm()
+  {
+    return view('dataFeed.otlupload');
+  }
+  public function postForm(OtlUploadRequest $request)
+  {
+    $result = new \stdClass();
+    $result->result = 'success';
+    $result->msg = '';
+
+
+    $file = $request->file('uploadfile');
+    if($file->isValid())
+    {
+      config(['excel.import.startRow' => 3 ]);
+      $sheet = \Excel::selectSheetsByIndex(0)
+      ->load($file);
+      // This command helps getting a view on what we get from $sheet
+      //$sheet->dd();
+      $result = $sheet->get();
+
+      // dd($result);
+
+      $messages = [];
+      $i = 1;
+      foreach ($result as $row){
+        array_push($messages,['status'=>'BEGIN LINE '.$i,'msg'=>'************************']);
+        $managerInDB = $this->userRepository->getByName($row->manager_name);
+        $userInDB = $this->userRepository->getByName($row->employee_name);
+        //$projectInDB = $this->projectRepository->getByOTL($row->customer_name,$row->project_name,$row->meta_activity,$row->task_name);
+
+        if (!$managerInDB){
+          $employee = [];
+          $employee['name'] = $row->manager_name;
+          $complete_name = explode(',', $employee['name']);
+          $employee_firstname = $complete_name[1];
+          $employee_lastname = $complete_name[0];
+          $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
+          $employee['password'] = bcrypt('Welcome1');
+          $employee['is_manager'] = 1;
+          $employee['from_otl'] = 1;
+          $employee['manager_id'] = -1;
+          $employee['roles'] = ['2'];
+          $managerInDB = $this->userRepository->create($employee);
+          array_push($messages,['status'=>'add','msg'=>'Manager '.$managerInDB->name.' added to DB']);
+        } else {
+          array_push($messages,['status'=>'pass','msg'=>'Manager '.$managerInDB->name.' already in DB']);
+        }
+        if (!$userInDB){
+          $employee = [];
+          $employee['name'] = $row->employee_name;
+          $complete_name = explode(',', $employee['name']);
+          $employee_firstname = $complete_name[1];
+          $employee_lastname = $complete_name[0];
+          $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
+          $employee['password'] = bcrypt('Welcome1');
+          $employee['is_manager'] = 0;
+          $employee['from_otl'] = 1;
+          $employee['manager_id'] = $managerInDB->id;
+          $employee['roles'] = ['3'];
+          $userInDB = $this->userRepository->create($employee);
+          array_push($messages,['status'=>'add','msg'=>'User '.$userInDB->name.' added to DB']);
+        } else {
+          array_push($messages,['status'=>'pass','msg'=>'User '.$userInDB->name.' already in DB']);
+        }
+        array_push($messages,['status'=>'END LINE '.$i,'msg'=>'************************']);
+        $i += 1;
+      }
+
+      /*
+
+      foreach ($sheet as $row){
+      $manager = [];
+      $manager['name'] = $row->manager_name;
+      $manager['is_manager'] = true;
+      $manager['manager_id'] = 1;
+      $manager['from_otl'] = 1;
+      $manager = $this->userRepository->createIfNotFound($manager);
+      $user = [];
+      $user['name'] = $row->user_name;
+      $user['manager_id'] = $manager->id;
+      $user['from_otl'] = 1;
+      $user = $this->userRepository->createIfNotFound($user);
+      $project = [];
+      $project['customer_name'] = $row->customer_name;
+      $project['project_name'] = $row->project_name;
+      $project['task_name'] = $row->task_name;
+      $project['meta_activity'] = $row->meta_activity;
+      $project['project_type'] = $row->project_type;
+      $project['task_category'] = $row->task_category;
+      $project['from_otl'] = 1;
+      $project = $this->projectRepository->createIfNotFound($project);
+      $activity = [];
+      $activity['year'] = $request->input('year');
+      $activity['month'] = $request->input('month');
+      $activity['project_id'] = $project->id;
+      $activity['user_id'] = $user->id;
+      $activity['task_hour'] = $row->original_time;
+      $activity['from_otl'] = 1;
+      $activity = $this->activityRepository->createOrUpdate($activity);
+
+      $key = in_array($user['name'], array_column($results, 'name'));
+      if ($key == false)
+      {
+      array_push($results,['name'=>$user['name'],'status'=>'updated']);
+    }
+  };
+  */
+}
+return view('dataFeed.otlupload',  compact('messages'))->with('success','File processed');
+}
+}

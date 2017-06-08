@@ -23,6 +23,11 @@ class UserRepository
     return $this->user->findOrFail($id);
   }
 
+  public function getByName($name)
+	{
+		return $this->user->where('name', $name)->first();
+	}
+
   public function create(Array $inputs)
   {
     $user = new $this->user;
@@ -36,28 +41,16 @@ class UserRepository
 
   public function update_password($id, Array $inputs)
   {
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     $user = $this->getById($id);
     if (isset($inputs['password']) && trim($inputs['password']) != ''){
       $user->password = bcrypt($inputs['password']);
       $user->save();
-      $result->msg = 'Password saved';
-    } else {
-      $result->result = 'error';
-      $result->msg = 'Password not saved';
     }
-    return $result;
+    return $user;
   }
 
   private function save(User $user, Array $inputs)
   {
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     // Required fields
     if (isset($inputs['name'])) {$user->name = $inputs['name'];}
     if (isset($inputs['email'])) {$user->email = $inputs['email'];}
@@ -65,7 +58,6 @@ class UserRepository
     if (isset($inputs['password']) && trim($inputs['password']) != ''){
       $user->password = bcrypt($inputs['password']);
     }
-
     // Nullable
     if (isset($inputs['country'])) {$user->country = $inputs['country'];}
     if (isset($inputs['region'])) {$user->region = $inputs['region'];}
@@ -75,16 +67,10 @@ class UserRepository
     if (isset($inputs['employee_type'])) {$user->employee_type = $inputs['employee_type'];}
     // Boolean
     if (isset($inputs['from_otl'])) {$user->from_otl = $inputs['from_otl'];}
-    $user->is_manager = isset($inputs['is_manager']);
+    $user->is_manager = isset($inputs['is_manager']) ? $inputs['is_manager']:0;
 
-    try {
-      $user->save();
-    }
-    catch (\Illuminate\Database\QueryException $ex){
-        $result->result = 'error';
-        $result->msg = 'Message:</BR>'.$ex->getMessage();
-        return $result;
-    }
+
+    $user->save();
 
     // Now we have to treat the manager
     if ($inputs['manager_id'] != -1){
@@ -114,33 +100,21 @@ class UserRepository
       }
     }
 
-    $result->msg = 'User '.$user->name.' saved successfully.';
-
-    return $result;
+    return $user;
   }
 
   public function destroy($id)
   {
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     $user = $this->getById($id);
-    $name = $user->name;
+    $my_employees = $user->employees()->count();
 
-    try {
-      $user->managers()->detach();
-      $user->delete();
-
-    } catch (\Illuminate\Database\QueryException $ex){
-        $result->result = 'error';
-        $result->msg = '</BR>Message:</BR>'.$ex->getMessage();
-        return $result;
+    if ($my_employees > 0){
+      return ['status'=>'error','msg'=>'User is manager of other users'];
     }
+    $user->managers()->detach();
+    $user->delete();
 
-    $result->msg = 'User '.$name.' deleted successfully.';
-
-    return $result;
+    return $user;
   }
 
   public function getListOfUsers()

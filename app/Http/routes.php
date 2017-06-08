@@ -31,6 +31,10 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
 Route::group(['middleware' => ['auth']], function() {
       Route::get('/home', ['uses'=>'HomeController@index','as'=>'home']);
 
+      //OTL
+      Route::get('otlupload', ['uses'=>'OtlUploadController@getForm','as'=>'otluploadform','middleware' => ['permission:otl-upload']]);
+      Route::post('otlupload', ['uses'=>'OtlUploadController@postForm','middleware' => ['permission:otl-upload']]);
+
       //User
       //  Main user list
       Route::get('userList', ['uses'=>'UserController@getList','as'=>'userList','middleware' => ['permission:user-view|user-create|user-edit|user-delete']]);

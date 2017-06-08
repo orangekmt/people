@@ -50,8 +50,8 @@ class UserController extends Controller {
       return redirect('userList')->with('error','You are not user '.  $user->name.'!!!');
     }
     $inputs = $request->all();
-    $result = $this->userRepository->update_password($id, $inputs);
-    return redirect('profile/'.$id)->with($result->result,$result->msg);
+    $password = $this->userRepository->update_password($id, $inputs);
+    return redirect('profile/'.$id)->with('success','Password updated successfully');
   }
 
 	public function getFormCreate()
@@ -92,15 +92,15 @@ class UserController extends Controller {
   public function postFormCreate(UserCreateRequest $request)
 	{
     $inputs = $request->all();
-    $result = $this->userRepository->create($inputs);
-    return redirect('userList')->with($result->result,$result->msg);
+    $user = $this->userRepository->create($inputs);
+    return redirect('userList')->with('success','Record created successfully');
 	}
 
 	public function postFormUpdate(UserUpdateRequest $request, $id)
 	{
     $inputs = $request->all();
-    $result = $this->userRepository->update($id, $inputs);
-    return redirect('userList')->with($result->result,$result->msg);
+    $user = $this->userRepository->update($id, $inputs);
+    return redirect('userList')->with('success','Record updated successfully');
 	}
 
 	public function delete($id)
@@ -108,7 +108,7 @@ class UserController extends Controller {
     // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
     $result = new \stdClass();
     $result->result = 'success';
-    $result->msg = '';
+    $result->msg = 'Record deleted successfully';
 
     // First we need to verify that we don't try to delete ourselve.
     if (Auth::user()->id == $id){
@@ -117,7 +117,11 @@ class UserController extends Controller {
       return json_encode($result);
     }
 
-    $result = $this->userRepository->destroy($id);
+    $user = $this->userRepository->destroy($id);
+    if (isset($user['status'])){
+      $result->result = 'error';
+      $result->msg = $user['msg'];
+    }
 
 		return json_encode($result);
 	}

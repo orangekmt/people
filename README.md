@@ -22,8 +22,8 @@ For Linux Ubuntu
 7) Execute composer to install necessary applications for Laravel 5
     sudo composer install
     sudo composer update
-8) Rename .env.example into .env with 
-    mv .env.example .env 
+8) Rename .env.example into .env with
+    mv .env.example .env
 9) Go in phpmyadmin and create a database people
 10) Edit .env
     Enter information about MySQL database
@@ -31,7 +31,7 @@ For Linux Ubuntu
     sudo service apache2 restart
 12) Create a key
     sudo php artisan key:generate
-13) Edit /etc/apache2/apache2.conf 
+13) Edit /etc/apache2/apache2.conf
     change from
     <Directory /var/www/>
             Options Indexes FollowSymLinks
@@ -52,3 +52,13 @@ For Linux Ubuntu
     do migrate
     do db seed
     If reset is not working, do php composer dump-autoload
+15) Modify your php.ini file (for php 7, located at: /etc/php/7.0/apache2/php.ini)
+    Upload_max_filesize  - 15 M
+    Max_input_time  - 600
+    Memory_limit    - 128M
+    Max_execution_time -  600
+    Post_max_size - 15 M
+16) Install zip support for the Excel file module to work
+    sudo apt-get install php7.0-zip
+    sudo service apache2 restart
+    

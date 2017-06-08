@@ -115,6 +115,13 @@ class PermissionTableSeeder extends Seeder
         		'display_name' => 'Delete Project',
         		'description' => 'Delete Project'
         	]
+          ,
+        	[
+            'id' => 18,
+        		'name' => 'otl-upload',
+        		'display_name' => 'Upload OTL',
+        		'description' => 'Upload xls file with OTL data'
+        	]
         ];
 
         foreach ($permission as $key => $value) {

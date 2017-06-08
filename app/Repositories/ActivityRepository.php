@@ -36,10 +36,6 @@ class ActivityRepository
 
 	private function save(Activity $activity, Array $inputs)
 	{
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     // Required fields
     if (isset($inputs['year'])) {$activity->year = $inputs['year'];}
     if (isset($inputs['month'])) {$activity->month = $inputs['month'];}
@@ -50,38 +46,17 @@ class ActivityRepository
     // Boolean
     if (isset($inputs['from_otl'])) {$activity->from_otl = $inputs['from_otl'];}
 
-    try {
-      $activity->save();
-    }
-    catch (\Illuminate\Database\QueryException $ex){
-        $result->result = 'error';
-        $result->msg = 'Message:</BR>'.$ex->getMessage();
-        return $result;
-    }
+    $activity->save();
 
-    $result->msg = 'Activity saved successfully.';
-
-    return $result;
+    return $activity;
 	}
 
 	public function destroy($id)
 	{
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     $activity = $this->getById($id);
+    $activity->delete();
 
-    try {
-		    $activity->delete();
-      } catch (\Illuminate\Database\QueryException $ex){
-          $result->result = 'error';
-          $result->msg = '</BR>Message:</BR>'.$ex->getMessage();
-          return $result;
-      }
-
-      $result->msg = 'Activity deleted successfully.';
-    return $result;
+    return $activity;
 	}
 
   public function getListOfActivities()

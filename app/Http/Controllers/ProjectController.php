@@ -49,20 +49,24 @@ class ProjectController extends Controller {
   public function postFormCreate(ProjectCreateRequest $request)
 	{
     $inputs = $request->all();
-    $result = $this->projectRepository->create($inputs);
-    return redirect('projectList')->with($result->result,$result->msg);
+    $project = $this->projectRepository->create($inputs);
+    return redirect('projectList')->with('success','Record created successfully');
 	}
 
 	public function postFormUpdate(ProjectUpdateRequest $request, $id)
 	{
     $inputs = $request->all();
-    $result = $this->projectRepository->update($id, $inputs);
-    return redirect('projectList')->with($result->result,$result->msg);
+    $project = $this->projectRepository->update($id, $inputs);
+    return redirect('projectList')->with('success','Record updated successfully');
 	}
 
 	public function delete($id)
 	{
-    $result = $this->projectRepository->destroy($id);
+    // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
+    $result = new \stdClass();
+    $result->result = 'success';
+    $result->msg = 'Record deleted successfully';
+    $project = $this->projectRepository->destroy($id);
 		return json_encode($result);
 	}
 

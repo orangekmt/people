@@ -10,6 +10,9 @@
                 <i class="fa fa-files-o"></i> <span>XLS Uploads</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                  @permission(['otl-upload'])
+                    <li><a href="{!!route('otluploadform')!!}"><i class="fa fa-circle-o"></i> OTL upload</a></li>
+                  @endpermission
                 </ul>
             </li>
             <li class="treeview">

@@ -21,9 +21,15 @@ class RoleTableSeeder extends Seeder
         	],
           [
             'id' => 2,
-        		'name' => 'Guest',
-        		'display_name' => 'Guest',
-        		'description' => 'This role has access only to the users list'
+        		'name' => 'Manager',
+        		'display_name' => 'Manager',
+        		'description' => 'This role is used for the managers'
+        	],
+          [
+            'id' => 3,
+        		'name' => 'User',
+        		'display_name' => 'User',
+        		'description' => 'This role is used for the users'
         	]
         ];
 
@@ -49,9 +55,13 @@ class RoleTableSeeder extends Seeder
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (15,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (16,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (17,1);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (18,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (6,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (10,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (14,2);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (6,3);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (10,3);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (14,3);");
         DB::statement("INSERT INTO `role_user`(`user_id`, `role_id`) VALUES (1,1);");
 
       }

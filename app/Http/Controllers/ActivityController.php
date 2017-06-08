@@ -58,20 +58,24 @@ class ActivityController extends Controller {
   public function postFormCreate(ActivityCreateRequest $request)
 	{
     $inputs = $request->all();
-    $result = $this->activityRepository->create($inputs);
-    return redirect('activityList')->with($result->result,$result->msg);
+    $activity = $this->activityRepository->create($inputs);
+    return redirect('activityList')->with('success','Record created successfully');
 	}
 
 	public function postFormUpdate(ActivityUpdateRequest $request, $id)
 	{
     $inputs = $request->all();
-    $result = $this->activityRepository->update($id, $inputs);
-    return redirect('activityList')->with($result->result,$result->msg);
+    $activity = $this->activityRepository->update($id, $inputs);
+    return redirect('activityList')->with('success','Record updated successfully');
 	}
 
 	public function delete($id)
 	{
-    $result = $this->activityRepository->destroy($id);
+    // When using stdClass(), we need to prepend with \ so that Laravel won't get confused...
+    $result = new \stdClass();
+    $result->result = 'success';
+    $result->msg = 'Record deleted successfully';
+    $activity = $this->activityRepository->destroy($id);
 		return json_encode($result);
 	}
 

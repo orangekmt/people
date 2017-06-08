@@ -23,6 +23,11 @@ class ProjectRepository
 		return $this->project->findOrFail($id);
 	}
 
+  public function getByOTL($customer_name,$otl_project_code,$meta_activity,$task_name)
+	{
+		return $this->project->where('customer_name', $customer_name)->where('otl_project_code', $otl_project_code)->where('meta_activity', $meta_activity)->where('task_name', $task_name)->first();
+	}
+
   public function create(Array $inputs)
   {
     $project = new $this->project;
@@ -36,10 +41,6 @@ class ProjectRepository
 
 	private function save(Project $project, Array $inputs)
 	{
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     // Required fields
     if (isset($inputs['project_name'])) {$project->project_name = $inputs['project_name'];}
     if (isset($inputs['customer_name'])) {$project->customer_name = $inputs['customer_name'];}
@@ -68,39 +69,17 @@ class ProjectRepository
     // Boolean
     if (isset($inputs['from_otl'])) {$project->from_otl = $inputs['from_otl'];}
 
-    try {
-      $project->save();
-    }
-    catch (\Illuminate\Database\QueryException $ex){
-        $result->result = 'error';
-        $result->msg = 'Message:</BR>'.$ex->getMessage();
-        return $result;
-    }
+    $project->save();
 
-    $result->msg = 'Project '.$project->name.' saved successfully.';
-
-    return $result;
+    return $project;
 	}
 
 	public function destroy($id)
 	{
-    $result = new \stdClass();
-    $result->result = 'success';
-    $result->msg = '';
-
     $project = $this->getById($id);
-    $name = $project->project_name;
+    $project->delete();
 
-    try {
-		    $project->delete();
-      } catch (\Illuminate\Database\QueryException $ex){
-          $result->result = 'error';
-          $result->msg = '</BR>Message:</BR>'.$ex->getMessage();
-          return $result;
-      }
-
-      $result->msg = 'Project '.$name.' deleted successfully.';
-    return $result;
+    return $project;
 	}
 
   public function getListOfProjects()

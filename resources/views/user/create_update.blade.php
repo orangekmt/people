@@ -176,7 +176,7 @@
                 {!! Form::label('is_manager', 'Is manager?', ['class' => 'control-label']) !!}
             </div>
             <div class="col-md-10">
-                {!! Form::checkbox('is_manager', 'yes', (isset($user)) ? $user->is_manager : '', ['class' => 'checkbox']) !!}
+                {!! Form::checkbox('is_manager', '1', (isset($user)) ? $user->is_manager : '', ['class' => 'checkbox']) !!}
                 {!! $errors->first('manager_id', '<small class="help-block">:message</small>') !!}
             </div>
         </div>
