@@ -7,7 +7,7 @@
             <li class="header">MAIN NAVIGATION</li>
             <li class="treeview">
                 <a href="#">
-                <i class="fa fa-files-o"></i> <span>XLS Uploads</span> <i class="fa fa-angle-left pull-right"></i>
+                <i class="fa fa-files-o"></i> <span>DB Feed</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                   @permission(['otl-upload'])
@@ -17,7 +17,7 @@
             </li>
             <li class="treeview">
                 <a href="#">
-                <i class="fa fa-table"></i> <span>Data Management</span> <i class="fa fa-angle-left pull-right"></i>
+                <i class="fa fa-table"></i> <span>DB Management</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     @permission(['user-view','user-edit','user-create','user-delete'])

@@ -21,7 +21,8 @@ return [
         'ISC' => 'ISC',
         'Cairo' => 'Cairo'
     ],
-    'domain' => [
+    'domain-users' => [
+        'GCP' => 'GCP',
         'OGSB' => 'OGSB',
         'Hybrid' => 'Hybrid',
         'Hybrid Security' => 'Hybrid Security',
@@ -29,15 +30,27 @@ return [
         'Hybrid Network' => 'Hybrid Network',
         'UC' => 'UC'
     ],
+    'domain-projects' => [
+        'Hybrid Security' => 'Hybrid Security',
+        'Hybrid APM' => 'Hybrid APM',
+        'Hybrid Network' => 'Hybrid Network',
+        'UC' => 'UC'
+    ],
     'meta_activity' => [
+        '' => '',
         'BILLABLE' => 'BILLABLE',
         'ABS' => 'ABS',
         'OTHER' => 'OTHER',
         'CF' => 'CF'
     ],
     'project_status' => [
-        'Open' => 'Open',
+        'Started' => 'Started',
+        'Pre-Sales' => 'Pre-Sales',
         'Closed' => 'Closed'
+    ],
+    'project_type' => [
+        'Baseline' => 'Baseline',
+        'Project' => 'Project'
     ],
     'year' => [
         '2015' => '2015',

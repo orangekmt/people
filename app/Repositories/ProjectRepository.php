@@ -23,11 +23,14 @@ class ProjectRepository
 		return $this->project->findOrFail($id);
 	}
 
-  public function getByOTL($customer_name,$otl_project_code,$meta_activity,$task_name)
+  public function getByOTL($otl_project_code,$meta_activity)
 	{
-		return $this->project->where('customer_name', $customer_name)->where('otl_project_code', $otl_project_code)->where('meta_activity', $meta_activity)->where('task_name', $task_name)->first();
+		return $this->project->where('otl_project_code', $otl_project_code)->where('meta_activity', $meta_activity)->first();
 	}
-
+  public function getByOTLnum($otl_project_code,$meta_activity)
+	{
+		return $this->project->where('otl_project_code', $otl_project_code)->where('meta_activity', $meta_activity)->count();
+	}
   public function create(Array $inputs)
   {
     $project = new $this->project;
@@ -44,12 +47,11 @@ class ProjectRepository
     // Required fields
     if (isset($inputs['project_name'])) {$project->project_name = $inputs['project_name'];}
     if (isset($inputs['customer_name'])) {$project->customer_name = $inputs['customer_name'];}
-    if (isset($inputs['task_name'])) {$project->task_name = $inputs['task_name'];}
+
     if (isset($inputs['meta_activity'])) {$project->meta_activity = $inputs['meta_activity'];}
     if (isset($inputs['otl_project_code'])) {$project->otl_project_code = $inputs['otl_project_code'];}
     // Nullable
     if (isset($inputs['project_type'])) {$project->project_type = $inputs['project_type'];}
-    if (isset($inputs['task_category'])) {$project->task_category = $inputs['task_category'];}
     if (isset($inputs['region'])) {$project->region = $inputs['region'];}
     if (isset($inputs['country'])) {$project->country = $inputs['country'];}
     if (isset($inputs['customer_location'])) {$project->customer_location = $inputs['customer_location'];}
@@ -65,9 +67,6 @@ class ProjectRepository
     if (isset($inputs['revenue'])) {$project->revenue = $inputs['revenue'];}
     if (isset($inputs['project_status'])) {$project->project_status = $inputs['project_status'];}
     if (isset($inputs['win_ratio'])) {$project->comments = $inputs['win_ratio'];}
-
-    // Boolean
-    if (isset($inputs['from_otl'])) {$project->from_otl = $inputs['from_otl'];}
 
     $project->save();
 
