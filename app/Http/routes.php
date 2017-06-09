@@ -95,6 +95,10 @@ Route::group(['middleware' => ['auth']], function() {
       Route::get('activityDelete/{n}', ['uses'=>'ActivityController@delete','as'=>'activityDelete','middleware' => ['permission:activity-delete']]);
       //  AJAX
       Route::get('listOfActivitiesAjax', ['uses'=>'ActivityController@listOfActivities','as'=>'listOfActivitiesAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
-      Route::get('listOfActivitiesPerUserAjax/{is_manager}/{user_id}/{year}', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+      Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+
+      //Dashboards
+      Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+
 
 });

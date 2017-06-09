@@ -34,6 +34,16 @@
                     @endpermission
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="#">
+                <i class="fa fa-table"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    @permission(['activity-view','activity-edit','activity-create','activity-delete'])
+                      <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                    @endpermission
+                </ul>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
