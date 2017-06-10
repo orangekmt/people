@@ -50,7 +50,8 @@ return [
     ],
     'project_type' => [
         'Baseline' => 'Baseline',
-        'Project' => 'Project'
+        'Project' => 'Project',
+        'POC' => 'POC'
     ],
     'year' => [
         '2015' => '2015',

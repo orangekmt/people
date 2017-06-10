@@ -122,6 +122,34 @@ class PermissionTableSeeder extends Seeder
         		'display_name' => 'Upload OTL',
         		'description' => 'Upload xls file with OTL data'
         	]
+          ,
+        	[
+            'id' => 19,
+        		'name' => 'dashboard-all-view',
+        		'display_name' => 'Dashboard View All',
+        		'description' => 'Dashboard view for all users and managers'
+        	]
+          ,
+        	[
+            'id' => 20,
+        		'name' => 'dashboard-all-create',
+        		'display_name' => 'Dashboard Create All',
+        		'description' => 'Dashboard create for all users and managers'
+        	]
+          ,
+        	[
+            'id' => 21,
+        		'name' => 'dashboard-all-edit',
+        		'display_name' => 'Dashboard Edit All',
+        		'description' => 'Dashboard edit for all users and managers'
+        	]
+          ,
+        	[
+            'id' => 22,
+        		'name' => 'dashboard-view',
+        		'display_name' => 'Dashboard View',
+        		'description' => 'Dashboard view'
+        	]
         ];
 
         foreach ($permission as $key => $value) {

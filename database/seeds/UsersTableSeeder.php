@@ -7,9 +7,17 @@ class UsersTableSeeder extends Seeder {
 
 	public function run()
 	{
-		// John
+		// Admin
 		User::create(array(
 				'id' => '1',
+				'name' => 'admin',
+				'email' => 'admin@orange.com',
+				'password' => bcrypt('Cisco!23'),
+				'is_manager' => 0
+			));
+		// John
+		User::create(array(
+				'id' => '2',
 				'name' => 'Dauphinais,John',
 				'email' => 'john.dauphinais@orange.com',
 				'password' => bcrypt('cisco123'),

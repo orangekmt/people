@@ -5,6 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
+            @permission(['otl-upload'])
             <li class="treeview">
                 <a href="#">
                 <i class="fa fa-files-o"></i> <span>DB Feed</span> <i class="fa fa-angle-left pull-right"></i>
@@ -15,6 +16,13 @@
                   @endpermission
                 </ul>
             </li>
+            @endpermission
+
+            @permission(['user-view','user-edit','user-create','user-delete',
+            'role-view','role-edit','role-create','role-delete',
+            'project-view','project-edit','project-create','project-delete',
+            'activity-view','activity-edit','activity-create','activity-delete'
+            ])
             <li class="treeview">
                 <a href="#">
                 <i class="fa fa-table"></i> <span>DB Management</span> <i class="fa fa-angle-left pull-right"></i>
@@ -34,16 +42,22 @@
                     @endpermission
                 </ul>
             </li>
+            @endpermission
+
+            @permission(['dashboard-view'])
             <li class="treeview">
                 <a href="#">
                 <i class="fa fa-table"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
+
                 <ul class="treeview-menu">
-                    @permission(['activity-view','activity-edit','activity-create','activity-delete'])
-                      <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
-                    @endpermission
+                  @permission(['dashboard-view'])
+                  <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                  @endpermission
                 </ul>
+
             </li>
+            @endpermission
         </ul>
     </section>
     <!-- /.sidebar -->
