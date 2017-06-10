@@ -49,9 +49,6 @@
             @endforeach
           </select>
         </div>
-        <div class="form-group col-xs-offset-6 col-xs-2">
-          <button class="pull-left btn btn-default" id="update">Update <i class="fa fa-arrow-circle-right"></i></button>
-        </div>
       </div>
     </div>
   </div>
@@ -219,27 +216,27 @@
                 disabled: {{ $manager_select_disabled }}
             });
 
-            $("#update").click(function()
-                {
-                  year = [];
-                  manager = [];
+            $('#year').on('change', function() {
+              year = [];
+              $("#year option:selected").each(function()
+                  {
+                  // log the value and text of each option
+                  year.push($(this).val());
 
-                  $("#year option:selected").each(function()
-                      {
-                      // log the value and text of each option
-                      year.push($(this).val());
-                  });
+              });
+              activitiesTable.ajax.reload();
+            });
 
+            $('#manager').on('change', function() {
+              manager = [];
+              $("#manager option:selected").each(function()
+                  {
+                  // log the value and text of each option
+                  manager.push($(this).val());
 
-                  $("#manager option:selected").each(function()
-                      {
-                      // log the value and text of each option
-                      manager.push($(this).val());
-                  });
-
-                  activitiesTable.ajax.reload();
-                }
-            );
+              });
+              activitiesTable.ajax.reload();
+            });
 
             activitiesTable = $('#activitiesTable').DataTable({
                 scrollX: true,

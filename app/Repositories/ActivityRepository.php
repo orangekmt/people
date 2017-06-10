@@ -88,8 +88,14 @@ class ActivityRepository
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
 
-    $activityList = DB::table('activities')
-    ->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','p.id as project_id','p.project_name as project_name','p.customer_name as customer_name','activities.year as year',
+    $activityList = DB::table('activities');
+
+    $activityList->leftjoin('projects as p', 'p.id', '=', 'activities.project_id')
+                  ->leftjoin('users as u', 'u.id', '=', 'activities.user_id')
+                  ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
+                  ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id');
+
+    $activityList->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','p.id as project_id','p.project_name as project_name','p.customer_name as customer_name','activities.year as year',
     //jan
 
     DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
@@ -138,13 +144,10 @@ class ActivityRepository
 
     DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com'),
     DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=12,activities.from_otl,0))) dec_otl')
-    )
+  );
 
 
-    ->leftjoin('projects as p', 'p.id', '=', 'activities.project_id')
-    ->leftjoin('users as u', 'u.id', '=', 'activities.user_id')
-    ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
-    ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id');
+
 
     if (!empty($where['year']))
         {
