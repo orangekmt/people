@@ -90,53 +90,53 @@ class ActivityRepository
     $activityList = DB::table('activities')
     ->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','p.id as project_id','p.project_name as project_name','activities.year as year',
     //jan
-    DB::raw('sum(if(activities.from_otl=0 and month=1,task_hour,0)) jan_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=1,task_hour,0)) jan_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=1,activities.from_otl,0))) jan_otl'),
     //feb
-    DB::raw('sum(if(activities.from_otl=0 and month=2,task_hour,0)) feb_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=2,task_hour,0)) feb_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,task_hour,0)),sum(if(activities.from_otl=0 and month=2,task_hour,0))) feb_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=2,activities.from_otl,0))) feb_otl'),
     //mar
-    DB::raw('sum(if(activities.from_otl=0 and month=3,task_hour,0)) mar_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=3,task_hour,0)) mar_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,task_hour,0)),sum(if(activities.from_otl=0 and month=3,task_hour,0))) mar_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=3,activities.from_otl,0))) mar_otl'),
     //apr
-    DB::raw('sum(if(activities.from_otl=0 and month=4,task_hour,0)) apr_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=4,task_hour,0)) apr_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,task_hour,0)),sum(if(activities.from_otl=0 and month=4,task_hour,0))) apr_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=4,activities.from_otl,0))) apr_otl'),
     //may
-    DB::raw('sum(if(activities.from_otl=0 and month=5,task_hour,0)) may_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=5,task_hour,0)) may_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,task_hour,0)),sum(if(activities.from_otl=0 and month=5,task_hour,0))) may_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=5,activities.from_otl,0))) may_otl'),
     //jun
-    DB::raw('sum(if(activities.from_otl=0 and month=6,task_hour,0)) jun_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=6,task_hour,0)) jun_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,task_hour,0)),sum(if(activities.from_otl=0 and month=6,task_hour,0))) jun_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=6,activities.from_otl,0))) jun_otl'),
     //jul
-    DB::raw('sum(if(activities.from_otl=0 and month=7,task_hour,0)) jul_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=7,task_hour,0)) jul_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,task_hour,0)),sum(if(activities.from_otl=0 and month=7,task_hour,0))) jul_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=7,activities.from_otl,0))) jul_otl'),
     //aug
-    DB::raw('sum(if(activities.from_otl=0 and month=8,task_hour,0)) aug_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=8,task_hour,0)) aug_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,task_hour,0)),sum(if(activities.from_otl=0 and month=8,task_hour,0))) aug_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=8,activities.from_otl,0))) aug_otl'),
     //sep
-    DB::raw('sum(if(activities.from_otl=0 and month=9,task_hour,0)) sep_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=9,task_hour,0)) sep_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,task_hour,0)),sum(if(activities.from_otl=0 and month=9,task_hour,0))) sep_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=9,activities.from_otl,0))) sep_otl'),
     //oct
-    DB::raw('sum(if(activities.from_otl=0 and month=10,task_hour,0)) oct_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=10,task_hour,0)) oct_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,task_hour,0)),sum(if(activities.from_otl=0 and month=10,task_hour,0))) oct_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=10,activities.from_otl,0))) oct_otl'),
     //nov
-    DB::raw('sum(if(activities.from_otl=0 and month=11,task_hour,0)) nov_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=11,task_hour,0)) nov_otl'),
+
     DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,task_hour,0)),sum(if(activities.from_otl=0 and month=11,task_hour,0))) nov_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=11,activities.from_otl,0))) nov_otl'),
     //dec
-    DB::raw('sum(if(activities.from_otl=0 and month=12,task_hour,0)) dec_forecast'),
-    DB::raw('sum(if(activities.from_otl=1 and month=12,task_hour,0)) dec_otl'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com')
+
+    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=12,activities.from_otl,0))) dec_otl')
     )
 
 
@@ -145,14 +145,13 @@ class ActivityRepository
     ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
     ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id')
 
-    ->where('activities.user_id', '=', 2)
     ->where('activities.year', '=', 2017)
 
     ->groupBy('manager_id','manager_name','user_id','user_name','project_id','project_name','year')
 
     ;
 
-      $data = $activityList->get();
+      //$data = $activityList->get();
       //$data = $activityList->toSql();
 
       //dd($data);

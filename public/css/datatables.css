@@ -29,3 +29,18 @@ th.first_column {
 th.last_column {
   width: 40px;
 }
+
+td.otl {
+  font-size : 16px;
+  color : green;
+}
+
+td.forecast {
+  font-size : 16px;
+  color : blue;
+}
+
+td.zero {
+  font-size : 10px;
+  color : grey;
+}
