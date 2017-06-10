@@ -21,6 +21,44 @@
 @stop
 
 @section('content')
+<div class="row">
+  <div class="col-md-12">
+  <div class="box box-primary">
+    <div class="box-header">
+      <i class="fa fa-wrench"></i>
+      <h3 class="box-title">Tools</h3>
+      <div class="box-tools pull-right">
+        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div><!-- /.box-tools -->
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="form-group col-xs-2">
+          <label for="month" class="control-label">Year</label>
+          <select class="form-control select2" style="width: 100%;" id="year" name="year" data-placeholder="Select a year">
+            @foreach($years as $year)
+              <option value="{{ $year['id'] }}" {{ $year['selected'] }}>{{ $year['value'] }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group col-xs-2">
+          <label for="manager" class="control-label">Manager</label>
+          <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
+            @foreach($manager_list as $key => $value)
+            <option value="{{ $key }}">{{ $value }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group col-xs-offset-6 col-xs-2">
+          <button class="pull-left btn btn-default" id="update">Update <i class="fa fa-arrow-circle-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="row">
+  <div class="col-md-12">
     <!-- table widget -->
     <div class="box box-info">
 
@@ -45,6 +83,7 @@
                 {{ $message }}
             </div>
             @endif
+            <div style="width: 98%;">
             <table id="activitiesTable" class="display table-bordered table-hover table-responsive">
                 <thead>
                     <tr>
@@ -52,6 +91,7 @@
                       <th>Manager name</th>
                       <th>User ID</th>
                       <th>User name</th>
+                      <th>Customer name</th>
                       <th>Project ID</th>
                       <th>Project name</th>
                       <th>Year</th>
@@ -87,6 +127,7 @@
                       <th>Manager name</th>
                       <th>User ID</th>
                       <th>User name</th>
+                      <th>Customer name</th>
                       <th>Project ID</th>
                       <th>Project name</th>
                       <th></th>
@@ -117,30 +158,46 @@
                     </tr>
                 </tfoot>
             </table>
+          </div>
         </div>
     </div>
-
+</div>
+</div>
 @stop
 
 @section('script')
     <script>
         var activitiesTable;
-        var record_id;
+        var year = [];
+        var manager = [];
 
+        $("#year option:selected").each(function()
+            {
+            // log the value and text of each option
+            year.push($(this).val());
+        });
+
+        $("#manager option:selected").each(function()
+            {
+            // log the value and text of each option
+            manager.push($(this).val());
+        });
+
+
+        function ajaxData(){
+                    var obj = {
+                        'year[]': year,
+                        'manager[]': manager
+                        };
+                    return obj;
+                    }
         // Here we are going to get from PHP the list of roles and their value for the logged in activities
 
-        <?php
-          $options = array(
-              'validate_all' => true,
-              'return_type' => 'both'
-          );
-          list($validate, $allValidations) = Entrust::ability(null,array('activities-view','activities-edit','activities-delete','activities-create'),$options);
-          echo "var permissions = jQuery.parseJSON('".json_encode($allValidations['permissions'])."');";
-        ?>
+        var permissions = jQuery.parseJSON('{!! $perms !!}');
+
         // Roles check finished.
 
         //console.log(permissions);
-
 
         $(document).ready(function() {
 
@@ -150,20 +207,54 @@
                 }
             });
 
+            //Init select2 boxes
+            $("#year").select2({
+                allowClear: false
+            });
+            //Init select2 boxes
+            $("#manager").select2({
+                allowClear: false,
+                disabled: {{ $manager_select_disabled }}
+            });
+
+            $("#update").click(function()
+                {
+                  year = [];
+                  manager = [];
+
+                  $("#year option:selected").each(function()
+                      {
+                      // log the value and text of each option
+                      year.push($(this).val());
+                  });
+
+
+                  $("#manager option:selected").each(function()
+                      {
+                      // log the value and text of each option
+                      manager.push($(this).val());
+                  });
+
+                  activitiesTable.ajax.reload();
+                }
+            );
+
             activitiesTable = $('#activitiesTable').DataTable({
                 scrollX: true,
-                ScrollXInner: "200%",
                 ajax: {
                         url: "{!! route('listOfActivitiesPerUserAjax') !!}",
                         type: "POST",
+                        data: ajaxData,
+                        dataType: "JSON"
                     },
                 columns: [
                     { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
                     { name: 'manager_name', data: 'manager_name', width: '150px' },
                     { name: 'user_id', data: 'user_id' , searchable: false , visible: false},
                     { name: 'user_name', data: 'user_name' , width: '150px'},
+                    { name: 'customer_name', data: 'customer_name' , width: '200px'},
                     { name: 'project_id', data: 'project_id' , searchable: false , visible: false},
-                    { name: 'project_name', data: 'project_name'},
+                    { name: 'project_name', data: 'project_name' , width: '150px'},
                     { name: 'year', data: 'year' , searchable: false , visible: false},
                     { name: 'jan_com', data: 'jan_com', width: '30px', searchable: false },
                     { name: 'jan_otl', data: 'jan_otl', width: '10px', searchable: false , visible: false},
@@ -214,112 +305,112 @@
                 },
                 rowCallback: function(row, data, index){
                   if(data.jan_com<= 0){
-                      $(row).find('td:eq(3)').addClass('zero');
-                  }
-                  else if(data.jan_otl> 0){
-                      $(row).find('td:eq(3)').addClass('otl');
-                  }
-                  else {
-                    $(row).find('td:eq(3)').addClass('forecast');
-                  }
-                  if(data.feb_com<= 0){
                       $(row).find('td:eq(4)').addClass('zero');
                   }
-                  else if(data.feb_otl> 0){
+                  else if(data.jan_otl> 0){
                       $(row).find('td:eq(4)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(4)').addClass('forecast');
                   }
-                  if(data.mar_com<= 0){
+                  if(data.feb_com<= 0){
                       $(row).find('td:eq(5)').addClass('zero');
                   }
-                  else if(data.mar_otl> 0){
+                  else if(data.feb_otl> 0){
                       $(row).find('td:eq(5)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(5)').addClass('forecast');
                   }
-                  if(data.apr_com<= 0){
+                  if(data.mar_com<= 0){
                       $(row).find('td:eq(6)').addClass('zero');
                   }
-                  else if(data.apr_otl> 0){
+                  else if(data.mar_otl> 0){
                       $(row).find('td:eq(6)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(6)').addClass('forecast');
                   }
-                  if(data.may_com<= 0){
+                  if(data.apr_com<= 0){
                       $(row).find('td:eq(7)').addClass('zero');
                   }
-                  else if(data.may_otl> 0){
+                  else if(data.apr_otl> 0){
                       $(row).find('td:eq(7)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(7)').addClass('forecast');
                   }
-                  if(data.jun_com<= 0){
+                  if(data.may_com<= 0){
                       $(row).find('td:eq(8)').addClass('zero');
                   }
-                  else if(data.jun_otl> 0){
+                  else if(data.may_otl> 0){
                       $(row).find('td:eq(8)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(8)').addClass('forecast');
                   }
-                  if(data.jul_com<= 0){
+                  if(data.jun_com<= 0){
                       $(row).find('td:eq(9)').addClass('zero');
                   }
-                  else if(data.jul_otl> 0){
+                  else if(data.jun_otl> 0){
                       $(row).find('td:eq(9)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(9)').addClass('forecast');
                   }
-                  if(data.aug_com<= 0){
+                  if(data.jul_com<= 0){
                       $(row).find('td:eq(10)').addClass('zero');
                   }
-                  else if(data.aug_otl> 0){
+                  else if(data.jul_otl> 0){
                       $(row).find('td:eq(10)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(10)').addClass('forecast');
                   }
-                  if(data.sep_com<= 0){
+                  if(data.aug_com<= 0){
                       $(row).find('td:eq(11)').addClass('zero');
                   }
-                  else if(data.sep_otl> 0){
+                  else if(data.aug_otl> 0){
                       $(row).find('td:eq(11)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(11)').addClass('forecast');
                   }
-                  if(data.oct_com<= 0){
+                  if(data.sep_com<= 0){
                       $(row).find('td:eq(12)').addClass('zero');
                   }
-                  else if(data.oct_otl> 0){
+                  else if(data.sep_otl> 0){
                       $(row).find('td:eq(12)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(12)').addClass('forecast');
                   }
-                  if(data.nov_com<= 0){
+                  if(data.oct_com<= 0){
                       $(row).find('td:eq(13)').addClass('zero');
                   }
-                  else if(data.nov_otl> 0){
+                  else if(data.oct_otl> 0){
                       $(row).find('td:eq(13)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(13)').addClass('forecast');
                   }
-                  if(data.dec_com<= 0){
+                  if(data.nov_com<= 0){
                       $(row).find('td:eq(14)').addClass('zero');
                   }
-                  else if(data.dec_otl> 0){
+                  else if(data.nov_otl> 0){
                       $(row).find('td:eq(14)').addClass('otl');
                   }
                   else {
                     $(row).find('td:eq(14)').addClass('forecast');
+                  }
+                  if(data.dec_com<= 0){
+                      $(row).find('td:eq(15)').addClass('zero');
+                  }
+                  else if(data.dec_otl> 0){
+                      $(row).find('td:eq(15)').addClass('otl');
+                  }
+                  else {
+                    $(row).find('td:eq(15)').addClass('forecast');
                   }
                 }
             });

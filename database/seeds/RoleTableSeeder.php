@@ -61,8 +61,10 @@ class RoleTableSeeder extends Seeder
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (21,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (22,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (22,2);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (22,3);");
         DB::statement("INSERT INTO `role_user`(`user_id`, `role_id`) VALUES (1,1);");
         DB::statement("INSERT INTO `role_user`(`user_id`, `role_id`) VALUES (2,2);");
+
 
       }
 }

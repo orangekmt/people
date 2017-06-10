@@ -83,8 +83,9 @@ class ActivityController extends Controller {
   {
     return $this->activityRepository->getListOfActivities();
   }
-  public function ListOfactivitiesPerUser()
+  public function ListOfactivitiesPerUser(Request $request)
   {
-    return $this->activityRepository->getListOfActivitiesPerUser();
+    $input = $request->all();
+    return $this->activityRepository->getListOfActivitiesPerUser($input);
   }
 }
