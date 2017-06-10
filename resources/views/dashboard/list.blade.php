@@ -83,7 +83,7 @@
                 {{ $message }}
             </div>
             @endif
-            <div style="width: 98%;">
+            <div style="">
             <table id="activitiesTable" class="display table-bordered table-hover table-responsive">
                 <thead>
                     <tr>
@@ -119,6 +119,7 @@
                       <th>OTL</th>
                       <th>Dec</th>
                       <th>OTL</th>
+                      <th></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -130,6 +131,7 @@
                       <th>Customer name</th>
                       <th>Project ID</th>
                       <th>Project name</th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -170,7 +172,7 @@
         var activitiesTable;
         var year = [];
         var manager = [];
-
+        //alert($.fn.dataTable.version);
         $("#year option:selected").each(function()
             {
             // log the value and text of each option
@@ -248,14 +250,14 @@
                         dataType: "JSON"
                     },
                 columns: [
-                    { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
-                    { name: 'manager_name', data: 'manager_name', width: '150px' },
-                    { name: 'user_id', data: 'user_id' , searchable: false , visible: false},
-                    { name: 'user_name', data: 'user_name' , width: '150px'},
-                    { name: 'customer_name', data: 'customer_name' , width: '200px'},
-                    { name: 'project_id', data: 'project_id' , searchable: false , visible: false},
-                    { name: 'project_name', data: 'project_name' , width: '150px'},
-                    { name: 'year', data: 'year' , searchable: false , visible: false},
+                    { name: 'u2.id', data: 'manager_id' , searchable: false , visible: false},
+                    { name: 'u2.name', data: 'manager_name', width: '150px' },
+                    { name: 'u.id', data: 'user_id' , searchable: false , visible: false},
+                    { name: 'u.name', data: 'user_name' , width: '150px'},
+                    { name: 'p.customer_name', data: 'customer_name' , width: '200px'},
+                    { name: 'p.id', data: 'project_id' , searchable: false , visible: false},
+                    { name: 'p.project_name', data: 'project_name', width: '200px'},
+                    { name: 'activities.year', data: 'year' , searchable: false , visible: false},
                     { name: 'jan_com', data: 'jan_com', width: '30px', searchable: false },
                     { name: 'jan_otl', data: 'jan_otl', width: '10px', searchable: false , visible: false},
                     { name: 'feb_com', data: 'feb_com', width: '30px', searchable: false },
@@ -279,7 +281,17 @@
                     { name: 'nov_com', data: 'nov_com', width: '30px', searchable: false },
                     { name: 'nov_otl', data: 'nov_otl', width: '10px', searchable: false , visible: false},
                     { name: 'dec_com', data: 'dec_com', width: '30px', searchable: false },
-                    { name: 'dec_otl', data: 'dec_otl', width: '10px', searchable: false , visible: false}
+                    { name: 'dec_otl', data: 'dec_otl', width: '10px', searchable: false , visible: false},
+                    {
+                        name: 'actions',
+                        data: null,
+                        sortable: false,
+                        searchable: false,
+                        render: function (data) {
+                            var actions = '';
+                            return actions;
+                        }
+                    }
                     ],
                 order: [[2, 'asc']],
                 initComplete: function () {
