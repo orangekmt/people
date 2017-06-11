@@ -6,6 +6,16 @@ table {
   table-layout: fixed;
   word-wrap:break-word;
 }
+
+table.my_data {
+  font-size : 14px;
+  color : black;
+}
+
+.direct-chat .box-body {
+    padding: 10px;
+}
+
 td.details-control {
 background: url("../plugins/datatables/details_open.png") no-repeat center center;
 cursor: pointer;

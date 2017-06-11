@@ -10,14 +10,20 @@ use DB;
 use Entrust;
 use Auth;
 use App\Repositories\UserRepository;
+use App\Repositories\ProjectRepository;
+use App\Repositories\ActivityRepository;
 
 class DashboardController extends Controller {
 
+  protected $activityRepository;
   protected $userRepository;
+  protected $projectRepository;
 
-  public function __construct(UserRepository $userRepository)
+  public function __construct(ActivityRepository $activityRepository,UserRepository $userRepository,ProjectRepository $projectRepository)
   {
+    $this->activityRepository = $activityRepository;
     $this->userRepository = $userRepository;
+    $this->projectRepository = $projectRepository;
 	}
 
 	public function activities()
@@ -52,6 +58,27 @@ class DashboardController extends Controller {
       $manager_select_disabled = 'true';
     }
 		return view('dashboard/list', compact('manager_list','today','years','manager_select_disabled','perms'));
+	}
+
+	public function getFormCreate($user_id)
+	{
+		return view('project/create_update', compact('user_id'))->with('action','create');
+	}
+
+  public function getFormUpdate($user_id,$project_id)
+	{
+    $project = $this->projectRepository->getById($project_id);
+		return view('project/create_update', compact('user_id','project_id','project'))->with('action','update');
+	}
+
+  public function postFormCreate(ProjectCreateRequest $request, $user_id)
+	{
+    return '';
+	}
+
+	public function postFormUpdate(ProjectUpdateRequest $request, $user_id,$project_id)
+	{
+    return '';
 	}
 
 }

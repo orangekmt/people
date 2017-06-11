@@ -99,6 +99,12 @@ Route::group(['middleware' => ['auth']], function() {
 
       //Dashboards
       Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:dashboard-view']]);
+      //  Create new activity
+      Route::get('dashboardFormCreate/{u}', ['uses'=>'DashboardController@getFormCreate','as'=>'dashboardFormCreate','middleware' => ['permission:dashboard-view']]);
+      Route::post('dashboardFormCreate/{u}', ['uses'=>'DashboardController@postFormCreate','middleware' => ['permission:dashboard-view']]);
+      //  Update activity
+      Route::get('dashboardFormUpdate/{u}/{p}', ['uses'=>'DashboardController@getFormUpdate','as'=>'dashboardFormUpdate','middleware' => ['permission:dashboard-view']]);
+      Route::post('dashboardFormUpdate/{u}/{p}', ['uses'=>'DashboardController@postFormUpdate','middleware' => ['permission:dashboard-view']]);
 
 
 });
