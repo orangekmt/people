@@ -12,6 +12,8 @@ use Auth;
 use App\Repositories\UserRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ActivityRepository;
+use App\Http\Requests\DashboardCreateRequest;
+use App\Http\Requests\DashboardUpdateRequest;
 
 class DashboardController extends Controller {
 
@@ -60,20 +62,43 @@ class DashboardController extends Controller {
 		return view('dashboard/list', compact('manager_list','today','years','manager_select_disabled','perms'));
 	}
 
-	public function getFormCreate($user_id)
+	public function getFormCreate($user_id,$year)
 	{
-		return view('project/create_update', compact('user_id'))->with('action','create');
+    $user = $this->userRepository->getById($user_id);
+		return view('dashboard/create_update', compact('user','year'))->with('action','create');
 	}
 
-  public function getFormUpdate($user_id,$project_id)
+  public function getFormUpdate($user_id,$project_id,$year)
 	{
+    $user = $this->userRepository->getById($user_id);
     $project = $this->projectRepository->getById($project_id);
-		return view('project/create_update', compact('user_id','project_id','project'))->with('action','update');
+    for ($i = 1; $i <= 12; $i++) {
+      $activity_forecast = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, 0);
+      if (!isset($activity_forecast)){
+        $activity_forecast = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, null);
+      }
+      $activity_OTL = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, 1);
+    }
+    die();
+		return view('dashboard/create_update', compact('user','project','year'))->with('action','update');
 	}
 
-  public function postFormCreate(ProjectCreateRequest $request, $user_id)
+  public function postFormCreate(DashboardCreateRequest $request)
 	{
-    return '';
+    $inputs = $request->all();
+    $project = $this->projectRepository->create($inputs);
+    foreach ($inputs['month'] as $key => $value){
+      $inputsActivities = [
+        'year' => $inputs['year'],
+        'month' => $key,
+        'project_id' => $project->id,
+        'user_id' => $inputs['user_id'],
+        'task_hour' => $value,
+        'from_otl' => 0
+      ];
+      $activity = $this->activityRepository->create($inputsActivities);
+    }
+    return redirect('dashboardActivities')->with('success','New project created successfully');
 	}
 
 	public function postFormUpdate(ProjectUpdateRequest $request, $user_id,$project_id)

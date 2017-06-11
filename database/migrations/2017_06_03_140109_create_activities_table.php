@@ -14,7 +14,7 @@ class CreateActivitiesTable extends Migration {
 			$table->integer('project_id')->unsigned();
 			$table->integer('user_id')->unsigned();
 			$table->float('task_hour');
-			$table->boolean('from_otl')->nullable();
+			$table->boolean('from_otl')->default(0);
 			$table->timestamp('created_at')->nullable();
 			$table->timestamp('updated_at')->nullable();
 		});

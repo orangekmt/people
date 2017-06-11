@@ -34,31 +34,7 @@
             </div>
             <div class="col-md-10">
               Download this
-              <a href="{{ asset('/Samples/otl_upload_sample.xls') }}">this file</a> to get the structure needed.
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
-            <div class="col-md-2">
-              {!! Form::label('year', 'year', ['class' => 'control-label']) !!}
-            </div>
-            <div class="col-md-10">
-              {!! Form::select('year', config('select.year'), date("Y"), ['class' => 'form-control']) !!}
-              {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group {!! $errors->has('month') ? 'has-error' : '' !!} col-md-12">
-            <div class="col-md-2">
-              {!! Form::label('month', 'month', ['class' => 'control-label']) !!}
-            </div>
-            <div class="col-md-10">
-              {!! Form::select('month', config('select.month'), date("m"), ['class' => 'form-control']) !!}
-              {!! $errors->first('month', '<small class="help-block">:message</small>') !!}
+              <a href="{{ asset('/Samples/otl_upload_sample.xls') }}">this file</a> to get the structure needed. The file needs to be named with the following convention:<year>-<month>.xls so for example for january 2017, you need the file 2017-1.xls
             </div>
           </div>
         </div>
@@ -97,6 +73,22 @@
           </div><!-- /.box-tools -->
         </div>
         <div class="box-body">
+          <div class="text-danger">Errors</div>
+          </BR>
+          @foreach($messages as $m)
+          @if($m['status'] == 'error')
+          <div class="row">
+            <div class="col-md-1 text-danger">
+              {!! $m['status'] !!}
+            </div>
+            <div class="col-md-offset-1 col-md-10 text-danger">
+              {!! $m['msg'] !!}
+            </div>
+          </div>
+          @endif
+          @endforeach
+          </BR></BR></BR>
+          Full results</BR>
           @foreach($messages as $m)
           <?php
           $color = "text-primary";

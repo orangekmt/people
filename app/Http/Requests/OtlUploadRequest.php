@@ -20,8 +20,6 @@ class OtlUploadRequest extends Request
   public function rules()
   {
     return [
-      'year' => 'required',
-      'month' => 'required',
       'uploadfile' => 'required'
     ];
   }

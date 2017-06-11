@@ -31,6 +31,8 @@ class CreateProjectsTable extends Migration {
 			$table->string('project_status', 100)->nullable();
 			$table->string('otl_project_code', 100)->nullable();
 			$table->integer('win_ratio')->nullable();
+			$table->integer('created_by_user_id')->unsigned()->nullable();
+			$table->boolean('otl_validated')->default(0);
 			$table->timestamp('created_at')->nullable();
 			$table->timestamp('updated_at')->nullable();
 		});

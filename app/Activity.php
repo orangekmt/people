@@ -11,9 +11,14 @@ class Activity extends Model
     public $timestamps = true;
     protected $fillable = array('year','month','project_id','user_id','task_hour','from_otl');
 
-    public function activities()
+    public function project()
     {
-        return $this->hasMany('App\Activity', 'activity_id');
+        return $this->belongsTo('App\Project', 'project_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
     }
 
 }

@@ -34,6 +34,7 @@ class ProjectRepository
   public function create(Array $inputs)
   {
     $project = new $this->project;
+    $inputs['created_by_user_id'] = Auth::user()->id;
     return $this->save($project, $inputs);
   }
 
@@ -66,7 +67,11 @@ class ProjectRepository
     if (isset($inputs['product_code'])) {$project->product_code = $inputs['product_code'];}
     if (isset($inputs['revenue'])) {$project->revenue = $inputs['revenue'];}
     if (isset($inputs['project_status'])) {$project->project_status = $inputs['project_status'];}
-    if (isset($inputs['win_ratio'])) {$project->comments = $inputs['win_ratio'];}
+    if (isset($inputs['win_ratio'])) {$project->win_ratio = $inputs['win_ratio'];}
+    if (isset($inputs['created_by_user_id'])) {$project->created_by_user_id = $inputs['created_by_user_id'];}
+
+    // Boolean
+    if (isset($inputs['otl_validated'])) {$project->otl_validated = $inputs['otl_validated'];}
 
     $project->save();
 

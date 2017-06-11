@@ -27,6 +27,11 @@ class OtlUploadController extends Controller
     $file = $request->file('uploadfile');
     if($file->isValid())
     {
+      $filename = $file->getClientOriginalName();
+      $fileextension = $file->getClientOriginalExtension();
+      $filenametemp = explode(".", $filename);
+      $yearmonth = explode("-", $filenametemp[0]);
+
       config(['excel.import.startRow' => 2 ]);
       $sheet = \Excel::selectSheetsByIndex(0)
       ->load($file);
@@ -42,9 +47,7 @@ class OtlUploadController extends Controller
         array_push($messages,['status'=>'BEGIN LINE '.$i,'msg'=>'************************']);
         $managerInDB = $this->userRepository->getByName($row->manager_name);
         $userInDB = $this->userRepository->getByName($row->employee_name);
-        $projectInDB = $this->projectRepository->getByOTL($row->project_name,$row->meta_activity);
         $projectInDBnum = $this->projectRepository->getByOTLnum($row->project_name,$row->meta_activity);
-
 
         if (!$managerInDB){
           $employee = [];
@@ -53,7 +56,7 @@ class OtlUploadController extends Controller
           $employee_firstname = $complete_name[1];
           $employee_lastname = $complete_name[0];
           $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
-          $employee['password'] = bcrypt('Welcome1');
+          $employee['password'] = 'Welcome1';
           $employee['is_manager'] = 1;
           $employee['from_otl'] = 1;
           $employee['manager_id'] = -1;
@@ -86,10 +89,14 @@ class OtlUploadController extends Controller
         }
         elseif ($projectInDBnum == 1) {
           // Only if we can find 1 instance of a mix of otl_project_code and meta-activity then we enter the activity
-          array_push($messages,['status'=>'pass','msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity]);
+          array_push($messages,['status'=>'update','msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity]);
+          $projectInDB = $this->projectRepository->getByOTL($row->project_name,$row->meta_activity);
+          $project_input = [];
+          $project_input['otl_validated'] = 1;
+          $this->projectRepository->update($projectInDB->id,$project_input);
           // Now we need to check if we need to update or create an activity
-          $activity['year'] = $request->input('year');
-          $activity['month'] = $request->input('month');
+          $activity['year'] = $yearmonth[0];
+          $activity['month'] = $yearmonth[1];
           $activity['user_id'] = $userInDB->id;
           $activity['project_id'] = $projectInDB->id;
           $activity['task_hour'] = $row->original_time;

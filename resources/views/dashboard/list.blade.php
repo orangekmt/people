@@ -1,4 +1,4 @@
-<!-- @extends('layouts.app',['main_title' => 'Dashboard','second_title'=>'activities','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'Dashboard','second_title'=>'activities','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
 
 @section('style')
 <!-- CSS -->
@@ -473,10 +473,16 @@
       console.log('the user id is '+row.data().user_id);
       console.log('the project id is '+row.data().project_id);
       // If we click on the name, then we create a new project
+      year = [];
+      $("#year option:selected").each(function()
+      {
+        // log the value and text of each option
+        year.push($(this).val());
+      });
       if (columns[colIndex].name == 'u.name'){
-        window.location.href = "{!! route('dashboardFormCreate','') !!}/"+row.data().user_id;
+        window.location.href = "{!! route('dashboardFormCreate',['','']) !!}/"+row.data().user_id+"/"+year[0];
       } else if (columns[colIndex].name == 'p.project_name'){
-        window.location.href = "{!! route('dashboardFormUpdate',['','']) !!}/"+row.data().user_id+"/"+row.data().project_id;
+        window.location.href = "{!! route('dashboardFormUpdate',['','','']) !!}/"+row.data().user_id+"/"+row.data().project_id+"/"+year[0];
       }
     });
 

@@ -34,4 +34,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\User', 'users_users' , 'manager_id', 'user_id')->withPivot('manager_type')->withTimestamps();
     }
 
+    public function projects()
+    {
+        return $this->hasMany('App\Project', 'project' , 'created_by_user_id', 'id');
+    }
+
 }
