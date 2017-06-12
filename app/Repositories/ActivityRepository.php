@@ -154,7 +154,7 @@ class ActivityRepository
             $activityList->where(function ($query) use ($where) {
                 foreach ($where['year'] as $w)
                 {
-                    $query->orWhere('activities.year',$w);
+                    $query->orWhere('year',$w);
                 }
             });
         }
@@ -201,12 +201,12 @@ class ActivityRepository
 
     $activityList = DB::table('activities');
 
-    $activityList->leftjoin('projects as p', 'p.id', '=', 'activities.project_id')
+    $activityList->leftjoin('projects as p', 'p.id', '=', 'project_id')
                   ->leftjoin('users as u', 'u.id', '=', 'activities.user_id')
                   ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
                   ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id');
 
-    $activityList->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','activities.year as year',
+    $activityList->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','year as year',
     //jan
 
     DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
@@ -265,7 +265,7 @@ class ActivityRepository
             $activityList->where(function ($query) use ($where) {
                 foreach ($where['year'] as $w)
                 {
-                    $query->orWhere('activities.year',$w);
+                    $query->orWhere('year',$w);
                 }
             });
         }
@@ -331,4 +331,56 @@ class ActivityRepository
       $data = Datatables::of($activityList)->make(true);
       return $data;
   }
+
+  public function getListOfLoadPerUserChart($where = null,$activity_type,$project_status)
+  {
+    /** We create here a SQL statement and the Datatables function will add the information it got from the AJAX request to have things like search or limit or show.
+    *   So we need to have a proper SQL search that the ajax can use via get with parameters given to it.
+    *   In the ajax datatables (view), there will be a parameter name that is going to be used here for the extra parameters so if we use a join,
+    *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
+    **/
+
+
+    $data = 0;
+    $where['user'] = [3];
+
+    $activityList = DB::table('activities');
+    $activityList->select('year',
+    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,task_hour,0)),sum(if(activities.from_otl=0 and month=2,task_hour,0))) feb_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,task_hour,0)),sum(if(activities.from_otl=0 and month=3,task_hour,0))) mar_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,task_hour,0)),sum(if(activities.from_otl=0 and month=4,task_hour,0))) apr_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,task_hour,0)),sum(if(activities.from_otl=0 and month=5,task_hour,0))) may_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,task_hour,0)),sum(if(activities.from_otl=0 and month=6,task_hour,0))) jun_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,task_hour,0)),sum(if(activities.from_otl=0 and month=7,task_hour,0))) jul_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,task_hour,0)),sum(if(activities.from_otl=0 and month=8,task_hour,0))) aug_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,task_hour,0)),sum(if(activities.from_otl=0 and month=9,task_hour,0))) sep_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,task_hour,0)),sum(if(activities.from_otl=0 and month=10,task_hour,0))) oct_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,task_hour,0)),sum(if(activities.from_otl=0 and month=11,task_hour,0))) nov_com'),
+    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com')
+    );
+    $activityList->leftjoin('projects as p', 'p.id', '=', 'project_id');
+
+    if (!empty($where['user'])){
+      $activityList->where(function ($query) use ($where) {
+        foreach ($where['user'] as $w)
+        {
+            $query->orWhere('user_id',$w);
+        }
+      });
+      $activityList->groupBy('year');
+      $activityList->where('p.activity_type','=',$activity_type);
+      $activityList->where('p.project_status','=',$project_status);
+      $data = $activityList->get();
+    }
+    elseif (!empty($where['manager'])){
+
+    }
+    else {
+
+    }
+
+    return $data;
+  }
+
 }

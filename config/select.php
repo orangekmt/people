@@ -53,6 +53,11 @@ return [
         'Project' => 'Project',
         'POC' => 'POC'
     ],
+    'activity_type' => [
+        '' => '',
+        'ISC' => 'ISC',
+        'DSC' => 'DSC'
+    ],
     'year' => [
         '2015' => '2015',
         '2016' => '2016',

@@ -147,6 +147,17 @@
                 </div>
               </div>
               <div class="row">
+                <div class="form-group {!! $errors->has('activity_type') ? 'has-error' : '' !!} col-md-12">
+                  <div class="col-md-3">
+                    {!! Form::label('activity_type', 'Activity type', ['class' => 'control-label']) !!}
+                  </div>
+                  <div class="col-md-9">
+                    {!! Form::select('activity_type', config('select.activity_type'), (isset($project)) ? $project->activity_type : '', ['class' => 'form-control']) !!}
+                    {!! $errors->first('activity_type', '<small class="help-block">:message</small>') !!}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                 <div class="form-group {!! $errors->has('project_status') ? 'has-error' : '' !!} col-md-12">
                   <div class="col-md-3">
                     {!! Form::label('project_status', 'Project status', ['class' => 'control-label']) !!}

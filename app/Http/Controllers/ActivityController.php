@@ -93,4 +93,23 @@ class ActivityController extends Controller {
     $input = $request->all();
     return $this->activityRepository->getlistOfLoadPerUser($input);
   }
+  public function listOfLoadPerUserChartAjax (Request $request)
+  {
+    $inputs = $request->all();
+    $dscvstotal = $this->activityRepository->getListOfLoadPerUserChart($inputs,'DSC','Pre-Sales');
+    $theoreticalCapacity = $this->userRepository->getTheoreticalCapacity($inputs);
+    $dscpresales = $this->activityRepository->getListOfLoadPerUserChart($inputs,'DSC','Pre-Sales');
+    $iscpresales = $this->activityRepository->getListOfLoadPerUserChart($inputs,'ISC','Pre-Sales');
+    $dscstarted = $this->activityRepository->getListOfLoadPerUserChart($inputs,'DSC','Started');
+    $iscstarted = $this->activityRepository->getListOfLoadPerUserChart($inputs,'ISC','Started');
+    $data = [];
+    $data ["dscvstotal"] = $dscvstotal;
+    $data ["theoreticalCapacity"] = $theoreticalCapacity;
+    $data ["dscpresales"] = $dscpresales;
+    $data ["iscpresales"] = $iscpresales;
+    $data ["dscstarted"] = $dscstarted;
+    $data ["iscstarted"] = $iscstarted;
+    dd($data);
+    return json_encode($data);
+  }
 }

@@ -12,6 +12,7 @@ class CreateProjectsTable extends Migration {
 			$table->string('customer_name', 100);
 			$table->string('project_name', 100)->unique();
 			$table->string('project_type', 100)->nullable();
+			$table->string('activity_type', 100)->nullable();
 			$table->string('meta_activity', 100);
 			$table->string('region', 100)->nullable();
 			$table->string('country', 100)->nullable();

@@ -53,6 +53,7 @@ class ProjectRepository
     if (isset($inputs['otl_project_code'])) {$project->otl_project_code = $inputs['otl_project_code'];}
     // Nullable
     if (isset($inputs['project_type'])) {$project->project_type = $inputs['project_type'];}
+    if (isset($inputs['activity_type'])) {$project->activity_type = $inputs['activity_type'];}
     if (isset($inputs['region'])) {$project->region = $inputs['region'];}
     if (isset($inputs['country'])) {$project->country = $inputs['country'];}
     if (isset($inputs['customer_location'])) {$project->customer_location = $inputs['customer_location'];}

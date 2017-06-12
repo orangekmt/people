@@ -148,4 +148,34 @@ class UserRepository
   {
     return $this->user->lists('name','id');
   }
+  public function getTheoreticalCapacity($where = null)
+  {
+    /** We create here a SQL statement and the Datatables function will add the information it got from the AJAX request to have things like search or limit or show.
+    *   So we need to have a proper SQL search that the ajax can use via get with parameters given to it.
+    *   In the ajax datatables (view), there will be a parameter name that is going to be used here for the extra parameters so if we use a join,
+    *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
+    **/
+    $data = 0;
+
+    if (!empty($where['user'])){
+      $data = count($where['user'])*22;
+    }
+    elseif (!empty($where['manager'])){
+      foreach ($where['manager'] as $w)
+      {
+          $data = $data+$this->getById($w)->employees()->count();
+      }
+      $data = $data * 22;
+    }
+    else {
+      $managers = $this->getManagersList();
+      foreach ($managers as $key => $value)
+      {
+          $data = $data+$this->getById($key)->employees()->count();
+      }
+      $data = $data * 22;
+    }
+    $theoretical = [$data,$data,$data,$data,$data,$data,$data,$data,$data,$data,$data,$data];
+    return $theoretical;
+  }
 }
