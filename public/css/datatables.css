@@ -13,7 +13,12 @@ table.my_data {
 }
 
 .direct-chat .box-body {
+  font-size : 14px;
     padding: 10px;
+}
+
+.direct-chat-info {
+  font-size : 14px !important;
 }
 
 td.details-control {

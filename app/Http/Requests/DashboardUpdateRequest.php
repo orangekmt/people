@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class ProjectUpdateRequest extends Request
+class DashboardUpdateRequest extends Request
 {
   /**
   * Determine if the project is authorized to make this request.
@@ -23,7 +23,7 @@ class ProjectUpdateRequest extends Request
   */
   public function rules()
   {
-    $id = $this->id;
+    $id = $this->project_id;
     $meta_activity = $this->meta_activity;
 
 

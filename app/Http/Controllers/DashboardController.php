@@ -33,6 +33,7 @@ class DashboardController extends Controller {
     $today = date("Y");
     $years = [];
 
+
     $options = array(
         'validate_all' => true,
         'return_type' => 'both'
@@ -64,23 +65,63 @@ class DashboardController extends Controller {
 
 	public function getFormCreate($user_id,$year)
 	{
+    $edit_project_name = '';
+    $edit_otl_name = '';
     $user = $this->userRepository->getById($user_id);
-		return view('dashboard/create_update', compact('user','year'))->with('action','create');
+		return view('dashboard/create_update', compact('user','year','edit_project_name','edit_otl_name'))->with('action','create');
 	}
 
   public function getFormUpdate($user_id,$project_id,$year)
 	{
+    $edit_project_name = '';
+    $edit_otl_name = '';
     $user = $this->userRepository->getById($user_id);
     $project = $this->projectRepository->getById($project_id);
-    for ($i = 1; $i <= 12; $i++) {
-      $activity_forecast = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, 0);
-      if (!isset($activity_forecast)){
-        $activity_forecast = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, null);
-      }
-      $activity_OTL = $this->projectRepository->getByOTL($year,$i,$user->id,$project->id, 1);
+    if (($project->created_by_user_id != null) && !(Auth::user()->id == $project->created_by_user_id)) {
+      $edit_project_name = 'disabled';
+      $edit_otl_name = 'disabled';
     }
-    die();
-		return view('dashboard/create_update', compact('user','project','year'))->with('action','update');
+    if ($project->otl_validated == 1) {
+      $edit_otl_name = 'disabled';
+    }
+
+    $activities = [];
+    $editable_activities = [];
+
+    for ($i = 1; $i <= 12; $i++) {
+      $activity_forecast = $this->activityRepository->getByOTL($year,$i,$user->id,$project->id, 0);
+      $activity_OTL = $this->activityRepository->getByOTL($year,$i,$user->id,$project->id, 1);
+      if (isset($activity_OTL)){
+        $activities[$i] = [
+          'id' => $activity_OTL->id,
+          'task_hour' => $activity_OTL->task_hour,
+          'from_otl' => 'disabled'
+        ];
+      } elseif (isset($activity_forecast)){
+        $activities[$i] = [
+          'id' => $activity_forecast->id,
+          'task_hour' => $activity_forecast->task_hour
+        ];
+        array_push($editable_activities,$activity_forecast->id);
+      } else {
+        $inputsActivities = [
+          'year' => $year,
+          'month' => $i,
+          'project_id' => $project_id,
+          'user_id' => $user_id,
+          'task_hour' => 0,
+          'from_otl' => 0
+        ];
+        $activity_forecast = $this->activityRepository->create($inputsActivities);
+        $activities[$i] = [
+          'id' => $activity_forecast->id,
+          'task_hour' => $activity_forecast->task_hour
+        ];
+        array_push($editable_activities,$activity_forecast->id);
+      }
+    }
+
+		return view('dashboard/create_update', compact('user','project','year','activities','editable_activities','edit_project_name','edit_otl_name'))->with('action','update');
 	}
 
   public function postFormCreate(DashboardCreateRequest $request)
@@ -101,9 +142,17 @@ class DashboardController extends Controller {
     return redirect('dashboardActivities')->with('success','New project created successfully');
 	}
 
-	public function postFormUpdate(ProjectUpdateRequest $request, $user_id,$project_id)
+	public function postFormUpdate(DashboardUpdateRequest $request)
 	{
-    return '';
+    $inputs = $request->all();
+    $project = $this->projectRepository->update($inputs['project_id'],$inputs);
+    foreach ($inputs['activities_id'] as $key => $value){
+      $inputsActivities = [
+        'task_hour' => $value
+      ];
+      $activity = $this->activityRepository->update($key,$inputsActivities);
+    }
+    return redirect('dashboardActivities')->with('success','Project updated successfully');
 	}
 
 }

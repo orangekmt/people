@@ -488,4 +488,4 @@
 
   } );
   </script>
-  @stop -->
+  @stop
