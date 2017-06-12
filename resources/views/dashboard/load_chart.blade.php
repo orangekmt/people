@@ -107,8 +107,118 @@
   var barChart;
   var year = [];
   var manager = [];
-  var myvar='';;
-  var myAjax;
+  var myvar='';
+
+  function ajaxDataPOST(){
+    var obj = {
+      'year[]': year,
+      'manager[]': manager
+    };
+    return obj;
+  };
+
+  function ajaxdscvstotal(){
+    var myarray = [
+      myvar.dscvstotal[0].jan_com,
+      myvar.dscvstotal[0].feb_com,
+      myvar.dscvstotal[0].mar_com,
+      myvar.dscvstotal[0].apr_com,
+      myvar.dscvstotal[0].may_com,
+      myvar.dscvstotal[0].jun_com,
+      myvar.dscvstotal[0].jul_com,
+      myvar.dscvstotal[0].aug_com,
+      myvar.dscvstotal[0].sep_com,
+      myvar.dscvstotal[0].oct_com,
+      myvar.dscvstotal[0].nov_com,
+      myvar.dscvstotal[0].dec_com
+    ];
+    return myarray;
+  };
+  function ajaxtheoreticalCapacity(){
+    var myarray = [
+      myvar.theoreticalCapacity[0].jan_com,
+      myvar.theoreticalCapacity[0].feb_com,
+      myvar.theoreticalCapacity[0].mar_com,
+      myvar.theoreticalCapacity[0].apr_com,
+      myvar.theoreticalCapacity[0].may_com,
+      myvar.theoreticalCapacity[0].jun_com,
+      myvar.theoreticalCapacity[0].jul_com,
+      myvar.theoreticalCapacity[0].aug_com,
+      myvar.theoreticalCapacity[0].sep_com,
+      myvar.theoreticalCapacity[0].oct_com,
+      myvar.theoreticalCapacity[0].nov_com,
+      myvar.theoreticalCapacity[0].dec_com
+    ];
+    return myarray;
+  };
+  function ajaxdscpresales(){
+    var myarray = [
+      myvar.dscpresales[0].jan_com,
+      myvar.dscpresales[0].feb_com,
+      myvar.dscpresales[0].mar_com,
+      myvar.dscpresales[0].apr_com,
+      myvar.dscpresales[0].may_com,
+      myvar.dscpresales[0].jun_com,
+      myvar.dscpresales[0].jul_com,
+      myvar.dscpresales[0].aug_com,
+      myvar.dscpresales[0].sep_com,
+      myvar.dscpresales[0].oct_com,
+      myvar.dscpresales[0].nov_com,
+      myvar.dscpresales[0].dec_com
+    ];
+    return myarray;
+  };
+  function ajaxiscpresales(){
+    var myarray = [
+      myvar.iscpresales[0].jan_com,
+      myvar.iscpresales[0].feb_com,
+      myvar.iscpresales[0].mar_com,
+      myvar.iscpresales[0].apr_com,
+      myvar.iscpresales[0].may_com,
+      myvar.iscpresales[0].jun_com,
+      myvar.iscpresales[0].jul_com,
+      myvar.iscpresales[0].aug_com,
+      myvar.iscpresales[0].sep_com,
+      myvar.iscpresales[0].oct_com,
+      myvar.iscpresales[0].nov_com,
+      myvar.iscpresales[0].dec_com
+    ];
+    return myarray;
+  };
+  function ajaxdscstarted(){
+    var myarray = [
+      myvar.dscstarted[0].jan_com,
+      myvar.dscstarted[0].feb_com,
+      myvar.dscstarted[0].mar_com,
+      myvar.dscstarted[0].apr_com,
+      myvar.dscstarted[0].may_com,
+      myvar.dscstarted[0].jun_com,
+      myvar.dscstarted[0].jul_com,
+      myvar.dscstarted[0].aug_com,
+      myvar.dscstarted[0].sep_com,
+      myvar.dscstarted[0].oct_com,
+      myvar.dscstarted[0].nov_com,
+      myvar.dscstarted[0].dec_com
+    ];
+    return myarray;
+  };
+  function ajaxiscstarted(){
+    var myarray = [
+      myvar.iscstarted[0].jan_com,
+      myvar.iscstarted[0].feb_com,
+      myvar.iscstarted[0].mar_com,
+      myvar.iscstarted[0].apr_com,
+      myvar.iscstarted[0].may_com,
+      myvar.iscstarted[0].jun_com,
+      myvar.iscstarted[0].jul_com,
+      myvar.iscstarted[0].aug_com,
+      myvar.iscstarted[0].sep_com,
+      myvar.iscstarted[0].oct_com,
+      myvar.iscstarted[0].nov_com,
+      myvar.iscstarted[0].dec_com
+    ];
+    return myarray;
+  };
 
   window.chartColors = {
    red: 'rgb(255, 99, 132)',
@@ -122,26 +232,6 @@
    grey: 'rgb(201, 203, 207)'
   };
 
-  //alert($.fn.dataTable.version);
-  $("#year option:selected").each(function()
-  {
-    // log the value and text of each option
-    year.push($(this).val());
-  });
-
-  $("#manager option:selected").each(function()
-  {
-    // log the value and text of each option
-    manager.push($(this).val());
-  });
-
-  function ajaxDataPOST(){
-    var obj = {
-      'year[]': year,
-      'manager[]': manager
-    };
-    return obj;
-  }
   // Here we are going to get from PHP the list of roles and their value for the logged in activities
 
   var permissions = jQuery.parseJSON('{!! $perms !!}');
@@ -151,27 +241,6 @@
   //console.log(permissions);
 
   $(document).ready(function() {
-
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-
-    myAjax = $.ajax({
-        url:"{!! route('listOfLoadPerUserChartAjax') !!}",
-        type:'POST',
-        data: ajaxDataPOST,
-        dataType:"JSON",
-        success: function(data) {
-          useReturnData(data);
-        }
-      });
-
-    function useReturnData(data){
-        myvar = data;
-        console.log(myvar);
-    };
 
     //Init select2 boxes
     $("#year").select2({
@@ -183,36 +252,39 @@
       disabled: {{ $manager_select_disabled }}
     });
 
-    $('#year').on('change', function() {
-      year = [];
-      $("#year option:selected").each(function()
-      {
-        // log the value and text of each option
-        year.push($(this).val());
-
-      });
-      //activitiesTable.ajax.reload();
+    $("#year option:selected").each(function()
+    {
+      // log the value and text of each option
+      year.push($(this).val());
     });
 
-    $('#manager').on('change', function() {
-      manager = [];
-      $("#manager option:selected").each(function()
-      {
-        // log the value and text of each option
-        manager.push($(this).val());
-
-      });
-      //activitiesTable.ajax.reload();
+    $("#manager option:selected").each(function()
+    {
+      // log the value and text of each option
+      manager.push($(this).val());
     });
+
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+
+
+    function useReturnData(data){
+        myvar = data;
+        //console.log(myvar);
+    };
 
     /* ChartJS
      * -------
      * Here we will create a few charts using ChartJS
      */
 
-
      var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
      var color = Chart.helpers.color;
+
 
      var barChartData = {
          labels: MONTHS,
@@ -224,7 +296,8 @@
              borderColor: window.chartColors.orange,
              borderWidth: 3,
              fill: false,
-             data: [10, 50, 75, 22, 24, 35, 67,54, 12, 8, 45, 64, 4, 78]
+             data: [
+                    ]
           },
           {
           type: 'line',
@@ -235,7 +308,8 @@
            borderWidth: 3,
            fill: false,
            pointRadius: 0,
-           data: [300, 300, 300, 300, 300, 300, 300,300, 300, 300, 300, 300, 300, 300]
+           data: [
+                    ]
          },
           {
           type: 'bar',
@@ -245,7 +319,8 @@
            backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
            borderColor: window.chartColors.green,
            borderWidth: 1,
-           data: [28, 48, 40, 19, 86, 27, 90,65, 59, 80, 81, 56, 55, 40]
+           data: [
+           ]
           },
           {
           type: 'bar',
@@ -255,7 +330,8 @@
            backgroundColor: color(window.chartColors.green_light).alpha(0.5).rgbString(),
            borderColor: window.chartColors.green_light,
            borderWidth: 1,
-           data: [65, 59, 80, 81, 56, 55, 40,28, 48, 40, 19, 86, 27, 90]
+           data: [
+           ]
           },
           {
           type: 'bar',
@@ -265,7 +341,8 @@
            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
            borderColor: window.chartColors.blue,
            borderWidth: 1,
-           data: [10, 50, 100, 142, 175, 25, 40,42, 53, 75, 142, 256, 248, 40]
+           data: [
+           ]
           },
           {
           type: 'bar',
@@ -275,7 +352,8 @@
            backgroundColor: color(window.chartColors.blue_light).alpha(0.5).rgbString(),
            borderColor: window.chartColors.blue_light,
            borderWidth: 1,
-           data: [14, 45, 85, 147, 54, 73, 24,54, 28, 72, 42, 89, 124, 40]
+           data: [
+         ]
           }
         ]
 
@@ -291,9 +369,9 @@
             position: 'top',
         },
         tooltips: {
-						mode: 'index',
-						intersect: false,
-					},
+            mode: 'index',
+            intersect: false,
+          },
         title: {
             display: true,
             text: 'LoE Forecast vs Capacity'
@@ -334,6 +412,79 @@
                 data: barChartData,
                 options: barChartOptions
             });
+
+
+    $.ajax({
+        url:"{!! route('listOfLoadPerUserChartAjax') !!}",
+        type:'POST',
+        data: ajaxDataPOST(),
+        dataType:"JSON",
+        success: function(data) {
+          useReturnData(data);
+          barChart.data.datasets[0].data = ajaxdscvstotal();
+          barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
+          barChart.data.datasets[2].data = ajaxdscpresales();
+          barChart.data.datasets[3].data = ajaxiscpresales();
+          barChart.data.datasets[4].data = ajaxdscstarted();
+          barChart.data.datasets[5].data = ajaxiscstarted();
+          barChart.update();
+        }
+      });
+
+    $('#year').on('change', function() {
+      year = [];
+      $("#year option:selected").each(function()
+      {
+        // log the value and text of each option
+        year.push($(this).val());
+
+      });
+
+      $.ajax({
+          url:"{!! route('listOfLoadPerUserChartAjax') !!}",
+          type:'POST',
+          data: ajaxDataPOST(),
+          dataType:"JSON",
+          success: function(data) {
+            useReturnData(data);
+            barChart.data.datasets[0].data = ajaxdscvstotal();
+            barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
+            barChart.data.datasets[2].data = ajaxdscpresales();
+            barChart.data.datasets[3].data = ajaxiscpresales();
+            barChart.data.datasets[4].data = ajaxdscstarted();
+            barChart.data.datasets[5].data = ajaxiscstarted();
+            barChart.update();
+          }
+        });
+      //activitiesTable.ajax.reload();
+    });
+
+    $('#manager').on('change', function() {
+      manager = [];
+      $("#manager option:selected").each(function()
+      {
+        // log the value and text of each option
+        manager.push($(this).val());
+
+      });
+      $.ajax({
+          url:"{!! route('listOfLoadPerUserChartAjax') !!}",
+          type:'POST',
+          data: ajaxDataPOST(),
+          dataType:"JSON",
+          success: function(data) {
+            useReturnData(data);
+            barChart.data.datasets[0].data = ajaxdscvstotal();
+            barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
+            barChart.data.datasets[2].data = ajaxdscpresales();
+            barChart.data.datasets[3].data = ajaxiscpresales();
+            barChart.data.datasets[4].data = ajaxdscstarted();
+            barChart.data.datasets[5].data = ajaxiscstarted();
+            barChart.update();
+          }
+        });
+      //activitiesTable.ajax.reload();
+    });
 
   } );
   </script>

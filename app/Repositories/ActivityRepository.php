@@ -420,6 +420,37 @@ class ActivityRepository
       $data = $activityList->get();
     }
 
+    if (empty($data)){
+      $data = [];
+      $data[0] = new \stdClass();
+      $data [0]->year = $where['year'][0];
+      $data [0]->jan_com = 0;
+      $data [0]->feb_com = 0;
+      $data [0]->mar_com = 0;
+      $data [0]->apr_com = 0;
+      $data [0]->may_com = 0;
+      $data [0]->jun_com = 0;
+      $data [0]->jul_com = 0;
+      $data [0]->aug_com = 0;
+      $data [0]->sep_com = 0;
+      $data [0]->oct_com = 0;
+      $data [0]->nov_com = 0;
+      $data [0]->dec_com = 0;
+    } else {
+      $data [0]->jan_com = $data [0]->jan_com/8;
+      $data [0]->feb_com = $data [0]->feb_com/8;
+      $data [0]->mar_com = $data [0]->mar_com/8;
+      $data [0]->apr_com = $data [0]->apr_com/8;
+      $data [0]->may_com = $data [0]->may_com/8;
+      $data [0]->jun_com = $data [0]->jun_com/8;
+      $data [0]->jul_com = $data [0]->jul_com/8;
+      $data [0]->aug_com = $data [0]->aug_com/8;
+      $data [0]->sep_com = $data [0]->sep_com/8;
+      $data [0]->oct_com = $data [0]->oct_com/8;
+      $data [0]->nov_com = $data [0]->nov_com/8;
+      $data [0]->dec_com = $data [0]->dec_com/8;
+    }
+
     return $data;
   }
 
