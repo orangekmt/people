@@ -59,10 +59,8 @@
                         <th>Project name</th>
                         <th>Task hours</th>
                         <th>From OTL</th>
-                        <th class="last_column">
-                          @permission('activity-create')
-                            <a href="{{ route('activityFormCreate') }}" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
-                          @endpermission
+                        <th>
+                            <a class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New</span></a>
                         </th>
                     </tr>
                 </thead>

@@ -53,6 +53,7 @@
                 <ul class="treeview-menu">
                   @permission(['dashboard-view'])
                   <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                  <li><a href="{!!route('dashboardLoad')!!}"><i class="fa fa-circle-o"></i> Users load</a></li>
                   @endpermission
                 </ul>
 

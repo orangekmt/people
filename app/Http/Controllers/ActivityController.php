@@ -88,4 +88,9 @@ class ActivityController extends Controller {
     $input = $request->all();
     return $this->activityRepository->getListOfActivitiesPerUser($input);
   }
+  public function listOfLoadPerUserAjax (Request $request)
+  {
+    $input = $request->all();
+    return $this->activityRepository->getlistOfLoadPerUser($input);
+  }
 }

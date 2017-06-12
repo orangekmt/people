@@ -96,9 +96,11 @@ Route::group(['middleware' => ['auth']], function() {
       //  AJAX
       Route::get('listOfActivitiesAjax', ['uses'=>'ActivityController@listOfActivities','as'=>'listOfActivitiesAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
       Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:dashboard-view']]);
+      Route::post('listOfLoadPerUserAjax', ['uses'=>'ActivityController@listOfLoadPerUserAjax','as'=>'listOfLoadPerUserAjax','middleware' => ['permission:dashboard-view']]);
 
       //Dashboards
       Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:dashboard-view']]);
+      Route::get('dashboardLoad', ['uses'=>'DashboardController@load','as'=>'dashboardLoad','middleware' => ['permission:dashboard-view']]);
       //  Create new activity
       Route::get('dashboardFormCreate/{u}/{y}', ['uses'=>'DashboardController@getFormCreate','as'=>'dashboardFormCreate','middleware' => ['permission:dashboard-view']]);
       Route::post('dashboardFormCreate', ['uses'=>'DashboardController@postFormCreate','middleware' => ['permission:dashboard-view']]);

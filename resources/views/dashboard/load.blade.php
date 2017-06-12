@@ -34,7 +34,7 @@
       <div class="box-body">
         <div class="row">
           <div class="form-group col-xs-2">
-            <label for="month" class="control-label">Year</label>
+            <label for="year" class="control-label">Year</label>
             <select class="form-control select2" style="width: 100%;" id="year" name="year" data-placeholder="Select a year">
               @foreach($years as $year)
               <option value="{{ $year['id'] }}" {{ $year['selected'] }}>{{ $year['value'] }}</option>
@@ -49,6 +49,31 @@
               @endforeach
             </select>
           </div>
+          <div class="form-group col-xs-2">
+            <label for="meta_activity" class="control-label">OTL Meta-activity</label>
+            <select class="form-control select2" style="width: 100%;" id="meta_activity" name="meta_activity" data-placeholder="Select an OTL meta-activity" multiple="multiple">
+              @foreach(config('select.meta_activity') as $key => $value)
+              <option value="{{ $key }}">{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group col-xs-2">
+            <label for="project_status" class="control-label">Project status</label>
+            <select class="form-control select2" style="width: 100%;" id="project_status" name="project_status" data-placeholder="Select a project status" multiple="multiple">
+              @foreach(config('select.project_status') as $key => $value)
+              <option value="{{ $key }}">{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group col-xs-2">
+            <label for="project_type" class="control-label">Project type</label>
+            <select class="form-control select2" style="width: 100%;" id="project_type" name="project_type" data-placeholder="Select a project type" multiple="multiple">
+              @foreach(config('select.project_type') as $key => $value)
+              <option value="{{ $key }}">{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
+
         </div>
       </div>
     </div>
@@ -85,11 +110,6 @@
             {{ $message }}
           </div>
           @endif
-          <div class="row button_in_row">
-            <div class="col-md-12">
-              <button id="new_project" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New Project</span></button>
-            </div>
-          </div>
           <div style="direct-chat-messages">
             <table id="activitiesTable" class="display table-bordered table-hover table-responsive my_data">
               <thead>
@@ -98,9 +118,6 @@
                   <th>Manager name</th>
                   <th>User ID</th>
                   <th>User name</th>
-                  <th>Customer name</th>
-                  <th>Project ID</th>
-                  <th>Project name</th>
                   <th>Year</th>
                   <th>Jan</th>
                   <th>OTL</th>
@@ -135,9 +152,6 @@
                   <th>Manager name</th>
                   <th>User ID</th>
                   <th>User name</th>
-                  <th>Customer name</th>
-                  <th>Project ID</th>
-                  <th>Project name</th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -174,20 +188,9 @@
 
                   <div class="contacts-list-info">
                     <span class="contacts-list-name">
-                      Edit the project and the number of hours you spend each month
-                    </span>
-                    <span class="contacts-list-msg">Simply click in the table on the line with the project name you want to edit</span>
-                  </div>
-                  <!-- /.contacts-list-info -->
-                </a>
-              </li>
-              <li>
 
-                  <div class="contacts-list-info">
-                    <span class="contacts-list-name">
-                      Create a new project with the number of hours you will spend each month
                     </span>
-                    <span class="contacts-list-msg">Simply click on the button New Project</span>
+                    <span class="contacts-list-msg"></span>
                   </div>
                   <!-- /.contacts-list-info -->
                 </a>
@@ -210,6 +213,10 @@
   var activitiesTable;
   var year = [];
   var manager = [];
+  var meta_activity = [];
+  var project_status = [];
+  var project_type = [];
+
   //alert($.fn.dataTable.version);
   $("#year option:selected").each(function()
   {
@@ -223,11 +230,32 @@
     manager.push($(this).val());
   });
 
+  $("#meta_activity option:selected").each(function()
+  {
+    // log the value and text of each option
+    meta_activity.push($(this).val());
+  });
+
+  $("#project_status option:selected").each(function()
+  {
+    // log the value and text of each option
+    project_status.push($(this).val());
+  });
+
+  $("#project_type option:selected").each(function()
+  {
+    // log the value and text of each option
+    project_type.push($(this).val());
+  });
+
 
   function ajaxData(){
     var obj = {
       'year[]': year,
-      'manager[]': manager
+      'manager[]': manager,
+      'meta_activity[]': meta_activity,
+      'project_status[]': project_status,
+      'project_type[]': project_type
     };
     return obj;
   }
@@ -256,6 +284,18 @@
       allowClear: false,
       disabled: {{ $manager_select_disabled }}
     });
+    //Init select2 boxes
+    $("#meta_activity").select2({
+      allowClear: false
+    });
+    //Init select2 boxes
+    $("#project_status").select2({
+      allowClear: false
+    });
+    //Init select2 boxes
+    $("#project_type").select2({
+      allowClear: false
+    });
 
     $('#year').on('change', function() {
       year = [];
@@ -279,10 +319,43 @@
       activitiesTable.ajax.reload();
     });
 
+    $('#meta_activity').on('change', function() {
+      meta_activity = [];
+      $("#meta_activity option:selected").each(function()
+      {
+        // log the value and text of each option
+        meta_activity.push($(this).val());
+
+      });
+      activitiesTable.ajax.reload();
+    });
+
+    $('#project_status').on('change', function() {
+      project_status = [];
+      $("#project_status option:selected").each(function()
+      {
+        // log the value and text of each option
+        project_status.push($(this).val());
+
+      });
+      activitiesTable.ajax.reload();
+    });
+
+    $('#project_type').on('change', function() {
+      project_type = [];
+      $("#project_type option:selected").each(function()
+      {
+        // log the value and text of each option
+        project_type.push($(this).val());
+
+      });
+      activitiesTable.ajax.reload();
+    });
+
     activitiesTable = $('#activitiesTable').DataTable({
       scrollX: true,
       ajax: {
-        url: "{!! route('listOfActivitiesPerUserAjax') !!}",
+        url: "{!! route('listOfLoadPerUserAjax') !!}",
         type: "POST",
         data: ajaxData,
         dataType: "JSON"
@@ -292,9 +365,6 @@
         { name: 'u2.name', data: 'manager_name', width: '150px' },
         { name: 'u.id', data: 'user_id' , searchable: false , visible: false},
         { name: 'u.name', data: 'user_name' , width: '150px'},
-        { name: 'p.customer_name', data: 'customer_name' , width: '200px'},
-        { name: 'p.id', data: 'project_id' , searchable: false , visible: false},
-        { name: 'p.project_name', data: 'project_name', width: '200px'},
         { name: 'activities.year', data: 'year' , searchable: false , visible: false},
         { name: 'jan_com', data: 'jan_com', width: '30px', searchable: false },
         { name: 'jan_otl', data: 'jan_otl', width: '10px', searchable: false , visible: false},
@@ -355,147 +425,152 @@
       },
       rowCallback: function(row, data, index){
         if(data.jan_com<= 0){
-          $(row).find('td:eq(4)').addClass('zero');
+          $(row).find('td:eq(2)').addClass('zero');
+        }
+        else if(data.jan_com> 176){
+          $(row).find('td:eq(2)').addClass('too_high');
         }
         else if(data.jan_otl> 0){
+          $(row).find('td:eq(2)').addClass('otl');
+        }
+        else {
+          $(row).find('td:eq(2)').addClass('forecast');
+        }
+        if(data.feb_com<= 0){
+          $(row).find('td:eq(3)').addClass('zero');
+        }
+        else if(data.feb_com> 176){
+          $(row).find('td:eq(3)').addClass('too_high');
+        }
+        else if(data.feb_otl> 0){
+          $(row).find('td:eq(3)').addClass('otl');
+        }
+        else {
+          $(row).find('td:eq(3)').addClass('forecast');
+        }
+        if(data.mar_com<= 0){
+          $(row).find('td:eq(4)').addClass('zero');
+        }
+        else if(data.mar_com> 176){
+          $(row).find('td:eq(4)').addClass('too_high');
+        }
+        else if(data.mar_otl> 0){
           $(row).find('td:eq(4)').addClass('otl');
         }
         else {
           $(row).find('td:eq(4)').addClass('forecast');
         }
-        if(data.feb_com<= 0){
+        if(data.apr_com<= 0){
           $(row).find('td:eq(5)').addClass('zero');
         }
-        else if(data.feb_otl> 0){
+        else if(data.apr_com> 176){
+          $(row).find('td:eq(5)').addClass('too_high');
+        }
+        else if(data.apr_otl> 0){
           $(row).find('td:eq(5)').addClass('otl');
         }
         else {
           $(row).find('td:eq(5)').addClass('forecast');
         }
-        if(data.mar_com<= 0){
+        if(data.may_com<= 0){
           $(row).find('td:eq(6)').addClass('zero');
         }
-        else if(data.mar_otl> 0){
+        else if(data.may_com> 176){
+          $(row).find('td:eq(6)').addClass('too_high');
+        }
+        else if(data.may_otl> 0){
           $(row).find('td:eq(6)').addClass('otl');
         }
         else {
           $(row).find('td:eq(6)').addClass('forecast');
         }
-        if(data.apr_com<= 0){
+        if(data.jun_com<= 0){
           $(row).find('td:eq(7)').addClass('zero');
         }
-        else if(data.apr_otl> 0){
+        else if(data.jun_com> 176){
+          $(row).find('td:eq(7)').addClass('too_high');
+        }
+        else if(data.jun_otl> 0){
           $(row).find('td:eq(7)').addClass('otl');
         }
         else {
           $(row).find('td:eq(7)').addClass('forecast');
         }
-        if(data.may_com<= 0){
+        if(data.jul_com<= 0){
           $(row).find('td:eq(8)').addClass('zero');
         }
-        else if(data.may_otl> 0){
+        else if(data.jul_com> 176){
+          $(row).find('td:eq(8)').addClass('too_high');
+        }
+        else if(data.jul_otl> 0){
           $(row).find('td:eq(8)').addClass('otl');
         }
         else {
           $(row).find('td:eq(8)').addClass('forecast');
         }
-        if(data.jun_com<= 0){
+        if(data.aug_com<= 0){
           $(row).find('td:eq(9)').addClass('zero');
         }
-        else if(data.jun_otl> 0){
+        else if(data.aug_com> 176){
+          $(row).find('td:eq(9)').addClass('too_high');
+        }
+        else if(data.aug_otl> 0){
           $(row).find('td:eq(9)').addClass('otl');
         }
         else {
           $(row).find('td:eq(9)').addClass('forecast');
         }
-        if(data.jul_com<= 0){
+        if(data.sep_com<= 0){
           $(row).find('td:eq(10)').addClass('zero');
         }
-        else if(data.jul_otl> 0){
+        else if(data.sep_com> 176){
+          $(row).find('td:eq(10)').addClass('too_high');
+        }
+        else if(data.sep_otl> 0){
           $(row).find('td:eq(10)').addClass('otl');
         }
         else {
           $(row).find('td:eq(10)').addClass('forecast');
         }
-        if(data.aug_com<= 0){
+        if(data.oct_com<= 0){
           $(row).find('td:eq(11)').addClass('zero');
         }
-        else if(data.aug_otl> 0){
+        else if(data.oct_com> 176){
+          $(row).find('td:eq(11)').addClass('too_high');
+        }
+        else if(data.oct_otl> 0){
           $(row).find('td:eq(11)').addClass('otl');
         }
         else {
           $(row).find('td:eq(11)').addClass('forecast');
         }
-        if(data.sep_com<= 0){
+        if(data.nov_com<= 0){
           $(row).find('td:eq(12)').addClass('zero');
         }
-        else if(data.sep_otl> 0){
+        else if(data.nov_com> 176){
+          $(row).find('td:eq(12)').addClass('too_high');
+        }
+        else if(data.nov_otl> 0){
           $(row).find('td:eq(12)').addClass('otl');
         }
         else {
           $(row).find('td:eq(12)').addClass('forecast');
         }
-        if(data.oct_com<= 0){
+        if(data.dec_com<= 0){
           $(row).find('td:eq(13)').addClass('zero');
         }
-        else if(data.oct_otl> 0){
+        else if(data.dec_com> 176){
+          $(row).find('td:eq(13)').addClass('too_high');
+        }
+        else if(data.dec_otl> 0){
           $(row).find('td:eq(13)').addClass('otl');
         }
         else {
           $(row).find('td:eq(13)').addClass('forecast');
         }
-        if(data.nov_com<= 0){
-          $(row).find('td:eq(14)').addClass('zero');
-        }
-        else if(data.nov_otl> 0){
-          $(row).find('td:eq(14)').addClass('otl');
-        }
-        else {
-          $(row).find('td:eq(14)').addClass('forecast');
-        }
-        if(data.dec_com<= 0){
-          $(row).find('td:eq(15)').addClass('zero');
-        }
-        else if(data.dec_otl> 0){
-          $(row).find('td:eq(15)').addClass('otl');
-        }
-        else {
-          $(row).find('td:eq(15)').addClass('forecast');
-        }
       }
     });
 
-
-    $('#activitiesTable').on('click', 'tbody td', function() {
-      var table = activitiesTable;
-      var tr = $(this).closest('tr');
-      var row = table.row(tr);
-      //get the initialization options
-      var columns = table.settings().init().columns;
-      //get the index of the clicked cell
-      var colIndex = table.cell(this).index().column;
-      console.log('you clicked on the column with the name '+columns[colIndex].name);
-      console.log('the user id is '+row.data().user_id);
-      console.log('the project id is '+row.data().project_id);
-      // If we click on the name, then we create a new project
-      year = [];
-      $("#year option:selected").each(function()
-      {
-        // log the value and text of each option
-        year.push($(this).val());
-      });
-      window.location.href = "{!! route('dashboardFormUpdate',['','','']) !!}/"+row.data().user_id+"/"+row.data().project_id+"/"+year[0];
-    });
-
-    $('#new_project').on('click', function() {
-      year = [];
-      $("#year option:selected").each(function()
-      {
-        // log the value and text of each option
-        year.push($(this).val());
-      });
-      window.location.href = "{!! route('dashboardFormCreate',[Auth::user()->id,'']) !!}/"+year[0];
-    });
   } );
   </script>
   @stop
