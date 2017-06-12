@@ -42,7 +42,8 @@
             <label for="manager" class="control-label">Manager</label>
             <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
               @foreach($manager_list as $key => $value)
-              <option value="{{ $key }}">{{ $value }}</option>
+
+              <option value="{{ $key }}" <?php if ($key == $manager_selected) { echo 'selected'; }?>>{{ $value }}</option>
               @endforeach
             </select>
           </div>
@@ -110,10 +111,13 @@
   var myvar='';
 
   function ajaxDataPOST(){
+
     var obj = {
       'year[]': year,
       'manager[]': manager
     };
+
+    console.log(obj);
     return obj;
   };
 

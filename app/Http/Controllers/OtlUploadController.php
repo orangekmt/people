@@ -73,7 +73,7 @@ class OtlUploadController extends Controller
           $employee_firstname = $complete_name[1];
           $employee_lastname = $complete_name[0];
           $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
-          $employee['password'] = bcrypt('Welcome1');
+          $employee['password'] = 'Welcome1';
           $employee['is_manager'] = 0;
           $employee['from_otl'] = 1;
           $employee['manager_id'] = $managerInDB->id;

@@ -102,6 +102,7 @@ class DashboardController extends Controller {
 	{
     $today = date("Y");
     $years = [];
+    $manager_selected = '';
 
 
     $options = array(
@@ -124,13 +125,15 @@ class DashboardController extends Controller {
     }
     elseif (Auth::user()->is_manager == 1) {
       $manager_list = [Auth::user()->id => Auth::user()->name];
+      $manager_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
     }
     else {
       $manager_list = [Auth::user()->managers()->first()->id => Auth::user()->managers()->first()->name];
+      $manager_selected = Auth::user()->managers()->first()->id;
       $manager_select_disabled = 'true';
     }
-		return view('dashboard/load_chart', compact('manager_list','today','years','manager_select_disabled','perms'));
+		return view('dashboard/load_chart', compact('manager_list','today','years','manager_select_disabled','manager_selected','perms'));
 	}
 
 	public function getFormCreate($user_id,$year)
