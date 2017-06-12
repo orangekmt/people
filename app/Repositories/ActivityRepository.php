@@ -7,15 +7,18 @@ use Datatables;
 use DB;
 use Entrust;
 use Auth;
+use App\Repositories\UserRepository;
 
 class ActivityRepository
 {
 
   protected $activity;
+  protected $userRepository;
 
-  public function __construct(Activity $activity)
+  public function __construct(Activity $activity,UserRepository $userRepository)
   {
     $this->activity = $activity;
+    $this->userRepository = $userRepository;
   }
 
   public function getById($id)
@@ -342,7 +345,6 @@ class ActivityRepository
 
 
     $data = 0;
-    $where['user'] = [3];
 
     $activityList = DB::table('activities');
     $activityList->select('year',
@@ -374,10 +376,48 @@ class ActivityRepository
       $data = $activityList->get();
     }
     elseif (!empty($where['manager'])){
-
+      $users = [];
+      foreach ($where['manager'] as $w)
+      {
+        $usersformanager = $this->userRepository->getById($w)->employees()->pluck('users_users.user_id')->toArray();
+        foreach ($usersformanager as $key => $value) {
+          array_push($users,$value);
+        }
+      }
+      $activityList->where(function ($query) use ($users) {
+        foreach ($users as $w)
+        {
+            $query->orWhere('user_id',$w);
+        }
+      });
+      $activityList->groupBy('year');
+      $activityList->where('p.activity_type','=',$activity_type);
+      $activityList->where('p.project_status','=',$project_status);
+      $data = $activityList->get();
     }
     else {
+      $managers = $this->userRepository->getManagersList();
 
+      $users = [];
+      foreach ($managers as $key => $value)
+      {
+        $usersformanager = $this->userRepository->getById($key)->employees()->pluck('users_users.user_id')->toArray();
+        foreach ($usersformanager as $key => $value) {
+          array_push($users,$value);
+        }
+      }
+
+      $activityList->where(function ($query) use ($users) {
+        foreach ($users as $w)
+        {
+            $query->orWhere('user_id',$w);
+        }
+      });
+      $activityList->groupBy('year');
+      $activityList->where('p.activity_type','=',$activity_type);
+      $activityList->where('p.project_status','=',$project_status);
+      $activityList->where('year','=',$where['year'][0]);
+      $data = $activityList->get();
     }
 
     return $data;
