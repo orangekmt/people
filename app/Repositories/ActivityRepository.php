@@ -491,7 +491,7 @@ class ActivityRepository
     $createTempTable2 = DB::unprepared(DB::raw('
       CREATE TEMPORARY TABLE table_temp_b
       AS (
-            SELECT year,user_id,
+            SELECT year,user_id,p.project_name,p.project_type,p.activity_type,p.project_status,
                   sum(CASE WHEN month = 1 THEN task_hour ELSE 0 END) AS jan_com,
                   sum(CASE WHEN month = 2 THEN task_hour ELSE 0 END) AS feb_com,
                   sum(CASE WHEN month = 3 THEN task_hour ELSE 0 END) AS mar_com,
@@ -504,17 +504,21 @@ class ActivityRepository
                   sum(CASE WHEN month = 10 THEN task_hour ELSE 0 END) AS oct_com,
                   sum(CASE WHEN month = 11 THEN task_hour ELSE 0 END) AS nov_com,
                   sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com
-            FROM table_temp_a
-            GROUP BY year,user_id
+            FROM table_temp_a AS temp_a
+            LEFT JOIN projects AS p ON p.id = temp_a.project_id
+            GROUP BY year,user_id,p.project_name,p.project_type,p.activity_type,p.project_status
 
           )
       '));
 
     $activity = DB::table('table_temp_b')
+    ->select('year','user_id',DB::raw('SUM(jan_com)'),DB::raw('SUM(feb_com)'))
+    ->where('project_type','=','Project')
     ->where(function($query){
       $query->where('user_id','=','15');
       $query->orWhere('user_id','=','16');
     })
+    ->groupBy('year','user_id')
     ->orderBy('user_id')
     ->get();
 
