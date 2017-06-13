@@ -468,10 +468,11 @@ class ActivityRepository
     $dropTempTables = DB::unprepared(
          DB::raw("
              DROP TABLE IF EXISTS table_temp_a ;
+             DROP TABLE IF EXISTS table_temp_b ;
          ")
     );
 
-    $createTempTables = DB::unprepared(DB::raw('
+    $createTempTable1 = DB::unprepared(DB::raw('
       CREATE TEMPORARY TABLE table_temp_a
       AS (
             SELECT *
@@ -487,7 +488,30 @@ class ActivityRepository
           )
       '));
 
-    $activity = DB::table('table_temp_a')->where(function($query){
+    $createTempTable2 = DB::unprepared(DB::raw('
+      CREATE TEMPORARY TABLE table_temp_b
+      AS (
+            SELECT year,user_id,
+                  sum(CASE WHEN month = 1 THEN task_hour ELSE 0 END) AS jan_com,
+                  sum(CASE WHEN month = 2 THEN task_hour ELSE 0 END) AS feb_com,
+                  sum(CASE WHEN month = 3 THEN task_hour ELSE 0 END) AS mar_com,
+                  sum(CASE WHEN month = 4 THEN task_hour ELSE 0 END) AS apr_com,
+                  sum(CASE WHEN month = 5 THEN task_hour ELSE 0 END) AS may_com,
+                  sum(CASE WHEN month = 6 THEN task_hour ELSE 0 END) AS jun_com,
+                  sum(CASE WHEN month = 7 THEN task_hour ELSE 0 END) AS jul_com,
+                  sum(CASE WHEN month = 8 THEN task_hour ELSE 0 END) AS aug_com,
+                  sum(CASE WHEN month = 9 THEN task_hour ELSE 0 END) AS sep_com,
+                  sum(CASE WHEN month = 10 THEN task_hour ELSE 0 END) AS oct_com,
+                  sum(CASE WHEN month = 11 THEN task_hour ELSE 0 END) AS nov_com,
+                  sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com
+            FROM table_temp_a
+            GROUP BY year,user_id
+
+          )
+      '));
+
+    $activity = DB::table('table_temp_b')
+    ->where(function($query){
       $query->where('user_id','=','15');
       $query->orWhere('user_id','=','16');
     })
