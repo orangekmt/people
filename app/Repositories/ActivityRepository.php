@@ -512,7 +512,20 @@ class ActivityRepository
       '));
 
     $activity = DB::table('table_temp_b')
-    ->select('year','user_id',DB::raw('SUM(jan_com)'),DB::raw('SUM(feb_com)'))
+    ->select('year','user_id',
+        DB::raw('SUM(jan_com) AS jan_com'),
+        DB::raw('SUM(feb_com) AS feb_com'),
+        DB::raw('SUM(mar_com) AS mar_com'),
+        DB::raw('SUM(apr_com) AS apr_com'),
+        DB::raw('SUM(may_com) AS may_com'),
+        DB::raw('SUM(jun_com) AS jun_com'),
+        DB::raw('SUM(jul_com) AS jul_com'),
+        DB::raw('SUM(aug_com) AS aug_com'),
+        DB::raw('SUM(sep_com) AS sep_com'),
+        DB::raw('SUM(oct_com) AS oct_com'),
+        DB::raw('SUM(nov_com) AS nov_com'),
+        DB::raw('SUM(dec_com) AS dec_com')
+        )
     ->where('project_type','=','Project')
     ->where(function($query){
       $query->where('user_id','=','15');
