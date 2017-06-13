@@ -373,6 +373,7 @@ class ActivityRepository
       $activityList->groupBy('year');
       $activityList->where('p.activity_type','=',$activity_type);
       $activityList->where('p.project_status','=',$project_status);
+      $activityList->where('year','=',$where['year'][0]);
       $data = $activityList->get();
     }
     elseif (!empty($where['manager'])){
@@ -393,6 +394,7 @@ class ActivityRepository
       $activityList->groupBy('year');
       $activityList->where('p.activity_type','=',$activity_type);
       $activityList->where('p.project_status','=',$project_status);
+      $activityList->where('year','=',$where['year'][0]);
       $data = $activityList->get();
     }
     else {
@@ -454,4 +456,46 @@ class ActivityRepository
     return $data;
   }
 
+  public function test()
+  {
+
+    /*
+    This select will get a temporary table with all the records where if from_otl=0
+    then it will check if there is not a record with from_otl=1 and
+    if yes, will not include it.
+     */
+
+    $dropTempTables = DB::unprepared(
+         DB::raw("
+             DROP TABLE IF EXISTS table_temp_a ;
+         ")
+    );
+
+    $createTempTables = DB::unprepared(DB::raw('
+      CREATE TEMPORARY TABLE table_temp_a
+      AS (
+            SELECT *
+            FROM activities AS a4
+            WHERE a4.id NOT IN
+              (
+                SELECT a3.id
+                FROM activities AS a3
+                INNER JOIN (SELECT * FROM activities AS a1 where a1.from_otl = 1) AS a2
+                ON (a3.user_id = a2.user_id AND a3.project_id = a2.project_id AND a3.year = a2.year AND a3.month = a2.month)
+                WHERE a3.from_otl = 0
+              )
+          )
+      '));
+
+    $activity = DB::table('table_temp_a')->where(function($query){
+      $query->where('user_id','=','15');
+      $query->orWhere('user_id','=','16');
+    })
+    ->orderBy('user_id')
+    ->get();
+
+    $result = $activity;
+
+    dd($result);
+  }
 }

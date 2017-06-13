@@ -112,3 +112,5 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 });
+
+Route::get('test', ['uses'=>'ActivityController@test']);

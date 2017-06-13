@@ -37,7 +37,6 @@ return [
         'UC' => 'UC'
     ],
     'meta_activity' => [
-        '' => '',
         'BILLABLE' => 'BILLABLE',
         'ABS' => 'ABS',
         'OTHER' => 'OTHER',
