@@ -86,7 +86,7 @@
 
       <div class="box-header with-border">
         <i class="fa fa-cloud-download"></i>
-        <h3 class="box-title">Activities (hours)</h3>
+        <h3 class="box-title">Activities (days)</h3>
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Help" data-widget="chat-pane-toggle">
             <i class="fa fa-question"></i>

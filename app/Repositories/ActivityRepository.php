@@ -465,51 +465,8 @@ class ActivityRepository
     if yes, will not include it.
      */
 
-    $dropTempTables = DB::unprepared(
-         DB::raw("
-             DROP TABLE IF EXISTS table_temp_a ;
-             DROP TABLE IF EXISTS table_temp_b ;
-         ")
-    );
-
-    $createTempTable1 = DB::unprepared(DB::raw('
-      CREATE TEMPORARY TABLE table_temp_a
-      AS (
-            SELECT *
-            FROM activities AS a4
-            WHERE a4.id NOT IN
-              (
-                SELECT a3.id
-                FROM activities AS a3
-                INNER JOIN (SELECT * FROM activities AS a1 where a1.from_otl = 1) AS a2
-                ON (a3.user_id = a2.user_id AND a3.project_id = a2.project_id AND a3.year = a2.year AND a3.month = a2.month)
-                WHERE a3.from_otl = 0
-              )
-          )
-      '));
-
-    $createTempTable2 = DB::unprepared(DB::raw('
-      CREATE TEMPORARY TABLE table_temp_b
-      AS (
-            SELECT year,user_id,p.project_name,p.project_type,p.activity_type,p.project_status,
-                  sum(CASE WHEN month = 1 THEN task_hour ELSE 0 END) AS jan_com,
-                  sum(CASE WHEN month = 2 THEN task_hour ELSE 0 END) AS feb_com,
-                  sum(CASE WHEN month = 3 THEN task_hour ELSE 0 END) AS mar_com,
-                  sum(CASE WHEN month = 4 THEN task_hour ELSE 0 END) AS apr_com,
-                  sum(CASE WHEN month = 5 THEN task_hour ELSE 0 END) AS may_com,
-                  sum(CASE WHEN month = 6 THEN task_hour ELSE 0 END) AS jun_com,
-                  sum(CASE WHEN month = 7 THEN task_hour ELSE 0 END) AS jul_com,
-                  sum(CASE WHEN month = 8 THEN task_hour ELSE 0 END) AS aug_com,
-                  sum(CASE WHEN month = 9 THEN task_hour ELSE 0 END) AS sep_com,
-                  sum(CASE WHEN month = 10 THEN task_hour ELSE 0 END) AS oct_com,
-                  sum(CASE WHEN month = 11 THEN task_hour ELSE 0 END) AS nov_com,
-                  sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com
-            FROM table_temp_a AS temp_a
-            LEFT JOIN projects AS p ON p.id = temp_a.project_id
-            GROUP BY year,user_id,p.project_name,p.project_type,p.activity_type,p.project_status
-
-          )
-      '));
+    $temp_table = new create_temp_table_mix_OTL_NONOTL('table_temp_a','table_temp_b');
+    
 
     $activity = DB::table('table_temp_b')
     ->select('year','user_id',
@@ -535,8 +492,134 @@ class ActivityRepository
     ->orderBy('user_id')
     ->get();
 
+    $activity2 = DB::table('table_temp_b')
+    ->where(function($query){
+      $query->where('user_id','=','15');
+      $query->orWhere('user_id','=','16');
+    })
+    ->get();
     $result = $activity;
 
     dd($result);
+  }
+
+
+}
+
+class create_temp_table_mix_OTL_NONOTL{
+  // We are going to create 2 temporary table and we need to protect them
+  // manke sure you use unset() on the object reference so that it will call destruct and free up memory
+  private $table_name_lines;
+  private $table_name_cols;
+
+  // When creating the object, please pass the name of 2 tables that will be created...
+  public function __construct($table_name_lines,$table_name_cols){
+    $this->table_name_lines = $table_name_lines;
+    $this->table_name_cols = $table_name_cols;
+    $this->create_temp_table_with_lines($this->table_name_lines);
+    $this->create_temp_table_with_months_as_columns($this->table_name_lines,$this->table_name_cols);
+  }
+
+  public function __destruct() {
+    $this->destroy_table($this->table_name_lines);
+    $this->destroy_table($this->table_name_cols);
+  }
+
+  public function create_temp_table_with_lines($table_name){
+    $dropTempTables = DB::unprepared(
+         DB::raw("
+             DROP TABLE IF EXISTS ".$table_name.";
+         ")
+    );
+
+    $createTempTable = DB::unprepared(DB::raw("
+      CREATE TEMPORARY TABLE ".$table_name."
+      AS (
+            SELECT *
+            FROM activities AS a4
+            WHERE a4.id NOT IN
+              (
+                SELECT a3.id
+                FROM activities AS a3
+                INNER JOIN (SELECT * FROM activities AS a1 where a1.from_otl = 1) AS a2
+                ON (a3.user_id = a2.user_id AND a3.project_id = a2.project_id AND a3.year = a2.year AND a3.month = a2.month)
+                WHERE a3.from_otl = 0
+              )
+          )
+      "));
+
+      return $createTempTable;
+  }
+
+  public function create_temp_table_with_months_as_columns($table_name_lines,$table_name_cols){
+    $dropTempTables = DB::unprepared(
+         DB::raw("
+             DROP TABLE IF EXISTS ".$table_name_cols.";
+         ")
+    );
+
+    $createTempTable = DB::unprepared(DB::raw("
+      CREATE TEMPORARY TABLE ".$table_name_cols."
+      AS (
+            SELECT
+                    temp_a.user_id AS user_id,
+                    u.name AS user_name,
+                    uu.manager_id AS manager_id,
+                    m.name AS manager_name,
+                    temp_a.project_id AS project_id,
+                    p.project_name AS project_name,
+                    p.customer_name AS customer_name,
+                    p.otl_project_code AS otl_project_code,
+                    p.meta_activity AS meta_activity,
+                    p.project_type AS project_type,
+                    p.activity_type AS activity_type,
+                    p.project_status AS project_status,
+                    p.region AS region,
+                    p.country AS country,
+                    p.customer_location AS customer_location,
+                    p.domain AS domain,
+                    p.description AS description,
+                    p.comments AS comments,
+                    p.LoE_onshore AS LoE_onshore,
+                    p.LoE_nearshore AS LoE_nearshore,
+                    p.LoE_offshore AS LoE_offshore,
+                    p.LoE_contractor AS LoE_contractor,
+                    p.gold_order_number AS gold_order_number,
+                    p.product_code AS product_code,
+                    p.revenue AS revenue,
+                    p.win_ratio AS win_ratio,
+                    p.estimated_start_date AS estimated_start_date,
+                    p.estimated_end_date AS estimated_end_date,
+                    temp_a.year AS year,
+                    sum(CASE WHEN month = 1 THEN task_hour ELSE 0 END) AS jan_com,
+                    sum(CASE WHEN month = 2 THEN task_hour ELSE 0 END) AS feb_com,
+                    sum(CASE WHEN month = 3 THEN task_hour ELSE 0 END) AS mar_com,
+                    sum(CASE WHEN month = 4 THEN task_hour ELSE 0 END) AS apr_com,
+                    sum(CASE WHEN month = 5 THEN task_hour ELSE 0 END) AS may_com,
+                    sum(CASE WHEN month = 6 THEN task_hour ELSE 0 END) AS jun_com,
+                    sum(CASE WHEN month = 7 THEN task_hour ELSE 0 END) AS jul_com,
+                    sum(CASE WHEN month = 8 THEN task_hour ELSE 0 END) AS aug_com,
+                    sum(CASE WHEN month = 9 THEN task_hour ELSE 0 END) AS sep_com,
+                    sum(CASE WHEN month = 10 THEN task_hour ELSE 0 END) AS oct_com,
+                    sum(CASE WHEN month = 11 THEN task_hour ELSE 0 END) AS nov_com,
+                    sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com
+            FROM ".$table_name_lines." AS temp_a
+            LEFT JOIN projects AS p ON p.id = temp_a.project_id
+            LEFT JOIN users AS u ON temp_a.user_id = u.id
+            LEFT JOIN users_users AS uu ON u.id = uu.user_id
+            LEFT JOIN users AS m ON m.id = uu.manager_id
+            GROUP BY year,user_id,p.project_name,p.project_type,p.activity_type,p.project_status
+
+          )
+      "));
+
+      return $createTempTable;
+  }
+  public function destroy_table($table_name){
+    $dropTempTables = DB::unprepared(
+         DB::raw("
+             DROP TABLE IF EXISTS ".$table_name.";
+         ")
+    );
   }
 }
