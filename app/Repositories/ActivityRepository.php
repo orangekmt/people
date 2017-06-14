@@ -466,7 +466,7 @@ class ActivityRepository
      */
 
     $temp_table = new create_temp_table_mix_OTL_NONOTL('table_temp_a','table_temp_b');
-    
+
 
     $activity = DB::table('table_temp_b')
     ->select('year','user_id',
@@ -498,7 +498,7 @@ class ActivityRepository
       $query->orWhere('user_id','=','16');
     })
     ->get();
-    $result = $activity;
+    $result = $activity2;
 
     dd($result);
   }
@@ -592,17 +592,29 @@ class create_temp_table_mix_OTL_NONOTL{
                     p.estimated_end_date AS estimated_end_date,
                     temp_a.year AS year,
                     sum(CASE WHEN month = 1 THEN task_hour ELSE 0 END) AS jan_com,
+                    sum(CASE WHEN month = 1 THEN temp_a.from_otl ELSE 0 END) AS jan_otl,
                     sum(CASE WHEN month = 2 THEN task_hour ELSE 0 END) AS feb_com,
+                    sum(CASE WHEN month = 2 THEN temp_a.from_otl ELSE 0 END) AS feb_otl,
                     sum(CASE WHEN month = 3 THEN task_hour ELSE 0 END) AS mar_com,
+                    sum(CASE WHEN month = 3 THEN temp_a.from_otl ELSE 0 END) AS mar_otl,
                     sum(CASE WHEN month = 4 THEN task_hour ELSE 0 END) AS apr_com,
+                    sum(CASE WHEN month = 4 THEN temp_a.from_otl ELSE 0 END) AS apr_otl,
                     sum(CASE WHEN month = 5 THEN task_hour ELSE 0 END) AS may_com,
+                    sum(CASE WHEN month = 5 THEN temp_a.from_otl ELSE 0 END) AS may_otl,
                     sum(CASE WHEN month = 6 THEN task_hour ELSE 0 END) AS jun_com,
+                    sum(CASE WHEN month = 6 THEN temp_a.from_otl ELSE 0 END) AS jun_otl,
                     sum(CASE WHEN month = 7 THEN task_hour ELSE 0 END) AS jul_com,
+                    sum(CASE WHEN month = 7 THEN temp_a.from_otl ELSE 0 END) AS jul_otl,
                     sum(CASE WHEN month = 8 THEN task_hour ELSE 0 END) AS aug_com,
+                    sum(CASE WHEN month = 8 THEN temp_a.from_otl ELSE 0 END) AS aug_otl,
                     sum(CASE WHEN month = 9 THEN task_hour ELSE 0 END) AS sep_com,
+                    sum(CASE WHEN month = 9 THEN temp_a.from_otl ELSE 0 END) AS sep_otl,
                     sum(CASE WHEN month = 10 THEN task_hour ELSE 0 END) AS oct_com,
+                    sum(CASE WHEN month = 10 THEN temp_a.from_otl ELSE 0 END) AS oct_otl,
                     sum(CASE WHEN month = 11 THEN task_hour ELSE 0 END) AS nov_com,
-                    sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com
+                    sum(CASE WHEN month = 11 THEN temp_a.from_otl ELSE 0 END) AS nov_otl,
+                    sum(CASE WHEN month = 12 THEN task_hour ELSE 0 END) AS dec_com,
+                    sum(CASE WHEN month = 12 THEN temp_a.from_otl ELSE 0 END) AS dec_otl
             FROM ".$table_name_lines." AS temp_a
             LEFT JOIN projects AS p ON p.id = temp_a.project_id
             LEFT JOIN users AS u ON temp_a.user_id = u.id
