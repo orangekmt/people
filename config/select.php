@@ -45,17 +45,20 @@ return [
     'project_status' => [
         'Started' => 'Started',
         'Pre-Sales' => 'Pre-Sales',
-        'Closed' => 'Closed'
+        'Closed' => 'Closed',
+        'Orange absence or other' => 'Orange absence or other'
     ],
     'project_type' => [
         'Baseline' => 'Baseline',
         'Project' => 'Project',
-        'POC' => 'POC'
+        'POC' => 'POC',
+        'Orange absence or other' => 'Orange absence or other'
     ],
     'activity_type' => [
         '' => '',
         'ISC' => 'ISC',
-        'DSC' => 'DSC'
+        'DSC' => 'DSC',
+        'Orange absence or other' => 'Orange absence or other'
     ],
     'year' => [
         '2015' => '2015',

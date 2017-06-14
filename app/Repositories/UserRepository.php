@@ -148,6 +148,11 @@ class UserRepository
   {
     return $this->user->lists('name','id');
   }
+  public function getAllUsersListNoManagers()
+  {
+    return $this->user->where('is_manager', '!=','1')->where('id', '!=','1')->lists('name','id');
+  }
+
   public function getTheoreticalCapacity($where = null)
   {
     /** We create here a SQL statement and the Datatables function will add the information it got from the AJAX request to have things like search or limit or show.

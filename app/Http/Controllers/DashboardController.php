@@ -32,7 +32,8 @@ class DashboardController extends Controller {
 	{
     $today = date("Y");
     $years = [];
-
+    $manager_selected = '';
+    $user_selected = '';
 
     $options = array(
         'validate_all' => true,
@@ -50,24 +51,35 @@ class DashboardController extends Controller {
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
       $manager_list = $this->userRepository->getManagersList();
+      $user_list = $this->userRepository->getAllUsersListNoManagers();
       $manager_select_disabled = 'false';
+      $user_select_disabled = 'false';
     }
     elseif (Auth::user()->is_manager == 1) {
       $manager_list = [Auth::user()->id => Auth::user()->name];
+      $user_list = Auth::user()->employees()->lists('name','user_id');
+      $manager_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'false';
     }
     else {
       $manager_list = [Auth::user()->managers()->first()->id => Auth::user()->managers()->first()->name];
+      $user_list = [Auth::user()->id => Auth::user()->name];
+      $manager_selected = Auth::user()->managers()->first()->id;
+      $user_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'true';
     }
-		return view('dashboard/list', compact('manager_list','today','years','manager_select_disabled','perms'));
+
+		return view('dashboard/list', compact('manager_list','today','years','manager_select_disabled','manager_selected','user_select_disabled','user_selected','user_list','perms'));
 	}
 
   public function load()
 	{
     $today = date("Y");
     $years = [];
-
+    $manager_selected = '';
+    $user_selected = '';
 
     $options = array(
         'validate_all' => true,
@@ -85,17 +97,27 @@ class DashboardController extends Controller {
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
       $manager_list = $this->userRepository->getManagersList();
+      $user_list = $this->userRepository->getAllUsersListNoManagers();
       $manager_select_disabled = 'false';
+      $user_select_disabled = 'false';
     }
     elseif (Auth::user()->is_manager == 1) {
       $manager_list = [Auth::user()->id => Auth::user()->name];
+      $user_list = Auth::user()->employees()->lists('name','user_id');
+      $manager_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'false';
     }
     else {
       $manager_list = [Auth::user()->managers()->first()->id => Auth::user()->managers()->first()->name];
+      $user_list = [Auth::user()->id => Auth::user()->name];
+      $manager_selected = Auth::user()->managers()->first()->id;
+      $user_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'true';
     }
-		return view('dashboard/load', compact('manager_list','today','years','manager_select_disabled','perms'));
+
+		return view('dashboard/load', compact('manager_list','today','years','manager_select_disabled','manager_selected','user_select_disabled','user_selected','user_list','perms'));
 	}
 
   public function load_chart()
@@ -103,6 +125,7 @@ class DashboardController extends Controller {
     $today = date("Y");
     $years = [];
     $manager_selected = '';
+    $user_selected = '';
 
 
     $options = array(
@@ -121,19 +144,27 @@ class DashboardController extends Controller {
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
       $manager_list = $this->userRepository->getManagersList();
+      $user_list = $this->userRepository->getAllUsersListNoManagers();
       $manager_select_disabled = 'false';
+      $user_select_disabled = 'false';
     }
     elseif (Auth::user()->is_manager == 1) {
       $manager_list = [Auth::user()->id => Auth::user()->name];
+      $user_list = Auth::user()->employees()->lists('name','user_id');
       $manager_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'false';
     }
     else {
       $manager_list = [Auth::user()->managers()->first()->id => Auth::user()->managers()->first()->name];
+      $user_list = [Auth::user()->id => Auth::user()->name];
       $manager_selected = Auth::user()->managers()->first()->id;
+      $user_selected = Auth::user()->id;
       $manager_select_disabled = 'true';
+      $user_select_disabled = 'true';
     }
-		return view('dashboard/load_chart', compact('manager_list','today','years','manager_select_disabled','manager_selected','perms'));
+
+		return view('dashboard/load_chart', compact('manager_list','today','years','manager_select_disabled','manager_selected','user_select_disabled','user_selected','user_list','perms'));
 	}
 
 	public function getFormCreate($user_id,$year)

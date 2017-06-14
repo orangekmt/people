@@ -91,67 +91,17 @@ class ActivityRepository
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
 
-    $activityList = DB::table('activities');
+    $temp_table = new create_temp_table_mix_OTL_NONOTL('table_temp_a','table_temp_b');
 
-    $activityList->leftjoin('projects as p', 'p.id', '=', 'activities.project_id')
-                  ->leftjoin('users as u', 'u.id', '=', 'activities.user_id')
-                  ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
-                  ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id');
+    $activityList = DB::table('table_temp_b');
 
-    $activityList->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','p.id as project_id','p.project_name as project_name','p.customer_name as customer_name','activities.year as year',
-    //jan
+    $activityList->select('manager_id','manager_name','user_id','user_name','project_id','project_name','customer_name','year',
+                          'jan_com','jan_otl','feb_com','feb_otl','mar_com','mar_otl','apr_com','apr_otl','may_com','may_otl','jun_com','jun_otl',
+                          'jul_com','jul_otl','aug_com','aug_otl','sep_com','sep_otl','oct_com','oct_otl','nov_com','nov_otl','dec_com','dec_otl'
 
-    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=1,activities.from_otl,0))) jan_otl'),
-    //feb
+    );
 
-    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,task_hour,0)),sum(if(activities.from_otl=0 and month=2,task_hour,0))) feb_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=2,activities.from_otl,0))) feb_otl'),
-    //mar
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,task_hour,0)),sum(if(activities.from_otl=0 and month=3,task_hour,0))) mar_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=3,activities.from_otl,0))) mar_otl'),
-    //apr
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,task_hour,0)),sum(if(activities.from_otl=0 and month=4,task_hour,0))) apr_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=4,activities.from_otl,0))) apr_otl'),
-    //may
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,task_hour,0)),sum(if(activities.from_otl=0 and month=5,task_hour,0))) may_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=5,activities.from_otl,0))) may_otl'),
-    //jun
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,task_hour,0)),sum(if(activities.from_otl=0 and month=6,task_hour,0))) jun_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=6,activities.from_otl,0))) jun_otl'),
-    //jul
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,task_hour,0)),sum(if(activities.from_otl=0 and month=7,task_hour,0))) jul_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=7,activities.from_otl,0))) jul_otl'),
-    //aug
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,task_hour,0)),sum(if(activities.from_otl=0 and month=8,task_hour,0))) aug_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=8,activities.from_otl,0))) aug_otl'),
-    //sep
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,task_hour,0)),sum(if(activities.from_otl=0 and month=9,task_hour,0))) sep_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=9,activities.from_otl,0))) sep_otl'),
-    //oct
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,task_hour,0)),sum(if(activities.from_otl=0 and month=10,task_hour,0))) oct_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=10,activities.from_otl,0))) oct_otl'),
-    //nov
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,task_hour,0)),sum(if(activities.from_otl=0 and month=11,task_hour,0))) nov_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=11,activities.from_otl,0))) nov_otl'),
-    //dec
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=12,activities.from_otl,0))) dec_otl')
-  );
-
-
-
-
+    // Checking which year to display
     if (!empty($where['year']))
         {
             $activityList->where(function ($query) use ($where) {
@@ -162,36 +112,57 @@ class ActivityRepository
             });
         }
 
+    // Checking the roles to see if allowed to see all users
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
+      // Checking which users to show from the manager list
       if (!empty($where['manager']))
           {
               $activityList->where(function ($query) use ($where) {
                   foreach ($where['manager'] as $w)
                   {
-                      $query->orWhere('u2.id',$w);
+                      $query->orWhere('manager_id',$w);
+                  }
+              });
+          }
+
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
+                  }
+              });
+          }
+
+    }
+    // If the authenticated user is a manager, he can see his employees by default
+    elseif (Auth::user()->is_manager == 1) {
+      $activityList->where('manager_id','=',Auth::user()->id);
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
                   }
               });
           }
     }
-    elseif (Auth::user()->is_manager == 1) {
-      $activityList->where('u2.id','=',Auth::user()->id);
-    }
+    // In the end, the user is not a manager and doesn't have a special role so he can only see himself
     else {
-      $activityList->where('u.id','=',Auth::user()->id);
+      $activityList->where('user_id','=',Auth::user()->id);
     }
 
     $activityList->groupBy('manager_id','manager_name','user_id','user_name','project_id','project_name','year');
 
+    $data = Datatables::of($activityList)->make(true);
 
+    // Destroying the object so it will remove the 2 temp tables created
+    unset($temp_table);
 
-      //$data = $activityList->get();
-      //dd($data);
-      //dd($data = $activityList->toSql());
-
-
-      $data = Datatables::of($activityList)->make(true);
-      return $data;
+    return $data;
   }
 
   public function getlistOfLoadPerUser($where = null)
@@ -202,66 +173,24 @@ class ActivityRepository
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
 
-    $activityList = DB::table('activities');
+    $temp_table = new create_temp_table_mix_OTL_NONOTL('table_temp_a','table_temp_b');
 
-    $activityList->leftjoin('projects as p', 'p.id', '=', 'project_id')
-                  ->leftjoin('users as u', 'u.id', '=', 'activities.user_id')
-                  ->leftjoin('users_users as uu', 'u.id', '=', 'uu.user_id')
-                  ->leftjoin('users AS u2', 'u2.id', '=', 'uu.manager_id');
+    $activityList = DB::table('table_temp_b');
 
-    $activityList->select( 'u2.id as manager_id','u2.name as manager_name','u.id as user_id','u.name as user_name','year as year',
-    //jan
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=1,activities.from_otl,0))) jan_otl'),
-    //feb
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,task_hour,0)),sum(if(activities.from_otl=0 and month=2,task_hour,0))) feb_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=2,activities.from_otl,0))) feb_otl'),
-    //mar
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,task_hour,0)),sum(if(activities.from_otl=0 and month=3,task_hour,0))) mar_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=3,activities.from_otl,0))) mar_otl'),
-    //apr
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,task_hour,0)),sum(if(activities.from_otl=0 and month=4,task_hour,0))) apr_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=4,activities.from_otl,0))) apr_otl'),
-    //may
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,task_hour,0)),sum(if(activities.from_otl=0 and month=5,task_hour,0))) may_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=5,activities.from_otl,0))) may_otl'),
-    //jun
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,task_hour,0)),sum(if(activities.from_otl=0 and month=6,task_hour,0))) jun_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=6,activities.from_otl,0))) jun_otl'),
-    //jul
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,task_hour,0)),sum(if(activities.from_otl=0 and month=7,task_hour,0))) jul_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=7,activities.from_otl,0))) jul_otl'),
-    //aug
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,task_hour,0)),sum(if(activities.from_otl=0 and month=8,task_hour,0))) aug_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=8,activities.from_otl,0))) aug_otl'),
-    //sep
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,task_hour,0)),sum(if(activities.from_otl=0 and month=9,task_hour,0))) sep_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=9,activities.from_otl,0))) sep_otl'),
-    //oct
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,task_hour,0)),sum(if(activities.from_otl=0 and month=10,task_hour,0))) oct_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=10,activities.from_otl,0))) oct_otl'),
-    //nov
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,task_hour,0)),sum(if(activities.from_otl=0 and month=11,task_hour,0))) nov_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=11,activities.from_otl,0))) nov_otl'),
-    //dec
-
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,activities.from_otl,0)),sum(if(activities.from_otl=0 and month=12,activities.from_otl,0))) dec_otl')
-  );
-
-
-
+    $activityList->select('manager_id','manager_name','user_id','user_name','year',
+                            DB::raw('SUM(jan_com) AS jan_com'),
+                            DB::raw('SUM(feb_com) AS feb_com'),
+                            DB::raw('SUM(mar_com) AS mar_com'),
+                            DB::raw('SUM(apr_com) AS apr_com'),
+                            DB::raw('SUM(may_com) AS may_com'),
+                            DB::raw('SUM(jun_com) AS jun_com'),
+                            DB::raw('SUM(jul_com) AS jul_com'),
+                            DB::raw('SUM(aug_com) AS aug_com'),
+                            DB::raw('SUM(sep_com) AS sep_com'),
+                            DB::raw('SUM(oct_com) AS oct_com'),
+                            DB::raw('SUM(nov_com) AS nov_com'),
+                            DB::raw('SUM(dec_com) AS dec_com')
+    );
 
     if (!empty($where['year']))
         {
@@ -278,7 +207,7 @@ class ActivityRepository
             $activityList->where(function ($query) use ($where) {
                 foreach ($where['meta_activity'] as $w)
                 {
-                    $query->orWhere('p.meta_activity',$w);
+                    $query->orWhere('meta_activity',$w);
                 }
             });
         }
@@ -288,7 +217,7 @@ class ActivityRepository
             $activityList->where(function ($query) use ($where) {
                 foreach ($where['project_status'] as $w)
                 {
-                    $query->orWhere('p.project_status',$w);
+                    $query->orWhere('project_status',$w);
                 }
             });
         }
@@ -298,11 +227,12 @@ class ActivityRepository
             $activityList->where(function ($query) use ($where) {
                 foreach ($where['project_type'] as $w)
                 {
-                    $query->orWhere('p.project_type',$w);
+                    $query->orWhere('project_type',$w);
                 }
             });
         }
 
+    // Checking the roles to see if allowed to see all users
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
       if (!empty($where['manager']))
@@ -310,29 +240,43 @@ class ActivityRepository
               $activityList->where(function ($query) use ($where) {
                   foreach ($where['manager'] as $w)
                   {
-                      $query->orWhere('u2.id',$w);
+                      $query->orWhere('manager_id',$w);
+                  }
+              });
+          }
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
                   }
               });
           }
     }
     elseif (Auth::user()->is_manager == 1) {
-      $activityList->where('u2.id','=',Auth::user()->id);
+      $activityList->where('manager_id','=',Auth::user()->id);
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
+                  }
+              });
+          }
     }
     else {
-      $activityList->where('u.id','=',Auth::user()->id);
+      $activityList->where('user_id','=',Auth::user()->id);
     }
 
     $activityList->groupBy('manager_id','manager_name','user_id','user_name','year');
 
+    $data = Datatables::of($activityList)->make(true);
 
+    unset($temp_table);
 
-      //$data = $activityList->get();
-      //dd($data);
-      //dd($data = $activityList->toSql());
-
-
-      $data = Datatables::of($activityList)->make(true);
-      return $data;
+    return $data;
   }
 
   public function getListOfLoadPerUserChart($where = null,$activity_type,$project_status)

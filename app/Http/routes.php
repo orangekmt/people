@@ -56,10 +56,8 @@ Route::group(['middleware' => ['auth']], function() {
 
       // Roles
       Route::get('roles',['as'=>'roles.index','uses'=>'RoleController@index','middleware' => ['permission:role-view|role-create|role-edit|role-delete']]);
-      Route::get('roles/{id}',['as'=>'roles.show','uses'=>'RoleController@show','middleware' => ['permission:role-view']]);
       Route::get('roles/create',['as'=>'roles.create','uses'=>'RoleController@create','middleware' => ['permission:role-create']]);
       Route::post('roles/create',['as'=>'roles.store','uses'=>'RoleController@store','middleware' => ['permission:role-create']]);
-      Route::get('roles/{id}',['as'=>'roles.show','uses'=>'RoleController@show','middleware' => ['permission:role-view']]);
       Route::get('roles/{id}/edit',['as'=>'roles.edit','uses'=>'RoleController@edit','middleware' => ['permission:role-edit']]);
       Route::patch('roles/{id}',['as'=>'roles.update','uses'=>'RoleController@update','middleware' => ['permission:role-edit']]);
       Route::delete('roles/{id}',['as'=>'roles.destroy','uses'=>'RoleController@destroy','middleware' => ['permission:role-delete']]);
@@ -94,23 +92,27 @@ Route::group(['middleware' => ['auth']], function() {
       //  Delete activity
       Route::get('activityDelete/{n}', ['uses'=>'ActivityController@delete','as'=>'activityDelete','middleware' => ['permission:activity-delete']]);
       //  AJAX
-      Route::get('listOfActivitiesAjax', ['uses'=>'ActivityController@listOfActivities','as'=>'listOfActivitiesAjax','middleware' => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
-      Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:dashboard-view']]);
-      Route::post('listOfLoadPerUserAjax', ['uses'=>'ActivityController@listOfLoadPerUserAjax','as'=>'listOfLoadPerUserAjax','middleware' => ['permission:dashboard-view']]);
-      Route::post('listOfLoadPerUserChartAjax', ['uses'=>'ActivityController@listOfLoadPerUserChartAjax','as'=>'listOfLoadPerUserChartAjax','middleware' => ['permission:dashboard-view']]);
+      Route::get('listOfActivitiesAjax', ['uses'=>'ActivityController@listOfActivities','as'=>'listOfActivitiesAjax','middleware'
+                    => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
+
+      //Tools
+      Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:tools-activity-view']]);
+      //  Create new activity
+      Route::get('dashboardFormCreate/{u}/{y}', ['uses'=>'DashboardController@getFormCreate','as'=>'dashboardFormCreate','middleware' => ['permission:tools-activity-new']]);
+      Route::post('dashboardFormCreate', ['uses'=>'DashboardController@postFormCreate','middleware' => ['permission:tools-activity-new']]);
+      //  Update activity
+      Route::get('dashboardFormUpdate/{u}/{p}/{y}', ['uses'=>'DashboardController@getFormUpdate','as'=>'dashboardFormUpdate','middleware' => ['permission:tools-activity-edit']]);
+      Route::post('dashboardFormUpdate', ['uses'=>'DashboardController@postFormUpdate','middleware' => ['permission:tools-activity-edit']]);
+      //  AJAX
+      Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:tools-activity-view']]);
 
       //Dashboards
-      Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:dashboard-view']]);
       Route::get('dashboardLoad', ['uses'=>'DashboardController@load','as'=>'dashboardLoad','middleware' => ['permission:dashboard-view']]);
       Route::get('dashboardLoadChart', ['uses'=>'DashboardController@load_chart','as'=>'dashboardLoadChart','middleware' => ['permission:dashboard-view']]);
-      //  Create new activity
-      Route::get('dashboardFormCreate/{u}/{y}', ['uses'=>'DashboardController@getFormCreate','as'=>'dashboardFormCreate','middleware' => ['permission:dashboard-view']]);
-      Route::post('dashboardFormCreate', ['uses'=>'DashboardController@postFormCreate','middleware' => ['permission:dashboard-view']]);
-      //  Update activity
-      Route::get('dashboardFormUpdate/{u}/{p}/{y}', ['uses'=>'DashboardController@getFormUpdate','as'=>'dashboardFormUpdate','middleware' => ['permission:dashboard-view']]);
-      Route::post('dashboardFormUpdate', ['uses'=>'DashboardController@postFormUpdate','middleware' => ['permission:dashboard-view']]);
-
+      //  AJAX
+      Route::post('listOfLoadPerUserAjax', ['uses'=>'ActivityController@listOfLoadPerUserAjax','as'=>'listOfLoadPerUserAjax','middleware' => ['permission:dashboard-view']]);
+      Route::get('listOfLoadPerUserChartAjax', ['uses'=>'ActivityController@listOfLoadPerUserChartAjax','as'=>'listOfLoadPerUserChartAjax','middleware' => ['permission:dashboard-view']]);
 
 });
 
-Route::get('test', ['uses'=>'ActivityController@test']);
+//Route::get('test', ['uses'=>'ActivityController@test']);

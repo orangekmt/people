@@ -47,7 +47,15 @@
               @endforeach
             </select>
           </div>
+          <div class="form-group col-xs-2">
+            <label for="user" class="control-label">User</label>
+            <select class="form-control select2" style="width: 100%;" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
+              @foreach($user_list as $key => $value)
 
+              <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -108,13 +116,15 @@
   var barChart;
   var year = [];
   var manager = [];
+  var user = [];
   var myvar='';
 
   function ajaxDataPOST(){
 
     var obj = {
       'year[]': year,
-      'manager[]': manager
+      'manager[]': manager,
+      'user[]': user
     };
 
     console.log(obj);
@@ -255,6 +265,10 @@
       allowClear: false,
       disabled: {{ $manager_select_disabled }}
     });
+    $("#user").select2({
+      allowClear: false,
+      disabled: {{ $user_select_disabled }}
+    });
 
     $("#year option:selected").each(function()
     {
@@ -266,6 +280,12 @@
     {
       // log the value and text of each option
       manager.push($(this).val());
+    });
+
+    $("#user option:selected").each(function()
+    {
+      // log the value and text of each option
+      user.push($(this).val());
     });
 
     $.ajaxSetup({
@@ -469,6 +489,33 @@
       {
         // log the value and text of each option
         manager.push($(this).val());
+
+      });
+      $.ajax({
+          url:"{!! route('listOfLoadPerUserChartAjax') !!}",
+          type:'POST',
+          data: ajaxDataPOST(),
+          dataType:"JSON",
+          success: function(data) {
+            useReturnData(data);
+            barChart.data.datasets[0].data = ajaxdscvstotal();
+            barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
+            barChart.data.datasets[2].data = ajaxdscpresales();
+            barChart.data.datasets[3].data = ajaxiscpresales();
+            barChart.data.datasets[4].data = ajaxdscstarted();
+            barChart.data.datasets[5].data = ajaxiscstarted();
+            barChart.update();
+          }
+        });
+      //activitiesTable.ajax.reload();
+    });
+
+    $('#user').on('change', function() {
+      manager = [];
+      $("#user option:selected").each(function()
+      {
+        // log the value and text of each option
+        user.push($(this).val());
 
       });
       $.ajax({

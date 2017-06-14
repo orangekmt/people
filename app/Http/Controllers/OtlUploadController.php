@@ -85,7 +85,8 @@ class OtlUploadController extends Controller
           array_push($messages,['status'=>'pass','msg'=>'User '.$userInDB->name.' already in DB']);
         }
         if ($projectInDBnum > 1){
-          array_push($messages,['status'=>'error','msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity]);
+          array_push($messages,['status'=>'error',
+              'msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity.' for user '.$row->employee_name]);
         }
         elseif ($projectInDBnum == 1) {
           // Only if we can find 1 instance of a mix of otl_project_code and meta-activity then we enter the activity
@@ -99,7 +100,7 @@ class OtlUploadController extends Controller
           $activity['month'] = $yearmonth[1];
           $activity['user_id'] = $userInDB->id;
           $activity['project_id'] = $projectInDB->id;
-          $activity['task_hour'] = $row->original_time;
+          $activity['task_hour'] = $row->original_time / config('options.time_trak')['hours_in_day'];
           $activity['from_otl'] = 1;
           $activityInDB = $this->activityRepository->getByOTL($activity['year'],$activity['month'],$userInDB->id,$projectInDB->id,$activity['from_otl']);
           if (!$activityInDB){
@@ -111,7 +112,8 @@ class OtlUploadController extends Controller
           }
         }
         else {
-          array_push($messages,['status'=>'error','msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity]);
+          array_push($messages,['status'=>'error',
+            'msg'=>'Found '.$projectInDBnum.' instance of '.$row->project_name.' with meta '.$row->meta_activity.' for user '.$row->employee_name]);
         }
         array_push($messages,['status'=>'END LINE '.$i,'msg'=>'************************']);
         $i += 1;

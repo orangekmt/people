@@ -45,7 +45,15 @@
             <label for="manager" class="control-label">Manager</label>
             <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
               @foreach($manager_list as $key => $value)
-              <option value="{{ $key }}">{{ $value }}</option>
+              <option value="{{ $key }}" <?php if ($key == $manager_selected) { echo 'selected'; }?>>{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group col-xs-2">
+            <label for="user" class="control-label">User</label>
+            <select class="form-control select2" style="width: 100%;" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
+              @foreach($user_list as $key => $value)
+              <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
               @endforeach
             </select>
           </div>
@@ -87,7 +95,9 @@
           @endif
           <div class="row button_in_row">
             <div class="col-md-12">
+              @permission('tools-activity-new')
               <button id="new_project" class="btn btn-info btn-xs" align="right"><span class="glyphicon glyphicon-plus"> New Project</span></button>
+              @endpermission
             </div>
           </div>
           <div style="direct-chat-messages">
@@ -210,6 +220,8 @@
   var activitiesTable;
   var year = [];
   var manager = [];
+  var user = [];
+
   //alert($.fn.dataTable.version);
   $("#year option:selected").each(function()
   {
@@ -223,11 +235,18 @@
     manager.push($(this).val());
   });
 
+  $("#user option:selected").each(function()
+  {
+    // log the value and text of each option
+    user.push($(this).val());
+  });
+
 
   function ajaxData(){
     var obj = {
       'year[]': year,
-      'manager[]': manager
+      'manager[]': manager,
+      'user[]': user
     };
     return obj;
   }
@@ -256,6 +275,11 @@
       allowClear: false,
       disabled: {{ $manager_select_disabled }}
     });
+    //Init select2 boxes
+    $("#user").select2({
+      allowClear: false,
+      disabled: {{ $user_select_disabled }}
+    });
 
     $('#year').on('change', function() {
       year = [];
@@ -279,6 +303,17 @@
       activitiesTable.ajax.reload();
     });
 
+    $('#user').on('change', function() {
+      user = [];
+      $("#user option:selected").each(function()
+      {
+        // log the value and text of each option
+        user.push($(this).val());
+
+      });
+      activitiesTable.ajax.reload();
+    });
+
     activitiesTable = $('#activitiesTable').DataTable({
       scrollX: true,
       ajax: {
@@ -288,14 +323,14 @@
         dataType: "JSON"
       },
       columns: [
-        { name: 'u2.id', data: 'manager_id' , searchable: false , visible: false},
-        { name: 'u2.name', data: 'manager_name', width: '150px' },
-        { name: 'u.id', data: 'user_id' , searchable: false , visible: false},
-        { name: 'u.name', data: 'user_name' , width: '150px'},
-        { name: 'p.customer_name', data: 'customer_name' , width: '200px'},
-        { name: 'p.id', data: 'project_id' , searchable: false , visible: false},
-        { name: 'p.project_name', data: 'project_name', width: '200px'},
-        { name: 'activities.year', data: 'year' , searchable: false , visible: false},
+        { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
+        { name: 'manager_name', data: 'manager_name', width: '150px' },
+        { name: 'user_id', data: 'user_id' , searchable: false , visible: false},
+        { name: 'user_name', data: 'user_name' , width: '150px'},
+        { name: 'customer_name', data: 'customer_name' , width: '200px'},
+        { name: 'project_id', data: 'project_id' , searchable: false , visible: false},
+        { name: 'project_name', data: 'project_name', width: '200px'},
+        { name: 'year', data: 'year' , searchable: false , visible: false},
         { name: 'jan_com', data: 'jan_com', width: '30px', searchable: false },
         { name: 'jan_otl', data: 'jan_otl', width: '10px', searchable: false , visible: false},
         { name: 'feb_com', data: 'feb_com', width: '30px', searchable: false },

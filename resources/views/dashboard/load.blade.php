@@ -45,7 +45,15 @@
             <label for="manager" class="control-label">Manager</label>
             <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
               @foreach($manager_list as $key => $value)
-              <option value="{{ $key }}">{{ $value }}</option>
+              <option value="{{ $key }}" <?php if ($key == $manager_selected) { echo 'selected'; }?>>{{ $value }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group col-xs-2">
+            <label for="user" class="control-label">User</label>
+            <select class="form-control select2" style="width: 100%;" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
+              @foreach($user_list as $key => $value)
+              <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
               @endforeach
             </select>
           </div>
@@ -120,29 +128,17 @@
                   <th>User name</th>
                   <th>Year</th>
                   <th>Jan</th>
-                  <th>OTL</th>
                   <th>Feb</th>
-                  <th>OTL</th>
                   <th>Mar</th>
-                  <th>OTL</th>
                   <th>Apr</th>
-                  <th>OTL</th>
                   <th>May</th>
-                  <th>OTL</th>
                   <th>Jun</th>
-                  <th>OTL</th>
                   <th>Jul</th>
-                  <th>OTL</th>
                   <th>Aug</th>
-                  <th>OTL</th>
                   <th>Sep</th>
-                  <th>OTL</th>
                   <th>Oct</th>
-                  <th>OTL</th>
                   <th>Nov</th>
-                  <th>OTL</th>
                   <th>Dec</th>
-                  <th>OTL</th>
                   <th></th>
                 </tr>
               </thead>
@@ -152,20 +148,6 @@
                   <th>Manager name</th>
                   <th>User ID</th>
                   <th>User name</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -213,6 +195,7 @@
   var activitiesTable;
   var year = [];
   var manager = [];
+  var user = [];
   var meta_activity = [];
   var project_status = [];
   var project_type = [];
@@ -228,6 +211,12 @@
   {
     // log the value and text of each option
     manager.push($(this).val());
+  });
+
+  $("#user option:selected").each(function()
+  {
+    // log the value and text of each option
+    user.push($(this).val());
   });
 
   $("#meta_activity option:selected").each(function()
@@ -253,6 +242,7 @@
     var obj = {
       'year[]': year,
       'manager[]': manager,
+      'user[]': user,
       'meta_activity[]': meta_activity,
       'project_status[]': project_status,
       'project_type[]': project_type
@@ -285,6 +275,11 @@
       disabled: {{ $manager_select_disabled }}
     });
     //Init select2 boxes
+    $("#user").select2({
+      allowClear: false,
+      disabled: {{ $user_select_disabled }}
+    });
+    //Init select2 boxes
     $("#meta_activity").select2({
       allowClear: false
     });
@@ -314,6 +309,17 @@
       {
         // log the value and text of each option
         manager.push($(this).val());
+
+      });
+      activitiesTable.ajax.reload();
+    });
+
+    $('#user').on('change', function() {
+      user = [];
+      $("#user option:selected").each(function()
+      {
+        // log the value and text of each option
+        user.push($(this).val());
 
       });
       activitiesTable.ajax.reload();
@@ -361,35 +367,23 @@
         dataType: "JSON"
       },
       columns: [
-        { name: 'u2.id', data: 'manager_id' , searchable: false , visible: false},
-        { name: 'u2.name', data: 'manager_name', width: '150px' },
-        { name: 'u.id', data: 'user_id' , searchable: false , visible: false},
-        { name: 'u.name', data: 'user_name' , width: '150px'},
-        { name: 'activities.year', data: 'year' , searchable: false , visible: false},
+        { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
+        { name: 'manager_name', data: 'manager_name', width: '150px' },
+        { name: 'user_id', data: 'user_id' , searchable: false , visible: false},
+        { name: 'user_name', data: 'user_name' , width: '150px'},
+        { name: 'year', data: 'year' , searchable: false , visible: false},
         { name: 'jan_com', data: 'jan_com', width: '30px', searchable: false },
-        { name: 'jan_otl', data: 'jan_otl', width: '10px', searchable: false , visible: false},
         { name: 'feb_com', data: 'feb_com', width: '30px', searchable: false },
-        { name: 'feb_otl', data: 'feb_otl', width: '10px', searchable: false , visible: false},
         { name: 'mar_com', data: 'mar_com', width: '30px', searchable: false },
-        { name: 'mar_otl', data: 'mar_otl', width: '10px', searchable: false , visible: false},
         { name: 'apr_com', data: 'apr_com', width: '30px', searchable: false },
-        { name: 'apr_otl', data: 'apr_otl', width: '10px', searchable: false , visible: false},
         { name: 'may_com', data: 'may_com', width: '30px', searchable: false },
-        { name: 'may_otl', data: 'may_otl', width: '10px', searchable: false , visible: false},
         { name: 'jun_com', data: 'jun_com', width: '30px', searchable: false },
-        { name: 'jun_otl', data: 'jun_otl', width: '10px', searchable: false , visible: false},
         { name: 'jul_com', data: 'jul_com', width: '30px', searchable: false },
-        { name: 'jul_otl', data: 'jul_otl', width: '10px', searchable: false , visible: false},
         { name: 'aug_com', data: 'aug_com', width: '30px', searchable: false },
-        { name: 'aug_otl', data: 'aug_otl', width: '10px', searchable: false , visible: false},
         { name: 'sep_com', data: 'sep_com', width: '30px', searchable: false },
-        { name: 'sep_otl', data: 'sep_otl', width: '10px', searchable: false , visible: false},
         { name: 'oct_com', data: 'oct_com', width: '30px', searchable: false },
-        { name: 'oct_otl', data: 'oct_otl', width: '10px', searchable: false , visible: false},
         { name: 'nov_com', data: 'nov_com', width: '30px', searchable: false },
-        { name: 'nov_otl', data: 'nov_otl', width: '10px', searchable: false , visible: false},
         { name: 'dec_com', data: 'dec_com', width: '30px', searchable: false },
-        { name: 'dec_otl', data: 'dec_otl', width: '10px', searchable: false , visible: false},
         {
           name: 'actions',
           data: null,
@@ -427,11 +421,8 @@
         if(data.jan_com<= 0){
           $(row).find('td:eq(2)').addClass('zero');
         }
-        else if(data.jan_com> 176){
+        else if(data.jan_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(2)').addClass('too_high');
-        }
-        else if(data.jan_otl> 0){
-          $(row).find('td:eq(2)').addClass('otl');
         }
         else {
           $(row).find('td:eq(2)').addClass('forecast');
@@ -439,11 +430,8 @@
         if(data.feb_com<= 0){
           $(row).find('td:eq(3)').addClass('zero');
         }
-        else if(data.feb_com> 176){
+        else if(data.feb_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(3)').addClass('too_high');
-        }
-        else if(data.feb_otl> 0){
-          $(row).find('td:eq(3)').addClass('otl');
         }
         else {
           $(row).find('td:eq(3)').addClass('forecast');
@@ -451,11 +439,8 @@
         if(data.mar_com<= 0){
           $(row).find('td:eq(4)').addClass('zero');
         }
-        else if(data.mar_com> 176){
+        else if(data.mar_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(4)').addClass('too_high');
-        }
-        else if(data.mar_otl> 0){
-          $(row).find('td:eq(4)').addClass('otl');
         }
         else {
           $(row).find('td:eq(4)').addClass('forecast');
@@ -463,11 +448,8 @@
         if(data.apr_com<= 0){
           $(row).find('td:eq(5)').addClass('zero');
         }
-        else if(data.apr_com> 176){
+        else if(data.apr_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(5)').addClass('too_high');
-        }
-        else if(data.apr_otl> 0){
-          $(row).find('td:eq(5)').addClass('otl');
         }
         else {
           $(row).find('td:eq(5)').addClass('forecast');
@@ -475,11 +457,8 @@
         if(data.may_com<= 0){
           $(row).find('td:eq(6)').addClass('zero');
         }
-        else if(data.may_com> 176){
+        else if(data.may_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(6)').addClass('too_high');
-        }
-        else if(data.may_otl> 0){
-          $(row).find('td:eq(6)').addClass('otl');
         }
         else {
           $(row).find('td:eq(6)').addClass('forecast');
@@ -487,11 +466,8 @@
         if(data.jun_com<= 0){
           $(row).find('td:eq(7)').addClass('zero');
         }
-        else if(data.jun_com> 176){
+        else if(data.jun_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(7)').addClass('too_high');
-        }
-        else if(data.jun_otl> 0){
-          $(row).find('td:eq(7)').addClass('otl');
         }
         else {
           $(row).find('td:eq(7)').addClass('forecast');
@@ -499,11 +475,8 @@
         if(data.jul_com<= 0){
           $(row).find('td:eq(8)').addClass('zero');
         }
-        else if(data.jul_com> 176){
+        else if(data.jul_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(8)').addClass('too_high');
-        }
-        else if(data.jul_otl> 0){
-          $(row).find('td:eq(8)').addClass('otl');
         }
         else {
           $(row).find('td:eq(8)').addClass('forecast');
@@ -511,11 +484,8 @@
         if(data.aug_com<= 0){
           $(row).find('td:eq(9)').addClass('zero');
         }
-        else if(data.aug_com> 176){
+        else if(data.aug_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(9)').addClass('too_high');
-        }
-        else if(data.aug_otl> 0){
-          $(row).find('td:eq(9)').addClass('otl');
         }
         else {
           $(row).find('td:eq(9)').addClass('forecast');
@@ -523,11 +493,8 @@
         if(data.sep_com<= 0){
           $(row).find('td:eq(10)').addClass('zero');
         }
-        else if(data.sep_com> 176){
+        else if(data.sep_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(10)').addClass('too_high');
-        }
-        else if(data.sep_otl> 0){
-          $(row).find('td:eq(10)').addClass('otl');
         }
         else {
           $(row).find('td:eq(10)').addClass('forecast');
@@ -535,11 +502,8 @@
         if(data.oct_com<= 0){
           $(row).find('td:eq(11)').addClass('zero');
         }
-        else if(data.oct_com> 176){
+        else if(data.oct_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(11)').addClass('too_high');
-        }
-        else if(data.oct_otl> 0){
-          $(row).find('td:eq(11)').addClass('otl');
         }
         else {
           $(row).find('td:eq(11)').addClass('forecast');
@@ -547,11 +511,8 @@
         if(data.nov_com<= 0){
           $(row).find('td:eq(12)').addClass('zero');
         }
-        else if(data.nov_com> 176){
+        else if(data.nov_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(12)').addClass('too_high');
-        }
-        else if(data.nov_otl> 0){
-          $(row).find('td:eq(12)').addClass('otl');
         }
         else {
           $(row).find('td:eq(12)').addClass('forecast');
@@ -559,11 +520,8 @@
         if(data.dec_com<= 0){
           $(row).find('td:eq(13)').addClass('zero');
         }
-        else if(data.dec_com> 176){
+        else if(data.dec_com> {{ config('options.time_trak')['days_in_month'] }}){
           $(row).find('td:eq(13)').addClass('too_high');
-        }
-        else if(data.dec_otl> 0){
-          $(row).find('td:eq(13)').addClass('otl');
         }
         else {
           $(row).find('td:eq(13)').addClass('forecast');

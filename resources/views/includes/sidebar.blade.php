@@ -52,9 +52,22 @@
 
                 <ul class="treeview-menu">
                   @permission(['dashboard-view'])
-                  <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
                   <li><a href="{!!route('dashboardLoad')!!}"><i class="fa fa-circle-o"></i> Users load</a></li>
                   <li><a href="{!!route('dashboardLoadChart')!!}"><i class="fa fa-circle-o"></i> Users load Chart</a></li>
+                  @endpermission
+                </ul>
+
+            </li>
+            @endpermission
+            @permission(['tools-activity-view'])
+            <li class="treeview">
+                <a href="#">
+                <i class="fa fa-table"></i> <span>Tools</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+
+                <ul class="treeview-menu">
+                  @permission(['tools-activity-view'])
+                  <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
                   @endpermission
                 </ul>
 

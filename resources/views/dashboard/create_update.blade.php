@@ -67,7 +67,7 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              Number of hours for each month.
+              Number of days for each month.
             </div>
           </div>
           <div class="row">
