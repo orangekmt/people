@@ -511,7 +511,7 @@
     });
 
     $('#user').on('change', function() {
-      manager = [];
+      user = [];
       $("#user option:selected").each(function()
       {
         // log the value and text of each option

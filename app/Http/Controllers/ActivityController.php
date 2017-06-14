@@ -141,8 +141,6 @@ class ActivityController extends Controller {
     $data ["dscstarted"] = $dscstarted;
     $data ["iscstarted"] = $iscstarted;
 
-    //dd($data);
-
     return json_encode($data);
   }
   public function test ()

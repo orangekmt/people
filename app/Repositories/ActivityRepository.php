@@ -116,22 +116,21 @@ class ActivityRepository
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
       // Checking which users to show from the manager list
-      if (!empty($where['manager']))
-          {
-              $activityList->where(function ($query) use ($where) {
-                  foreach ($where['manager'] as $w)
-                  {
-                      $query->orWhere('manager_id',$w);
-                  }
-              });
-          }
-
       if (!empty($where['user']))
           {
               $activityList->where(function ($query) use ($where) {
                   foreach ($where['user'] as $w)
                   {
                       $query->orWhere('user_id',$w);
+                  }
+              });
+          }
+      elseif (!empty($where['manager']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['manager'] as $w)
+                  {
+                      $query->orWhere('manager_id',$w);
                   }
               });
           }
@@ -235,15 +234,6 @@ class ActivityRepository
     // Checking the roles to see if allowed to see all users
     if (Entrust::can('dashboard-all-view')){
       // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
-      if (!empty($where['manager']))
-          {
-              $activityList->where(function ($query) use ($where) {
-                  foreach ($where['manager'] as $w)
-                  {
-                      $query->orWhere('manager_id',$w);
-                  }
-              });
-          }
       if (!empty($where['user']))
           {
               $activityList->where(function ($query) use ($where) {
@@ -253,6 +243,16 @@ class ActivityRepository
                   }
               });
           }
+      elseif (!empty($where['manager']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['manager'] as $w)
+                  {
+                      $query->orWhere('manager_id',$w);
+                  }
+              });
+          }
+
     }
     elseif (Auth::user()->is_manager == 1) {
       $activityList->where('manager_id','=',Auth::user()->id);
@@ -290,85 +290,81 @@ class ActivityRepository
 
     $data = 0;
 
-    $activityList = DB::table('activities');
-    $activityList->select('year',
-    DB::raw('if(sum(if(activities.from_otl=1 and month=1,task_hour,0))>0,sum(if(activities.from_otl=1 and month=1,task_hour,0)),sum(if(activities.from_otl=0 and month=1,task_hour,0))) jan_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=2,task_hour,0))>0,sum(if(activities.from_otl=1 and month=2,task_hour,0)),sum(if(activities.from_otl=0 and month=2,task_hour,0))) feb_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=3,task_hour,0))>0,sum(if(activities.from_otl=1 and month=3,task_hour,0)),sum(if(activities.from_otl=0 and month=3,task_hour,0))) mar_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=4,task_hour,0))>0,sum(if(activities.from_otl=1 and month=4,task_hour,0)),sum(if(activities.from_otl=0 and month=4,task_hour,0))) apr_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=5,task_hour,0))>0,sum(if(activities.from_otl=1 and month=5,task_hour,0)),sum(if(activities.from_otl=0 and month=5,task_hour,0))) may_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=6,task_hour,0))>0,sum(if(activities.from_otl=1 and month=6,task_hour,0)),sum(if(activities.from_otl=0 and month=6,task_hour,0))) jun_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=7,task_hour,0))>0,sum(if(activities.from_otl=1 and month=7,task_hour,0)),sum(if(activities.from_otl=0 and month=7,task_hour,0))) jul_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=8,task_hour,0))>0,sum(if(activities.from_otl=1 and month=8,task_hour,0)),sum(if(activities.from_otl=0 and month=8,task_hour,0))) aug_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=9,task_hour,0))>0,sum(if(activities.from_otl=1 and month=9,task_hour,0)),sum(if(activities.from_otl=0 and month=9,task_hour,0))) sep_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=10,task_hour,0))>0,sum(if(activities.from_otl=1 and month=10,task_hour,0)),sum(if(activities.from_otl=0 and month=10,task_hour,0))) oct_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=11,task_hour,0))>0,sum(if(activities.from_otl=1 and month=11,task_hour,0)),sum(if(activities.from_otl=0 and month=11,task_hour,0))) nov_com'),
-    DB::raw('if(sum(if(activities.from_otl=1 and month=12,task_hour,0))>0,sum(if(activities.from_otl=1 and month=12,task_hour,0)),sum(if(activities.from_otl=0 and month=12,task_hour,0))) dec_com')
-    );
-    $activityList->leftjoin('projects as p', 'p.id', '=', 'project_id');
+    $temp_table = new create_temp_table_mix_OTL_NONOTL('table_temp_a','table_temp_b');
 
-    if (!empty($where['user'])){
-      $activityList->where(function ($query) use ($where) {
-        foreach ($where['user'] as $w)
+    $activityList = DB::table('table_temp_b');
+
+    $activityList->select('year',
+                            DB::raw('SUM(jan_com) AS jan_com'),
+                            DB::raw('SUM(feb_com) AS feb_com'),
+                            DB::raw('SUM(mar_com) AS mar_com'),
+                            DB::raw('SUM(apr_com) AS apr_com'),
+                            DB::raw('SUM(may_com) AS may_com'),
+                            DB::raw('SUM(jun_com) AS jun_com'),
+                            DB::raw('SUM(jul_com) AS jul_com'),
+                            DB::raw('SUM(aug_com) AS aug_com'),
+                            DB::raw('SUM(sep_com) AS sep_com'),
+                            DB::raw('SUM(oct_com) AS oct_com'),
+                            DB::raw('SUM(nov_com) AS nov_com'),
+                            DB::raw('SUM(dec_com) AS dec_com')
+    );
+
+    if (!empty($where['year']))
         {
-            $query->orWhere('user_id',$w);
+            $activityList->where(function ($query) use ($where) {
+                foreach ($where['year'] as $w)
+                {
+                    $query->orWhere('year',$w);
+                }
+            });
         }
-      });
-      $activityList->groupBy('year');
-      $activityList->where('p.activity_type','=',$activity_type);
-      $activityList->where('p.project_status','=',$project_status);
-      $activityList->where('year','=',$where['year'][0]);
-      $data = $activityList->get();
+
+    // Checking the roles to see if allowed to see all users
+    if (Entrust::can('dashboard-all-view')){
+      // Format of $manager_list is [ 1=> 'manager1', 2=>'manager2',...]
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
+                  }
+              });
+          }
+      elseif (!empty($where['manager']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['manager'] as $w)
+                  {
+                      $query->orWhere('manager_id',$w);
+                  }
+              });
+          }
     }
-    elseif (!empty($where['manager'])){
-      $users = [];
-      foreach ($where['manager'] as $w)
-      {
-        $usersformanager = $this->userRepository->getById($w)->employees()->pluck('users_users.user_id')->toArray();
-        foreach ($usersformanager as $key => $value) {
-          array_push($users,$value);
-        }
-      }
-      $activityList->where(function ($query) use ($users) {
-        foreach ($users as $w)
-        {
-            $query->orWhere('user_id',$w);
-        }
-      });
-      $activityList->groupBy('year');
-      $activityList->where('p.activity_type','=',$activity_type);
-      $activityList->where('p.project_status','=',$project_status);
-      $activityList->where('year','=',$where['year'][0]);
-      $data = $activityList->get();
+    elseif (Auth::user()->is_manager == 1) {
+      $activityList->where('manager_id','=',Auth::user()->id);
+      if (!empty($where['user']))
+          {
+              $activityList->where(function ($query) use ($where) {
+                  foreach ($where['user'] as $w)
+                  {
+                      $query->orWhere('user_id',$w);
+                  }
+              });
+          }
     }
     else {
-      $managers = $this->userRepository->getManagersList();
-
-      $users = [];
-      foreach ($managers as $key => $value)
-      {
-        $usersformanager = $this->userRepository->getById($key)->employees()->pluck('users_users.user_id')->toArray();
-        foreach ($usersformanager as $key => $value) {
-          array_push($users,$value);
-        }
-      }
-
-      $activityList->where(function ($query) use ($users) {
-        foreach ($users as $w)
-        {
-            $query->orWhere('user_id',$w);
-        }
-      });
-      $activityList->groupBy('year');
-      $activityList->where('p.activity_type','=',$activity_type);
-      $activityList->where('p.project_status','=',$project_status);
-      $activityList->where('year','=',$where['year'][0]);
-      $data = $activityList->get();
+      $activityList->where('user_id','=',Auth::user()->id);
     }
 
-    if (empty($data)){
-      $data = [];
-      $data[0] = new \stdClass();
+    $activityList->where('activity_type','=',$activity_type);
+    $activityList->where('project_status','=',$project_status);
+
+    $data = $activityList->get();
+
+    // This is in case we don't find any record then we put everything to 0
+    $activityList->groupBy('year');
+    if ($data [0]->year == null){
       $data [0]->year = $where['year'][0];
       $data [0]->jan_com = 0;
       $data [0]->feb_com = 0;
@@ -382,19 +378,6 @@ class ActivityRepository
       $data [0]->oct_com = 0;
       $data [0]->nov_com = 0;
       $data [0]->dec_com = 0;
-    } else {
-      $data [0]->jan_com = $data [0]->jan_com/8;
-      $data [0]->feb_com = $data [0]->feb_com/8;
-      $data [0]->mar_com = $data [0]->mar_com/8;
-      $data [0]->apr_com = $data [0]->apr_com/8;
-      $data [0]->may_com = $data [0]->may_com/8;
-      $data [0]->jun_com = $data [0]->jun_com/8;
-      $data [0]->jul_com = $data [0]->jul_com/8;
-      $data [0]->aug_com = $data [0]->aug_com/8;
-      $data [0]->sep_com = $data [0]->sep_com/8;
-      $data [0]->oct_com = $data [0]->oct_com/8;
-      $data [0]->nov_com = $data [0]->nov_com/8;
-      $data [0]->dec_com = $data [0]->dec_com/8;
     }
 
     return $data;
