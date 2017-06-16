@@ -3,6 +3,13 @@
 @section('style')
 <!-- CSS -->
 <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
+<link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+@stop
+
+@section('scriptsrc')
+<!-- JS -->
+<!-- Select2 -->
+<script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
 @stop
 
 @section('content')
@@ -14,7 +21,7 @@
         <i class="fa fa-project"></i>
         <h3 class="box-title">
           @if($action == 'create')
-          Create project for user {{$user->name}}
+          Create project
           @elseif($action == 'update')
           Update project
           @endif
@@ -44,15 +51,15 @@
           @endif
 
           @if($action == 'create')
-          {!! Form::open(['url' => 'dashboardFormCreate', 'method' => 'post']) !!}
+          {!! Form::open(['url' => 'toolsFormCreate', 'method' => 'post']) !!}
           @elseif($action == 'update')
-          {!! Form::open(['url' => 'dashboardFormUpdate', 'method' => 'post']) !!}
+          {!! Form::open(['url' => 'toolsFormUpdate', 'method' => 'post']) !!}
           {!! Form::hidden('project_id', $project->id, ['class' => 'form-control']) !!}
           @foreach ($editable_activities as $key => $value)
             {!! Form::hidden('editable_activities['.$key.']', $value, ['class' => 'form-control']) !!}
           @endforeach
           @endif
-          {!! Form::hidden('user_id', $user->id, ['class' => 'form-control']) !!}
+          {!! Form::hidden('created_by_user_id', $created_by_user_id, ['class' => 'form-control']) !!}
 
           <div class="row">
             <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
@@ -63,6 +70,22 @@
                     {!! Form::select('year', config('select.year'), (isset($year)) ? $year : '', ['class' => 'form-control']) !!}
                     {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
                 </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group {!! $errors->has('user_id') ? 'has-error' : '' !!} col-md-12">
+              <div class="col-md-1">
+                {!! Form::label('user_id', 'user_id', ['class' => 'control-label']) !!}
+              </div>
+              <div class="col-md-11">
+                <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" data-placeholder="Select a user">
+                  <option value="-1" ></option>
+                  @foreach($user_list as $key => $value)
+                  <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
+                  @endforeach
+                </select>
+                {!! $errors->first('user_id', '<small class="help-block">:message</small>') !!}
+              </div>
             </div>
           </div>
           <div class="row">
@@ -394,20 +417,27 @@
 @stop
 
 @section('script')
-@if($action == 'update')
+
 
 <script>
 var year;
 
 $(document).ready(function() {
 
-  $('#year').on('change', function() {
-      year=$(this).val();
-      window.location.href = "{!! route('dashboardFormUpdate',[$user->id,$project->id,'']) !!}"+"/"+year;
+  @if($action == 'update')
+    $('#year').on('change', function() {
+        year=$(this).val();
+        window.location.href = "{!! route('toolsFormUpdate',[$user->id,$project->id,'']) !!}"+"/"+year;
+    });
+  @endif
+  //Init select2 boxes
+  $("#user").select2({
+    allowClear: false,
+    disabled: {{ $user_select_disabled }}
   });
 
 });
 </script>
 
-@endif
+
 @stop

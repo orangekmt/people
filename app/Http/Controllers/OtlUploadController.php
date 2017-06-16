@@ -60,7 +60,7 @@ class OtlUploadController extends Controller
           $employee['is_manager'] = 1;
           $employee['from_otl'] = 1;
           $employee['manager_id'] = -1;
-          $employee['roles'] = ['2'];
+          $employee['roles'] = ['3'];
           $managerInDB = $this->userRepository->create($employee);
           array_push($messages,['status'=>'add','msg'=>'Manager '.$managerInDB->name.' added to DB']);
         } else {
@@ -77,7 +77,7 @@ class OtlUploadController extends Controller
           $employee['is_manager'] = 0;
           $employee['from_otl'] = 1;
           $employee['manager_id'] = $managerInDB->id;
-          $employee['roles'] = ['3'];
+          $employee['roles'] = ['4'];
           $userInDB = $this->userRepository->create($employee);
           array_push($messages,['status'=>'add','msg'=>'User '.$userInDB->name.' added to DB']);
         }

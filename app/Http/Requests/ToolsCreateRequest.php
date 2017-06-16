@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class DashboardCreateRequest extends Request
+class ToolsCreateRequest extends Request
 {
   /**
   * Determine if the project is authorized to make this request.

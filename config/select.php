@@ -7,9 +7,11 @@ return [
         'contractor' => 'contractor'
     ],
     'region' => [
+        '' => '',
         'Europe' => 'Europe'
     ],
     'country' => [
+        '' => '',
         'Belgium' => 'Belgium',
         'The Netherlands' => 'The Netherlands',
         'United Kingdom' => 'United Kingdom',
@@ -31,24 +33,28 @@ return [
         'UC' => 'UC'
     ],
     'domain-projects' => [
+        '' => '',
         'Hybrid Security' => 'Hybrid Security',
         'Hybrid APM' => 'Hybrid APM',
         'Hybrid Network' => 'Hybrid Network',
         'UC' => 'UC'
     ],
     'meta_activity' => [
+        '' => '',
         'BILLABLE' => 'BILLABLE',
         'ABS' => 'ABS',
         'OTHER' => 'OTHER',
         'CF' => 'CF'
     ],
     'project_status' => [
+        '' => '',
         'Started' => 'Started',
         'Pre-Sales' => 'Pre-Sales',
         'Closed' => 'Closed',
         'Orange absence or other' => 'Orange absence or other'
     ],
     'project_type' => [
+        '' => '',
         'Baseline' => 'Baseline',
         'Project' => 'Project',
         'POC' => 'POC',

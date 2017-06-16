@@ -67,7 +67,7 @@
 
                 <ul class="treeview-menu">
                   @permission(['tools-activity-view'])
-                  <li><a href="{!!route('dashboardActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                  <li><a href="{!!route('toolsActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
                   @endpermission
                 </ul>
 

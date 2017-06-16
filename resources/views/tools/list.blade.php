@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'Dashboard','second_title'=>'activities','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app',['main_title' => 'Tools','second_title'=>'activities','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
 
 @section('style')
 <!-- CSS -->
@@ -519,7 +519,7 @@
         // log the value and text of each option
         year.push($(this).val());
       });
-      window.location.href = "{!! route('dashboardFormUpdate',['','','']) !!}/"+row.data().user_id+"/"+row.data().project_id+"/"+year[0];
+      window.location.href = "{!! route('toolsFormUpdate',['','','']) !!}/"+row.data().user_id+"/"+row.data().project_id+"/"+year[0];
     });
 
     $('#new_project').on('click', function() {
@@ -529,7 +529,7 @@
         // log the value and text of each option
         year.push($(this).val());
       });
-      window.location.href = "{!! route('dashboardFormCreate',[Auth::user()->id,'']) !!}/"+year[0];
+      window.location.href = "{!! route('toolsFormCreate',[Auth::user()->id,'']) !!}/"+year[0];
     });
   } );
   </script>

@@ -96,15 +96,15 @@ Route::group(['middleware' => ['auth']], function() {
                     => ['permission:activity-view|activity-create|activity-edit|activity-delete']]);
 
       //Tools
-      Route::get('dashboardActivities', ['uses'=>'DashboardController@activities','as'=>'dashboardActivities','middleware' => ['permission:tools-activity-view']]);
+      Route::get('toolsActivities', ['uses'=>'ToolsController@activities','as'=>'toolsActivities','middleware' => ['permission:tools-activity-view|tools-activity-all-view']]);
       //  Create new activity
-      Route::get('dashboardFormCreate/{u}/{y}', ['uses'=>'DashboardController@getFormCreate','as'=>'dashboardFormCreate','middleware' => ['permission:tools-activity-new']]);
-      Route::post('dashboardFormCreate', ['uses'=>'DashboardController@postFormCreate','middleware' => ['permission:tools-activity-new']]);
+      Route::get('toolsFormCreate/{u}/{y}', ['uses'=>'ToolsController@getFormCreate','as'=>'toolsFormCreate','middleware' => ['permission:tools-activity-new']]);
+      Route::post('toolsFormCreate', ['uses'=>'ToolsController@postFormCreate','middleware' => ['permission:tools-activity-new']]);
       //  Update activity
-      Route::get('dashboardFormUpdate/{u}/{p}/{y}', ['uses'=>'DashboardController@getFormUpdate','as'=>'dashboardFormUpdate','middleware' => ['permission:tools-activity-edit']]);
-      Route::post('dashboardFormUpdate', ['uses'=>'DashboardController@postFormUpdate','middleware' => ['permission:tools-activity-edit']]);
+      Route::get('toolsFormUpdate/{u}/{p}/{y}', ['uses'=>'ToolsController@getFormUpdate','as'=>'toolsFormUpdate','middleware' => ['permission:tools-activity-edit']]);
+      Route::post('toolsFormUpdate', ['uses'=>'ToolsController@postFormUpdate','middleware' => ['permission:tools-activity-edit']]);
       //  AJAX
-      Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:tools-activity-view']]);
+      Route::post('listOfActivitiesPerUserAjax', ['uses'=>'ActivityController@listOfActivitiesPerUser','as'=>'listOfActivitiesPerUserAjax','middleware' => ['permission:tools-activity-view|tools-activity-all-view']]);
 
       //Dashboards
       Route::get('dashboardLoad', ['uses'=>'DashboardController@load','as'=>'dashboardLoad','middleware' => ['permission:dashboard-view']]);
