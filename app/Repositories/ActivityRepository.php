@@ -26,9 +26,14 @@ class ActivityRepository
     return $this->activity->findOrFail($id);
   }
 
-  public function getByOTL($year,$month,$user_id,$project_id, $from_otl)
+  public function getByOTL($year,$user_id,$project_id, $from_otl)
   {
-    return $this->activity->where('year', $year)->where('month', $month)->where('user_id', $user_id)->where('project_id', $project_id)->where('from_otl', $from_otl)->first();
+    return $this->activity->where('year', $year)->where('user_id', $user_id)->where('project_id', $project_id)->where('from_otl', $from_otl)->lists('task_hour','month');
+  }
+
+  public function user_assigned_on_project($year,$user_id,$project_id)
+  {
+    return $this->activity->where('year', $year)->where('user_id', $user_id)->where('project_id', $project_id)->count();
   }
 
   public function create(Array $inputs)
@@ -40,6 +45,22 @@ class ActivityRepository
   public function update($id, Array $inputs)
   {
     return $this->save($this->getById($id), $inputs);
+  }
+
+  public function createOrUpdate($inputs)
+  {
+    $activity = $this->activity
+            ->where('year', $inputs['year'])
+            ->where('month',   $inputs['month'])
+            ->where('project_id', $inputs['project_id'])
+            ->where('user_id', $inputs['user_id'])
+            ->first();
+
+    if (!isset($activity)){
+      $activity = new $this->activity;
+    }
+
+    return $this->save($activity, $inputs);
   }
 
   private function save(Activity $activity, Array $inputs)

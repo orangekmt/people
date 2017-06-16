@@ -79,6 +79,14 @@ class ToolsController extends Controller {
     $edit_project_name = '';
     $edit_otl_name = '';
     $user_selected = '';
+    $meta_activity_select_disabled = 'false';
+    $project_type_select_disabled = 'false';
+    $activity_type_select_disabled = 'false';
+    $project_status_select_disabled = 'false';
+    $region_select_disabled = 'false';
+    $country_select_disabled = 'false';
+    $domain_select_disabled = 'false';
+
     $created_by_user_id = Auth::user()->id;
 
     if (Entrust::can('tools-activity-all-view')){
@@ -96,15 +104,21 @@ class ToolsController extends Controller {
     }
 
     $user = $this->userRepository->getById($user_id);
-		return view('tools/create_update', compact('user','year','edit_project_name','edit_otl_name','user_list','user_selected','user_select_disabled','created_by_user_id'))->with('action','create');
+
+		return view('tools/create_update', compact('user','year','edit_project_name','edit_otl_name',
+      'user_list','user_selected','user_select_disabled','created_by_user_id',
+      'meta_activity_select_disabled','project_type_select_disabled','activity_type_select_disabled','project_status_select_disabled',
+      'region_select_disabled','country_select_disabled','domain_select_disabled'))
+      ->with('action','create');
 	}
 
   public function postFormCreate(ToolsCreateRequest $request)
 	{
     $inputs = $request->all();
     $project = $this->projectRepository->create($inputs);
-    // Here I will test if a user has been selected or not => -1 means no user selected
-    if (intval($inputs['user_id']) > 0) {
+
+    // Here I will test if a user has been selected or not
+    if (!empty($inputs['user_id'])) {
       foreach ($inputs['month'] as $key => $value){
         $inputsActivities = [
           'year' => $inputs['year'],
@@ -122,66 +136,131 @@ class ToolsController extends Controller {
 
   public function getFormUpdate($user_id,$project_id,$year)
 	{
+    // Here we setup all the disabled fields to be disabled
     $edit_project_name = '';
     $edit_otl_name = '';
-    $user = $this->userRepository->getById($user_id);
-    $project = $this->projectRepository->getById($project_id);
-    if (($project->created_by_user_id != null) && !(Auth::user()->id == $project->created_by_user_id)) {
-      $edit_project_name = 'disabled';
-      $edit_otl_name = 'disabled';
+    $meta_activity_select_disabled = 'true';
+    $project_type_select_disabled = 'true';
+    $activity_type_select_disabled = 'true';
+    $project_status_select_disabled = 'true';
+    $region_select_disabled = 'true';
+    $country_select_disabled = 'true';
+    $domain_select_disabled = 'true';
+    $user_select_disabled = 'true';
+
+    $user_list = [];
+
+    // Here we will define if we can select a user for this project and activity or not
+    // Attention, we need to prevent in the user_list to have ids when already assigned to a project
+    if (Entrust::can('tools-activity-all-view')){
+      $user_list_temp = $this->userRepository->getAllUsersListNoManagers();
+
+      if ($user_id == '0') {
+        foreach ($user_list_temp as $key => $value){
+          if ($this->activityRepository->user_assigned_on_project($year,$key,$project_id) == 0){
+            $user_list[$key] = $value;
+          }
+        }
+        $user_select_disabled = 'false';
+        $user_selected = '';
+      } else {
+        $user_list = $user_list_temp;
+        $user_select_disabled = 'true';
+        $user_selected = $user_id;
+      }
     }
+    elseif (Auth::user()->is_manager == 1) {
+      $user_list_temp = Auth::user()->employees()->lists('name','user_id');
+
+      if ($user_id == '0') {
+        foreach ($user_list_temp as $key => $value){
+          if ($this->activityRepository->user_assigned_on_project($year,$key,$project_id) == 0){
+            $user_list[$key] = $value;
+          }
+        }
+        $user_select_disabled = 'false';
+        $user_selected = '';
+      } else {
+        $user_list = $user_list_temp;
+        $user_select_disabled = 'true';
+        $user_selected = $user_id;
+      }
+    }
+    else {
+      $user_list = [Auth::user()->id => Auth::user()->name];
+      if ($user_id == '0') {
+        $user_select_disabled = 'true';
+        $user_selected = '';
+      } else {
+        $user_select_disabled = 'true';
+        $user_selected = $user_id;
+      }
+    }
+
+    // Here we find the information about the project
+    $project = $this->projectRepository->getById($project_id);
+    $created_by_user_name = $this->userRepository->getById($project->created_by_user_id)->name;
+
+    // Here we can check what can be edited for this project
+    if (isset($project->created_by_user_id) && (Auth::user()->id == $project->created_by_user_id)) {
+      $edit_project_name = '';
+      $meta_activity_select_disabled = 'false';
+      $project_type_select_disabled = 'false';
+      $activity_type_select_disabled = 'false';
+      $project_status_select_disabled = 'false';
+      $region_select_disabled = 'false';
+      $country_select_disabled = 'false';
+      $domain_select_disabled = 'false';
+    }
+
     if ($project->otl_validated == 1) {
       $edit_otl_name = 'disabled';
     }
 
     $activities = [];
-    $editable_activities = [];
+    $from_otl = [];
+
+    if ($user_id != '0') {
+      $user = $this->userRepository->getById($user_id);
+      $activity_forecast = $this->activityRepository->getByOTL($year,$user->id,$project->id, 0);
+      $activity_OTL = $this->activityRepository->getByOTL($year,$user->id,$project->id, 1);
+    }
 
     for ($i = 1; $i <= 12; $i++) {
-      $activity_forecast = $this->activityRepository->getByOTL($year,$i,$user->id,$project->id, 0);
-      $activity_OTL = $this->activityRepository->getByOTL($year,$i,$user->id,$project->id, 1);
-      if (isset($activity_OTL)){
-        $activities[$i] = [
-          'id' => $activity_OTL->id,
-          'task_hour' => $activity_OTL->task_hour,
-          'from_otl' => 'disabled'
-        ];
-      } elseif (isset($activity_forecast)){
-        $activities[$i] = [
-          'id' => $activity_forecast->id,
-          'task_hour' => $activity_forecast->task_hour
-        ];
-        array_push($editable_activities,$activity_forecast->id);
+      if (isset($activity_OTL[$i])){
+        $activities[$i] = $activity_OTL[$i];
+        $from_otl[$i] = 'disabled';
+      } elseif (isset($activity_forecast[$i])){
+        $activities[$i] = $activity_forecast[$i];
+        $from_otl[$i] = '';
+
       } else {
-        $inputsActivities = [
-          'year' => $year,
-          'month' => $i,
-          'project_id' => $project_id,
-          'user_id' => $user_id,
-          'task_hour' => 0,
-          'from_otl' => 0
-        ];
-        $activity_forecast = $this->activityRepository->create($inputsActivities);
-        $activities[$i] = [
-          'id' => $activity_forecast->id,
-          'task_hour' => $activity_forecast->task_hour
-        ];
-        array_push($editable_activities,$activity_forecast->id);
+        $activities[$i] = '0';
+        $from_otl[$i] = '';
       }
     }
 
-		return view('tools/create_update', compact('user','project','year','activities','editable_activities','edit_project_name','edit_otl_name'))->with('action','update');
+		return view('tools/create_update', compact('user_id','project','year','activities','from_otl',
+      'edit_project_name','edit_otl_name',
+      'meta_activity_select_disabled','project_type_select_disabled','activity_type_select_disabled','project_status_select_disabled',
+      'region_select_disabled','country_select_disabled','domain_select_disabled','user_list','user_selected','user_select_disabled','created_by_user_name'))
+      ->with('action','update');
 	}
 
 	public function postFormUpdate(ToolsUpdateRequest $request)
 	{
     $inputs = $request->all();
+
     $project = $this->projectRepository->update($inputs['project_id'],$inputs);
-    foreach ($inputs['activities_id'] as $key => $value){
-      $inputsActivities = [
-        'task_hour' => $value
-      ];
-      $activity = $this->activityRepository->update($key,$inputsActivities);
+
+    if ($inputs['user_id'] != 0) {
+      foreach ($inputs['month'] as $key => $value){
+        $inputs_new = $inputs;
+        $inputs_new['month'] = $key;
+        $inputs_new['task_hour'] = $value;
+        $inputs_new['from_otl'] = 0;
+        $activity = $this->activityRepository->createOrUpdate($inputs_new);
+      }
     }
     return redirect('toolsActivities')->with('success','Project updated successfully');
 	}

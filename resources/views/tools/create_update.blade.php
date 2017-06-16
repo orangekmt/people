@@ -2,8 +2,8 @@
 
 @section('style')
 <!-- CSS -->
-<link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
 <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{ asset('/css/forms.css') }}">
 @stop
 
 @section('scriptsrc')
@@ -13,7 +13,6 @@
 @stop
 
 @section('content')
-
 <div class="row">
   <div class="col-md-12">
     <div class="box box-info direct-chat direct-chat-info">
@@ -23,7 +22,7 @@
           @if($action == 'create')
           Create project
           @elseif($action == 'update')
-          Update project
+          Update project {{ isset($created_by_user_name) ? '(created by user '.$created_by_user_name.')' : '' }}
           @endif
         </h3>
         <div class="box-tools pull-right">
@@ -52,14 +51,12 @@
 
           @if($action == 'create')
           {!! Form::open(['url' => 'toolsFormCreate', 'method' => 'post']) !!}
+          {!! Form::hidden('created_by_user_id', $created_by_user_id, ['class' => 'form-control']) !!}
           @elseif($action == 'update')
           {!! Form::open(['url' => 'toolsFormUpdate', 'method' => 'post']) !!}
           {!! Form::hidden('project_id', $project->id, ['class' => 'form-control']) !!}
-          @foreach ($editable_activities as $key => $value)
-            {!! Form::hidden('editable_activities['.$key.']', $value, ['class' => 'form-control']) !!}
-          @endforeach
           @endif
-          {!! Form::hidden('created_by_user_id', $created_by_user_id, ['class' => 'form-control']) !!}
+
 
           <div class="row">
             <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
@@ -75,11 +72,11 @@
           <div class="row">
             <div class="form-group {!! $errors->has('user_id') ? 'has-error' : '' !!} col-md-12">
               <div class="col-md-1">
-                {!! Form::label('user_id', 'user_id', ['class' => 'control-label']) !!}
+                {!! Form::label('user_id', 'User', ['class' => 'control-label']) !!}
               </div>
               <div class="col-md-11">
                 <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" data-placeholder="Select a user">
-                  <option value="-1" ></option>
+                  <option value="" ></option>
                   @foreach($user_list as $key => $value)
                   <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
                   @endforeach
@@ -88,26 +85,26 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row_months">
             <div class="col-md-12">
               Number of days for each month.
             </div>
           </div>
-          <div class="row">
+          <div class="row_months">
             @if($action == 'create')
             @for($i = 1; $i <= 12; $i++)
             <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1">
               {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
-              {!! Form::text('month['.$i.']', (isset($activities[$i]['task_hour'])) ? $activities[$i]['task_hour'] : 0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i], (isset($activities[$i]['from_otl'])) ? 'disabled' : '']) !!}
+              {!! Form::text('month['.$i.']','', ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i]]) !!}
               {!! $errors->first('month['.$i.']', '<small class="help-block">:message</small>') !!}
             </div>
             @endfor
             @elseif($action == 'update')
             @for($i = 1; $i <= 12; $i++)
-            <div class="form-group {!! $errors->has('activities_id['.$activities[$i]['id'].']') ? 'has-error' : '' !!} col-md-1">
-              {!! Form::label('activities_id['.$activities[$i]['id'].']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
-              {!! Form::text('activities_id['.$activities[$i]['id'].']', (isset($activities[$i]['task_hour'])) ? $activities[$i]['task_hour'] : 0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i], (isset($activities[$i]['from_otl'])) ? 'disabled' : '']) !!}
-              {!! $errors->first('activities_id['.$activities[$i]['id'].']', '<small class="help-block">:message</small>') !!}
+            <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1">
+              {!! Form::label('month['.$i.']', config('select.month_names')[$i], ['class' => 'control-label']) !!}
+              {!! Form::text('month['.$i.']',isset($activities[$i]) ? $activities[$i] : 0, ['class' => 'form-control', 'placeholder' => config('select.month_names')[$i],!empty($from_otl[$i]) ? 'disabled' : '']) !!}
+              {!! $errors->first('month['.$i.']', '<small class="help-block">:message</small>') !!}
             </div>
             @endfor
             @endif
@@ -120,7 +117,7 @@
                     {!! Form::label('project_name', 'Project name', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::text('project_name', (isset($project)) ? $project->project_name : '', ['class' => 'form-control', 'placeholder' => 'project name',$edit_project_name]) !!}
+                    {!! Form::text('project_name', (isset($project->project_name)) ? $project->project_name : '', ['class' => 'form-control', 'placeholder' => 'project name',$edit_project_name]) !!}
                     {!! $errors->first('project_name', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -131,7 +128,7 @@
                     {!! Form::label('customer_name', 'Customer name', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::text('customer_name', (isset($project)) ? $project->customer_name : '', ['class' => 'form-control', 'placeholder' => 'customer name',$edit_project_name]) !!}
+                    {!! Form::text('customer_name', (isset($project->customer_name)) ? $project->customer_name : '', ['class' => 'form-control', 'placeholder' => 'customer name',$edit_project_name]) !!}
                     {!! $errors->first('customer_name', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -142,7 +139,7 @@
                     {!! Form::label('otl_project_code', 'OTL project code', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::text('otl_project_code', (isset($project)) ? $project->otl_project_code : '', ['class' => 'form-control', 'placeholder' => 'OTL project code',$edit_otl_name]) !!}
+                    {!! Form::text('otl_project_code', (isset($project->otl_project_code)) ? $project->otl_project_code : '', ['class' => 'form-control', 'placeholder' => 'OTL project code',$edit_otl_name]) !!}
                     {!! $errors->first('otl_project_code', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -153,7 +150,12 @@
                     {!! Form::label('meta_activity', 'Meta-activity', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('meta_activity', config('select.meta_activity'), (isset($project)) ? $project->meta_activity : '', ['class' => 'form-control',$edit_otl_name]) !!}
+                    <select class="form-control select2" style="width: 100%;" id="meta_activity" name="meta_activity" data-placeholder="Select a meta-activity">
+                      <option value="" ></option>
+                      @foreach(config('select.meta_activity') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->meta_activity) && $value == $project->meta_activity) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('otl_project_code', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -164,7 +166,12 @@
                     {!! Form::label('project_type', 'Project type', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('project_type', config('select.project_type'), (isset($project)) ? $project->project_type : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="project_type" name="project_type" data-placeholder="Select a project type">
+                      <option value="" ></option>
+                      @foreach(config('select.project_type') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->project_type) && $value == $project->project_type) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('project_type', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -175,7 +182,12 @@
                     {!! Form::label('activity_type', 'Activity type', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('activity_type', config('select.activity_type'), (isset($project)) ? $project->activity_type : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="activity_type" name="activity_type" data-placeholder="Select an activity type">
+                      <option value="" ></option>
+                      @foreach(config('select.activity_type') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->activity_type) && $value == $project->activity_type) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('activity_type', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -186,7 +198,12 @@
                     {!! Form::label('project_status', 'Project status', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('project_status', config('select.project_status'), (isset($project)) ? $project->project_status : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="project_status" name="project_status" data-placeholder="Select a project status">
+                      <option value="" ></option>
+                      @foreach(config('select.project_status') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->project_status) && $value == $project->project_status) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('project_status', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -197,7 +214,12 @@
                     {!! Form::label('region', 'Region', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('region', config('select.region'), (isset($project)) ? $project->region : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="region" name="region" data-placeholder="Select a region">
+                      <option value="" ></option>
+                      @foreach(config('select.region') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->region) && $value == $project->region) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('region', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -208,7 +230,12 @@
                     {!! Form::label('country', 'Country', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('country', config('select.country'), (isset($project)) ? $project->country : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="country" name="country" data-placeholder="Select a country">
+                      <option value="" ></option>
+                      @foreach(config('select.country') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->country) && $value == $project->country) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('country', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -230,7 +257,12 @@
                     {!! Form::label('domain', 'Domain', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-9">
-                    {!! Form::select('domain', config('select.domain-projects'), (isset($project)) ? $project->domain : '', ['class' => 'form-control']) !!}
+                    <select class="form-control select2" style="width: 100%;" id="domain" name="domain" data-placeholder="Select a domain">
+                      <option value="" ></option>
+                      @foreach(config('select.domain-projects') as $key => $value)
+                      <option value="{{ $key }}" <?php if (isset($project->domain) && $value == $project->domain) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
                     {!! $errors->first('domain', '<small class="help-block">:message</small>') !!}
                   </div>
                 </div>
@@ -423,18 +455,62 @@
 var year;
 
 $(document).ready(function() {
+  //Init select2 boxes
+  $("#user_id").select2({
+    allowClear: true,
+    disabled: {{ $user_select_disabled }}
+  });
+
+  $("#meta_activity").select2({
+    allowClear: true,
+    disabled: {{ $meta_activity_select_disabled }}
+  });
+
+  $("#project_type").select2({
+    allowClear: true,
+    disabled: {{ $project_type_select_disabled }}
+  });
+
+  $("#activity_type").select2({
+    allowClear: true,
+    disabled: {{ $activity_type_select_disabled }}
+  });
+
+  $("#project_status").select2({
+    allowClear: true,
+    disabled: {{ $project_status_select_disabled }}
+  });
+
+  $("#region").select2({
+    allowClear: true,
+    disabled: {{ $region_select_disabled }}
+  });
+
+  $("#country").select2({
+    allowClear: true,
+    disabled: {{ $country_select_disabled }}
+  });
+
+  $("#domain").select2({
+    allowClear: true,
+    disabled: {{ $domain_select_disabled }}
+  });
 
   @if($action == 'update')
     $('#year').on('change', function() {
         year=$(this).val();
-        window.location.href = "{!! route('toolsFormUpdate',[$user->id,$project->id,'']) !!}"+"/"+year;
+        window.location.href = "{!! route('toolsFormUpdate',[$user_id,$project->id,'']) !!}"+"/"+year;
     });
   @endif
-  //Init select2 boxes
-  $("#user").select2({
-    allowClear: false,
-    disabled: {{ $user_select_disabled }}
+
+  // Now this is important so that we send the value of all disabled fields
+  // What it does is when you try to submit, it will remove the disabled property on all fields with disabled
+  jQuery(function ($) {
+    $('form').bind('submit', function () {
+      $(this).find(':input').prop('disabled', false);
+    });
   });
+
 
 });
 </script>

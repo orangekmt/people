@@ -22,7 +22,7 @@ class RoleTableSeeder extends Seeder
           [
             'id' => 2,
         		'name' => 'Super Manager',
-        		'display_name' => 'Manager',
+        		'display_name' => 'Super Manager',
         		'description' => 'This role is used for the managers with view for everyone'
         	],
           [

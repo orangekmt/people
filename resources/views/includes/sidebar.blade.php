@@ -29,16 +29,16 @@
                 </a>
                 <ul class="treeview-menu">
                     @permission(['user-view','user-edit','user-create','user-delete'])
-                      <li><a href="{!!route('userList')!!}"><i class="fa fa-circle-o"></i> Users List</a></li>
+                      <li><a href="{!!route('userList')!!}"><i class="fa fa-circle-o"></i> Users list</a></li>
                     @endpermission
                     @permission(['role-view','role-edit','role-create','role-delete'])
-                      <li><a href="{!!route('roles.index')!!}"><i class="fa fa-circle-o"></i> Roles List</a></li>
+                      <li><a href="{!!route('roles.index')!!}"><i class="fa fa-circle-o"></i> Roles list</a></li>
                     @endpermission
                     @permission(['project-view','project-edit','project-create','project-delete'])
-                      <li><a href="{!!route('projectList')!!}"><i class="fa fa-circle-o"></i> Projects List</a></li>
+                      <li><a href="{!!route('projectList')!!}"><i class="fa fa-circle-o"></i> Projects list</a></li>
                     @endpermission
                     @permission(['activity-view','activity-edit','activity-create','activity-delete'])
-                      <li><a href="{!!route('activityList')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                      <li><a href="{!!route('activityList')!!}"><i class="fa fa-circle-o"></i> Activity list</a></li>
                     @endpermission
                 </ul>
             </li>
@@ -67,7 +67,7 @@
 
                 <ul class="treeview-menu">
                   @permission(['tools-activity-view'])
-                  <li><a href="{!!route('toolsActivities')!!}"><i class="fa fa-circle-o"></i> Activity List</a></li>
+                  <li><a href="{!!route('toolsActivities')!!}"><i class="fa fa-circle-o"></i> Activity list per project</a></li>
                   @endpermission
                 </ul>
 
