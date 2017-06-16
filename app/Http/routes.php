@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth']], function() {
       //  Delete project
       Route::get('projectDelete/{n}', ['uses'=>'ProjectController@delete','as'=>'projectDelete','middleware' => ['permission:project-delete']]);
       //  AJAX
-      Route::get('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
+      Route::post('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
 
       //Activity
       //  Main activity list
@@ -97,8 +97,9 @@ Route::group(['middleware' => ['auth']], function() {
 
       //Tools
       Route::get('toolsActivities', ['uses'=>'ToolsController@activities','as'=>'toolsActivities','middleware' => ['permission:tools-activity-view|tools-activity-all-view']]);
+      Route::get('toolsProjectsAssignedAndNot', ['uses'=>'ToolsController@projectsAssignedAndNot','as'=>'projectsAssignedAndNot','middleware' => ['permission:tools-activity-view|tools-activity-all-view']]);
       //  Create new activity
-      Route::get('toolsFormCreate/{u}/{y}', ['uses'=>'ToolsController@getFormCreate','as'=>'toolsFormCreate','middleware' => ['permission:tools-activity-new']]);
+      Route::get('toolsFormCreate/{y}', ['uses'=>'ToolsController@getFormCreate','as'=>'toolsFormCreate','middleware' => ['permission:tools-activity-new']]);
       Route::post('toolsFormCreate', ['uses'=>'ToolsController@postFormCreate','middleware' => ['permission:tools-activity-new']]);
       //  Update activity
       Route::get('toolsFormUpdate/{u}/{p}/{y}', ['uses'=>'ToolsController@getFormUpdate','as'=>'toolsFormUpdate','middleware' => ['permission:tools-activity-edit']]);

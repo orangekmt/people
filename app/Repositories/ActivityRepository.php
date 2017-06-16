@@ -401,6 +401,8 @@ class ActivityRepository
       $data [0]->dec_com = 0;
     }
 
+    unset($temp_table);
+    
     return $data;
   }
 

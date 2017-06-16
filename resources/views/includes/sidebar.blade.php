@@ -68,6 +68,7 @@
                 <ul class="treeview-menu">
                   @permission(['tools-activity-view'])
                   <li><a href="{!!route('toolsActivities')!!}"><i class="fa fa-circle-o"></i> Activity list per project</a></li>
+                  <li><a href="{!!route('projectsAssignedAndNot')!!}"><i class="fa fa-circle-o"></i> Project assignment</a></li>
                   @endpermission
                 </ul>
 

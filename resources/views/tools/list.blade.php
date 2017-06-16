@@ -529,7 +529,7 @@
         // log the value and text of each option
         year.push($(this).val());
       });
-      window.location.href = "{!! route('toolsFormCreate',[Auth::user()->id,'']) !!}/"+year[0];
+      window.location.href = "{!! route('toolsFormCreate',$today) !!}";
     });
   } );
   </script>

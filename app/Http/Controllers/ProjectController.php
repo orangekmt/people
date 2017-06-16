@@ -70,8 +70,9 @@ class ProjectController extends Controller {
 		return json_encode($result);
 	}
 
-  public function ListOfprojects()
+  public function ListOfprojects(Request $request)
   {
-    return $this->projectRepository->getListOfProjects();
+    $inputs = $request->all();
+    return $this->projectRepository->getListOfProjects($inputs);
   }
 }

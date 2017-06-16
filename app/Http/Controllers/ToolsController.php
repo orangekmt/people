@@ -74,7 +74,14 @@ class ToolsController extends Controller {
 		return view('tools/list', compact('manager_list','today','years','manager_select_disabled','manager_selected','user_select_disabled','user_selected','user_list','perms'));
 	}
 
-	public function getFormCreate($user_id,$year)
+  public function projectsAssignedAndNot()
+  {
+    $year = date("Y");
+    $manager_list = [];
+    return view('tools/projects_assigned_and_not', compact('manager_list','year'));
+  }
+
+	public function getFormCreate($year)
 	{
     $edit_project_name = '';
     $edit_otl_name = '';
@@ -103,9 +110,7 @@ class ToolsController extends Controller {
       $user_select_disabled = 'true';
     }
 
-    $user = $this->userRepository->getById($user_id);
-
-		return view('tools/create_update', compact('user','year','edit_project_name','edit_otl_name',
+		return view('tools/create_update', compact('year','edit_project_name','edit_otl_name',
       'user_list','user_selected','user_select_disabled','created_by_user_id',
       'meta_activity_select_disabled','project_type_select_disabled','activity_type_select_disabled','project_status_select_disabled',
       'region_select_disabled','country_select_disabled','domain_select_disabled'))

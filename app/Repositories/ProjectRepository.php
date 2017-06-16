@@ -87,15 +87,23 @@ class ProjectRepository
     return $project;
 	}
 
-  public function getListOfProjects()
+  public function getListOfProjects($where = null)
   {
     /** We create here a SQL statement and the Datatables function will add the information it got from the AJAX request to have things like search or limit or show.
     *   So we need to have a proper SQL search that the ajax can use via get with parameters given to it.
     *   In the ajax datatables (view), there will be a parameter name that is going to be used here for the extra parameters so if we use a join,
     *   Then we will need to use in the view page the name of the table.column. This is so that it knows how to do proper sorting or search.
     **/
-    $projectList = DB::table('projects')
+
+    $projectList = $this->project
       ->select( '*');
+    if (isset($where['unassigned']) && $where['unassigned'] == 'true') {
+      $projectList->doesntHave('activities');
+      //$projectList->groupBy('projects.id');
+    }
+    elseif (isset($where['unassigned']) && $where['unassigned'] == 'false') {
+      $projectList->has('activities');
+    }
     $data = Datatables::of($projectList)->make(true);
     return $data;
   }

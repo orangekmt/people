@@ -254,6 +254,12 @@
         // Roles check finished.
 
         //console.log(permissions);
+        function ajaxData(){
+          var obj = {
+            'unassigned': 'no_use'
+          };
+          return obj;
+        }
 
 
         $(document).ready(function() {
@@ -266,12 +272,12 @@
             });
 
             projectTable = $('#projectTable').DataTable({
-                serverSide: true,
-                processing: true,
                 scrollX: true,
                 ajax: {
                         url: "{!! route('listOfProjectsAjax') !!}",
-                        type: "GET",
+                        type: "POST",
+                        data: ajaxData,
+                        dataType: "JSON"
                     },
                 columns: [
                     {
