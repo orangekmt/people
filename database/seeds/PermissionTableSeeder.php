@@ -67,106 +67,112 @@ class PermissionTableSeeder extends Seeder
         		'display_name' => 'Delete User',
         		'description' => 'Delete User'
         	],
-        	[
+          [
             'id' => 10,
+        		'name' => 'user-view-all',
+        		'display_name' => 'View All User',
+        		'description' => 'View All User'
+        	],
+        	[
+            'id' => 11,
         		'name' => 'activity-view',
         		'display_name' => 'Display Activity',
         		'description' => 'See Activity'
         	],
         	[
-            'id' => 11,
+            'id' => 12,
         		'name' => 'activity-create',
         		'display_name' => 'Create Activity',
         		'description' => 'Create New Activity'
         	],
         	[
-            'id' => 12,
+            'id' => 13,
         		'name' => 'activity-edit',
         		'display_name' => 'Edit Activity',
         		'description' => 'Edit Activity'
         	],
         	[
-            'id' => 13,
+            'id' => 14,
         		'name' => 'activity-delete',
         		'display_name' => 'Delete Activity',
         		'description' => 'Delete Activity'
         	],
         	[
-            'id' => 14,
+            'id' => 15,
         		'name' => 'project-view',
         		'display_name' => 'Display Project',
         		'description' => 'See Project'
         	],
         	[
-            'id' => 15,
+            'id' => 16,
         		'name' => 'project-create',
         		'display_name' => 'Create Project',
         		'description' => 'Create New Project'
         	],
         	[
-            'id' => 16,
+            'id' => 17,
         		'name' => 'project-edit',
         		'display_name' => 'Edit Project',
         		'description' => 'Edit Project'
         	],
         	[
-            'id' => 17,
+            'id' => 18,
         		'name' => 'project-delete',
         		'display_name' => 'Delete Project',
         		'description' => 'Delete Project'
         	]
           ,
         	[
-            'id' => 18,
+            'id' => 19,
         		'name' => 'otl-upload',
         		'display_name' => 'Upload OTL',
         		'description' => 'Upload xls file with OTL data'
         	]
           ,
         	[
-            'id' => 19,
+            'id' => 20,
         		'name' => 'tools-activity-view',
         		'display_name' => 'Tools Activity View',
         		'description' => 'Tools Activity View'
         	]
           ,
           [
-            'id' => 20,
+            'id' => 21,
         		'name' => 'tools-activity-new',
         		'display_name' => 'Tools Activity New',
         		'description' => 'Tools Activity New'
         	]
           ,
           [
-            'id' => 21,
+            'id' => 22,
         		'name' => 'tools-activity-edit',
         		'display_name' => 'Tools Activity Edit',
         		'description' => 'Tools Activity Edit'
         	]
           ,
           [
-            'id' => 22,
+            'id' => 23,
         		'name' => 'tools-activity-all-view',
         		'display_name' => 'Tools Activity All View',
         		'description' => 'Tools Activity All View'
         	]
           ,
           [
-            'id' => 23,
+            'id' => 24,
         		'name' => 'tools-activity-all-edit',
         		'display_name' => 'Tools Activity All Edit',
         		'description' => 'Tools Activity All Edit'
         	]
           ,
         	[
-            'id' => 24,
+            'id' => 25,
         		'name' => 'dashboard-view',
         		'display_name' => 'Dashboard View',
         		'description' => 'Dashboard View'
         	]
           ,
         	[
-            'id' => 25,
+            'id' => 26,
         		'name' => 'dashboard-all-view',
         		'display_name' => 'Dashboard View All',
         		'description' => 'Dashboard view for all users and managers'

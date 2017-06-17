@@ -135,6 +135,10 @@ class RoleController extends Controller
           return redirect()->route('roles.index')
                           ->with('error','Role admin cannot be deleted');
         }
+        elseif ($id == 4) {
+          return redirect()->route('roles.index')
+                          ->with('error','Role user cannot be deleted');
+        }
         else{
           DB::table("roles")->where('id',$id)->delete();
           return redirect()->route('roles.index')

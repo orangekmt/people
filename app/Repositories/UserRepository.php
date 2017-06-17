@@ -91,12 +91,10 @@ class UserRepository
     }
 
     // Now we need to save the roles
-    if (Entrust::can('role-assign')){
-      if (isset($inputs['roles'])) {
-        DB::table('role_user')->where('user_id',$user->id)->delete();
-        foreach ($inputs['roles'] as $key => $value) {
-          $user->attachRole($value);
-        }
+    if (isset($inputs['roles'])) {
+      DB::table('role_user')->where('user_id',$user->id)->delete();
+      foreach ($inputs['roles'] as $key => $value) {
+        $user->attachRole($value);
       }
     }
 
@@ -130,6 +128,12 @@ class UserRepository
     'users.employee_type','users_users.manager_id','u2.name AS manager_name')
     ->leftjoin('users_users', 'users.id', '=', 'users_users.user_id')
     ->leftjoin('users AS u2', 'u2.id', '=', 'users_users.manager_id');
+    if (Auth::user()->id != 1){
+      $userList->where('users.id','!=','1');
+    }
+    if (!Entrust::can('user-view-all')){
+      $userList->where('users_users.manager_id','=',Auth::user()->id);
+    }
     $data = Datatables::of($userList)->make(true);
     return $data;
   }

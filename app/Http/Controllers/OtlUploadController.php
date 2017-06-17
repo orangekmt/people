@@ -45,44 +45,23 @@ class OtlUploadController extends Controller
       $i = 1;
       foreach ($result as $row){
         array_push($messages,['status'=>'BEGIN LINE '.$i,'msg'=>'************************']);
+        $missing = 0;
         $managerInDB = $this->userRepository->getByName($row->manager_name);
         $userInDB = $this->userRepository->getByName($row->employee_name);
         $projectInDBnum = $this->projectRepository->getByOTLnum($row->project_name,$row->meta_activity);
 
-        if (!$managerInDB){
-          $employee = [];
-          $employee['name'] = $row->manager_name;
-          $complete_name = explode(',', $employee['name']);
-          $employee_firstname = $complete_name[1];
-          $employee_lastname = $complete_name[0];
-          $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
-          $employee['password'] = 'Welcome1';
-          $employee['is_manager'] = 1;
-          $employee['from_otl'] = 1;
-          $employee['manager_id'] = -1;
-          $employee['roles'] = ['3'];
-          $managerInDB = $this->userRepository->create($employee);
-          array_push($messages,['status'=>'add','msg'=>'Manager '.$managerInDB->name.' added to DB']);
+        if (empty($managerInDB)){
+          array_push($messages,['status'=>'error','msg'=>'Manager '.$row->manager_name.' not in DB']);
+          $missing = 1;
         } else {
-          array_push($messages,['status'=>'pass','msg'=>'Manager '.$managerInDB->name.' already in DB']);
+          array_push($messages,['status'=>'pass','msg'=>'Manager '.$row->manager_name.' already in DB']);
         }
-        if (!$userInDB){
-          $employee = [];
-          $employee['name'] = $row->employee_name;
-          $complete_name = explode(',', $employee['name']);
-          $employee_firstname = $complete_name[1];
-          $employee_lastname = $complete_name[0];
-          $employee['email'] = strtolower($employee_firstname.'.'.$employee_lastname).'@orange.com';
-          $employee['password'] = 'Welcome1';
-          $employee['is_manager'] = 0;
-          $employee['from_otl'] = 1;
-          $employee['manager_id'] = $managerInDB->id;
-          $employee['roles'] = ['4'];
-          $userInDB = $this->userRepository->create($employee);
-          array_push($messages,['status'=>'add','msg'=>'User '.$userInDB->name.' added to DB']);
+        if (empty($userInDB)){
+          array_push($messages,['status'=>'error','msg'=>'User '.$row->employee_name.' not in DB']);
+          $missing = 1;
         }
         else {
-          array_push($messages,['status'=>'pass','msg'=>'User '.$userInDB->name.' already in DB']);
+          array_push($messages,['status'=>'pass','msg'=>'User '.$row->employee_name.' already in DB']);
         }
         if ($projectInDBnum > 1){
           array_push($messages,['status'=>'error',
@@ -95,20 +74,22 @@ class OtlUploadController extends Controller
           $project_input = [];
           $project_input['otl_validated'] = 1;
           $this->projectRepository->update($projectInDB->id,$project_input);
-          // Now we need to check if we need to update or create an activity
-          $activity['year'] = $yearmonth[0];
-          $activity['month'] = $yearmonth[1];
-          $activity['user_id'] = $userInDB->id;
-          $activity['project_id'] = $projectInDB->id;
-          $activity['task_hour'] = $row->original_time / config('options.time_trak')['hours_in_day'];
-          $activity['from_otl'] = 1;
-          $activityInDB = $this->activityRepository->getByOTL($activity['year'],$activity['month'],$userInDB->id,$projectInDB->id,$activity['from_otl']);
-          if (!empty($activityInDB)){
-            $this->activityRepository->create($activity);
-            array_push($messages,['status'=>'add','msg'=>'Activity created in DB']);
-          } else {
-            $this->activityRepository->update($activityInDB->id,$activity);
-            array_push($messages,['status'=>'update','msg'=>'Activity updated in DB']);
+          if ($missing == 0) {
+            // Now we need to check if we need to update or create an activity
+            $activity['year'] = $yearmonth[0];
+            $activity['month'] = $yearmonth[1];
+            $activity['user_id'] = $userInDB->id;
+            $activity['project_id'] = $projectInDB->id;
+            $activity['task_hour'] = $row->original_time / config('options.time_trak')['hours_in_day'];
+            $activity['from_otl'] = 1;
+            $activityInDB = $this->activityRepository->getByOTL($activity['year'],$activity['month'],$userInDB->id,$projectInDB->id,$activity['from_otl']);
+            if (!empty($activityInDB)){
+              $this->activityRepository->create($activity);
+              array_push($messages,['status'=>'add','msg'=>'Activity created in DB']);
+            } else {
+              $this->activityRepository->update($activityInDB->id,$activity);
+              array_push($messages,['status'=>'update','msg'=>'Activity updated in DB']);
+            }
           }
         }
         else {

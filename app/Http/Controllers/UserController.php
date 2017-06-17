@@ -56,7 +56,18 @@ class UserController extends Controller {
 
 	public function getFormCreate()
 	{
-    $roles = Role::lists('display_name','id');
+    $role_select_disabled = 'true';
+    $userRole = ['4' => '4'];
+    if(Entrust::hasRole('Admin')){
+      $roles = Role::lists('display_name','id');
+    } else {
+      $roles = Role::where('id','!=','1')->lists('display_name','id');
+    }
+
+    if (Entrust::can('role-assign')){
+      $role_select_disabled = 'false';
+    }
+
 		$manager_list = $this->userRepository->getManagersList();
     //\Debugbar::info($manager_list);
     // Now we need to add 1 record so that we can chose without a manager
@@ -66,13 +77,23 @@ class UserController extends Controller {
     ksort($manager_list);
 
 		//\Debugbar::info($manager_list);
-		return view('user/create_update', compact('manager_list','roles'))->with('action','create');
+		return view('user/create_update', compact('manager_list','roles','role_select_disabled','userRole'))->with('action','create');
 	}
 
 	public function getFormUpdate($id)
 	{
     $user = User::find($id);
-    $roles = Role::lists('display_name','id');
+    $role_select_disabled = 'true';
+    if(Entrust::hasRole('Admin')){
+      $roles = Role::lists('display_name','id');
+    } else {
+      $roles = Role::where('id','!=','1')->lists('display_name','id');
+    }
+
+    if (Entrust::can('role-assign')){
+      $role_select_disabled = 'false';
+    }
+
     $userRole = $user->roles->lists('id','id')->toArray();
 
     $manager_list = $this->userRepository->getManagersList();
@@ -86,7 +107,7 @@ class UserController extends Controller {
     $manager = $this->userRepository->getMyManagersList($id);
 
 		//\Debugbar::info($manager_list);
-		return view('user/create_update', compact('manager_list','user','manager','roles','userRole'))->with('action','update');
+		return view('user/create_update', compact('manager_list','user','manager','roles','userRole','role_select_disabled'))->with('action','update');
 	}
 
   public function postFormCreate(UserCreateRequest $request)

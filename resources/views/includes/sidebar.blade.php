@@ -51,12 +51,14 @@
       </ul>
       @endpermission
 
-      @permission(['tools-activity-view'])
+      @permission(['tools-activity-view','tools-activity-new'])
       <ul class="nav side-menu">
         <li><a><i class="fa fa-desktop"></i>Tools<span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             @permission(['tools-activity-view'])
             <li><a href="{!!route('toolsActivities')!!}">Activity list per project</a></li>
+            @endpermission
+            @permission(['tools-activity-new'])
             <li><a href="{!!route('projectsAssignedAndNot')!!}">Project assignment</a></li>
             @endpermission
           </ul>

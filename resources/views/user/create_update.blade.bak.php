@@ -220,10 +220,10 @@
                 {!! Form::label('roles', 'Roles', ['class' => 'control-label']) !!}
               </div>
               <div class="col-md-11">
-                <select class="form-control select2" style="width: 100%;" id="roles" name="roles[]" data-placeholder="Select a role"  multiple="multiple">
+                <select class="form-control select2" style="width: 100%;" id="roles" name="roles" data-placeholder="Select a role"  multiple="multiple">
                   <option value="" ></option>
                   @foreach($roles as $key => $value)
-                  <option value="{{ $key }}" <?php echo isset($userRole[$key]) ? 'selected' : '';?>>{{ $value }}</option>
+                  <option value="{{ $key }}" <?php if ($key == $role_selected) { echo 'selected'; }?>>{{ $value }}</option>
                   @endforeach
                 </select>
                 {!! $errors->first('roles', '<small class="help-block">:message</small>') !!}

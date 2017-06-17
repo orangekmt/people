@@ -77,7 +77,7 @@ Route::group(['middleware' => ['auth']], function() {
       //  Delete project
       Route::get('projectDelete/{n}', ['uses'=>'ProjectController@delete','as'=>'projectDelete','middleware' => ['permission:project-delete']]);
       //  AJAX
-      Route::post('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:project-view|project-create|project-edit|project-delete']]);
+      Route::post('listOfProjectsAjax', ['uses'=>'ProjectController@listOfProjects','as'=>'listOfProjectsAjax','middleware' => ['permission:tools-activity-new|tools-activity-edit|project-view|project-create|project-edit|project-delete']]);
 
       //Activity
       //  Main activity list
