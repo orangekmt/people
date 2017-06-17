@@ -96,7 +96,10 @@ class ProjectRepository
     **/
 
     $projectList = $this->project
-      ->select( '*');
+      ->select( 'id','customer_name','project_name','otl_project_code','project_type','activity_type','project_status','meta_activity','region',
+                'country','domain','description','estimated_start_date','estimated_end_date','comments','LoE_onshore','LoE_nearshore',
+                'LoE_offshore','LoE_contractor','gold_order_number','product_code','revenue','win_ratio');
+
     if (isset($where['unassigned']) && $where['unassigned'] == 'true') {
       $projectList->doesntHave('activities');
       //$projectList->groupBy('projects.id');
@@ -107,6 +110,7 @@ class ProjectRepository
     $data = Datatables::of($projectList)->make(true);
     return $data;
   }
+
   public function getAllProjectsList()
   {
     return $this->project->lists('project_name','id');

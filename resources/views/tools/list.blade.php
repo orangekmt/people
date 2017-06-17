@@ -316,10 +316,14 @@
 
     activitiesTable = $('#activitiesTable').DataTable({
       scrollX: true,
+      serverSide: true,
+      processing: true,
       ajax: {
         url: "{!! route('listOfActivitiesPerUserAjax') !!}",
         type: "POST",
-        data: ajaxData,
+        data: function ( d ) {
+          $.extend(d,ajaxData());
+        },
         dataType: "JSON"
       },
       columns: [

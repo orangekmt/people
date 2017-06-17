@@ -19,6 +19,8 @@
 @stop
 
 @section('content')
+<div class="row">
+  <div class="col-md-12">
     <!-- table widget -->
     <div class="box box-info">
 
@@ -52,14 +54,95 @@
             </div>
             <div id="delete_message">
             </div>
-            <table id="projectTable" class="display table-bordered table-hover table-responsive">
+            <table id="projectTable_unassigned" class="display table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Customer name</th>
+                      <th>Project name</th>
+                      <th>OTL project code</th>
+                      <th>Project type</th>
+                      <th>Activity type</th>
+                      <th>Project status</th>
+                      <th>Meta-activity</th>
+                      <th>Region</th>
+                      <th>Country</th>
+                      <th>Domain</th>
+                      <th>Description</th>
+                      <th>Estimated start date</th>
+                      <th>Estimated end date</th>
+                      <th>Comments</th>
+                      <th>LoE onshore</th>
+                      <th>LoE nearshore</th>
+                      <th>LoE offshore</th>
+                      <th>LoE contractor</th>
+                      <th>Gold order</th>
+                      <th>FPC</th>
+                      <th>Revenue (€)</th>
+                      <th>Win ratio (%)</th>
+                      <th class="last_column"></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>ID</th>
+                      <th>Customer name</th>
+                      <th>Project name</th>
+                      <th>OTL project code</th>
+                      <th>Project type</th>
+                      <th>Activity type</th>
+                      <th>Project status</th>
+                      <th>Meta-activity</th>
+                      <th>Region</th>
+                      <th>Country</th>
+                      <th>Domain</th>
+                      <th>Description</th>
+                      <th>Estimated start date</th>
+                      <th>Estimated end date</th>
+                      <th>Comments</th>
+                      <th>LoE onshore</th>
+                      <th>LoE nearshore</th>
+                      <th>LoE offshore</th>
+                      <th>LoE contractor</th>
+                      <th>Gold order</th>
+                      <th>FPC</th>
+                      <th>Revenue (€)</th>
+                      <th>Win ratio (%)</th>
+                      <th class="last_column"></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <!-- table widget -->
+    <div class="box box-info">
+
+        <div class="box-header">
+            <i class="fa fa-cloud-download"></i>
+            <h3 class="box-title">Assigned projects</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div><!-- /.box-tools -->
+        </div>
+
+        <div class="box-body">
+            <div id="delete_message">
+            </div>
+            <table id="projectTable_assigned" class="display table-bordered table-hover table-responsive">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Project name</th>
                         <th>Customer name</th>
+                        <th>Project name</th>
                         <th>OTL project code</th>
                         <th>Project type</th>
+                        <th>Activity type</th>
+                        <th>Project status</th>
                         <th>Meta-activity</th>
                         <th>Region</th>
                         <th>Country</th>
@@ -75,7 +158,6 @@
                         <th>Gold order</th>
                         <th>FPC</th>
                         <th>Revenue (€)</th>
-                        <th>Project status</th>
                         <th>Win ratio (%)</th>
                         <th class="last_column"></th>
                     </tr>
@@ -83,10 +165,12 @@
                 <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>Project name</th>
                         <th>Customer name</th>
+                        <th>Project name</th>
                         <th>OTL project code</th>
                         <th>Project type</th>
+                        <th>Activity type</th>
+                        <th>Project status</th>
                         <th>Meta-activity</th>
                         <th>Region</th>
                         <th>Country</th>
@@ -102,7 +186,6 @@
                         <th>Gold order</th>
                         <th>FPC</th>
                         <th>Revenue (€)</th>
-                        <th>Project status</th>
                         <th>Win ratio (%)</th>
                         <th class="last_column"></th>
                     </tr>
@@ -110,15 +193,25 @@
             </table>
         </div>
     </div>
+  </div>
+</div>
 @stop
 
 @section('script')
     <script>
-        var projectTable;
+        var projectTable_unassigned;
+        var projectTable_assigned;
 
-        function ajaxData(){
+        function ajaxData_unassigned(){
           var obj = {
             'unassigned': 'true'
+          };
+          return obj;
+        }
+
+        function ajaxData_assigned(){
+          var obj = {
+            'unassigned': 'false'
           };
           return obj;
         }
@@ -131,23 +224,29 @@
                 }
             });
 
-            projectTable = $('#projectTable').DataTable({
+            projectTable_unassigned = $('#projectTable_unassigned').DataTable({
                 scrollX: true,
+                serverSide: true,
+                processing: true,
                 ajax: {
                         url: "{!! route('listOfProjectsAjax') !!}",
                         type: "POST",
-                        data: ajaxData,
+                        data: function ( d ) {
+                          $.extend(d,ajaxData_unassigned());
+                        },
                         dataType: "JSON"
                     },
                 columns: [
                     { name: 'id', data: 'id', searchable: false , visible: false },
-                    { name: 'project_name', data: 'project_name' },
                     { name: 'customer_name', data: 'customer_name' },
+                    { name: 'project_name', data: 'project_name' },
                     { name: 'otl_project_code', data: 'otl_project_code', searchable: false , visible: false },
-                    { name: 'project_type', data: 'project_type', searchable: false , visible: false},
+                    { name: 'project_type', data: 'project_type'},
+                    { name: 'activity_type', data: 'activity_type'},
+                    { name: 'project_status', data: 'project_status'},
                     { name: 'meta_activity', data: 'meta_activity', searchable: false , visible: false },
-                    { name: 'region', data: 'region' },
-                    { name: 'country', data: 'country' },
+                    { name: 'region', data: 'region' , searchable: false , visible: false},
+                    { name: 'country', data: 'country' , searchable: false , visible: false},
                     { name: 'domain', data: 'domain' },
                     { name: 'description', data: 'description', searchable: false , visible: false },
                     { name: 'estimated_start_date', data: 'estimated_start_date' },
@@ -159,8 +258,78 @@
                     { name: 'LoE_contractor', data: 'LoE_contractor', searchable: false , visible: false },
                     { name: 'gold_order_number', data: 'gold_order_number', searchable: false , visible: false },
                     { name: 'product_code', data: 'product_code', searchable: false , visible: false },
-                    { name: 'revenue', data: 'revenue' },
-                    { name: 'project_status', data: 'project_status', searchable: false , visible: false },
+                    { name: 'revenue', data: 'revenue' , searchable: false , visible: false},
+                    { name: 'win_ratio', data: 'win_ratio', searchable: false , visible: false },
+                    {
+                      name: 'actions',
+                      data: null,
+                      sortable: false,
+                      searchable: false,
+                      render: function (data) {
+                        var actions = '';
+                        return actions;
+                      }
+                    }
+                    ],
+                order: [[2, 'asc']],
+                initComplete: function () {
+                    var columns = this.api().init().columns;
+                    this.api().columns().every(function () {
+                        var column = this;
+                        // this will get us the index of the column
+                        index = column[0][0];
+                        //console.log(columns[index].searchable);
+
+                        // Now we need to skip the column if it is not searchable and we return true, meaning we go to next iteration
+                        if (columns[index].searchable == false) {
+                          return true;
+                        }
+                        else {
+                          var input = document.createElement("input");
+                          $(input).appendTo($(column.footer()).empty())
+                          .on('keyup change', function () {
+                              column.search($(this).val(), false, false, true).draw();
+                          });
+                        }
+                    });
+                }
+            });
+
+            projectTable_assigned = $('#projectTable_assigned').DataTable({
+                scrollX: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                        url: "{!! route('listOfProjectsAjax') !!}",
+                        type: "POST",
+                        data: function ( d ) {
+                          $.extend(d,ajaxData_assigned());
+                        },
+                        dataType: "JSON"
+                    },
+                columns: [
+                    { name: 'id', data: 'id', searchable: false , visible: false },
+                    { name: 'customer_name', data: 'customer_name' },
+                    { name: 'project_name', data: 'project_name' },
+                    { name: 'otl_project_code', data: 'otl_project_code', searchable: false , visible: false },
+                    { name: 'project_type', data: 'project_type'},
+                    { name: 'activity_type', data: 'activity_type'},
+                    { name: 'project_status', data: 'project_status'},
+                    { name: 'meta_activity', data: 'meta_activity', searchable: false , visible: false },
+                    { name: 'region', data: 'region' , searchable: false , visible: false},
+                    { name: 'country', data: 'country' , searchable: false , visible: false},
+                    { name: 'domain', data: 'domain' },
+                    { name: 'description', data: 'description', searchable: false , visible: false },
+                    { name: 'estimated_start_date', data: 'estimated_start_date' },
+                    { name: 'estimated_end_date', data: 'estimated_end_date' },
+                    { name: 'comments', data: 'comments', searchable: false , visible: false },
+                    { name: 'LoE_onshore', data: 'LoE_onshore', searchable: false , visible: false },
+                    { name: 'LoE_nearshore', data: 'LoE_nearshore' , searchable: false , visible: false},
+                    { name: 'LoE_offshore', data: 'LoE_offshore', searchable: false , visible: false },
+                    { name: 'LoE_contractor', data: 'LoE_contractor', searchable: false , visible: false },
+                    { name: 'gold_order_number', data: 'gold_order_number', searchable: false , visible: false },
+                    { name: 'product_code', data: 'product_code', searchable: false , visible: false },
+                    { name: 'revenue', data: 'revenue' , searchable: false , visible: false},
                     { name: 'win_ratio', data: 'win_ratio', searchable: false , visible: false },
                     {
                       name: 'actions',
