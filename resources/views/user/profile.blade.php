@@ -1,16 +1,33 @@
-@extends('layouts.app',['main_title' => $user->name,'second_title'=>'profile','url'=>[['name'=>'home','url'=>route('home')],['name'=>'profile','url'=>'#']]])
+@extends('layouts.app')
 
 @section('content')
-    <!-- upload widget -->
-    <div class="box box-info">
-        <div class="box-header">
-            <i class="fa fa-user"></i>
-            <h3 class="box-title">Change password</h3>
-            <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div><!-- /.box-tools -->
-        </div>
-        <div class="box-body">
+<!-- Page title -->
+<div class="page-title">
+  <div class="title_left">
+    <h3>Profile</h3>
+  </div>
+</div>
+<div class="clearfix"></div>
+<!-- Page title -->
+
+<!-- Window -->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>Change password</h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
           @if ($message = Session::get('success'))
           <div class="alert alert-success alert-dismissible">
               <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>
@@ -56,8 +73,12 @@
               </div>
           </div>
           {!! Form::close() !!}
-        </div>
-        <div class="box-footer">
-        </div>
+      </div>
+      <!-- Window content -->
+
     </div>
+  </div>
+</div>
+<!-- Window -->
+
 @stop

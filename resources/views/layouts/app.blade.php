@@ -1,99 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>People | Dashboard</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset('/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- FontAwesome 4.3.0 -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <!-- Ionicons 2.0.0 -->
-    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <!-- Theme style -->
-    <link href="{{ asset('/plugins/adminLTE/dist/css/AdminLTE.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link href="{{ asset('/plugins/adminLTE/dist/css/skins/_all-skins.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- iCheck -->
-    <link href="{{ asset('/plugins/iCheck/flat/blue.css') }}" rel="stylesheet" type="text/css" />
-    <!-- Date Picker -->
-    <link href="{{ asset('/plugins/datepicker/datepicker3.css') }}" rel="stylesheet" type="text/css" />
-    @yield('style')
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- jQuery 2.1.3 -->
-    <script src="{{ asset('/plugins/jQuery/jQuery-2.2.0.min.js') }}"></script>
-    <!-- jQuery UI 1.11.2 -->
-    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js" type="text/javascript"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-       $.widget.bridge('uibutton', $.ui.button);
-    </script>
-    <!-- Bootstrap 3.3.2 JS -->
-    <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <!-- Sparkline -->
-    <script src="{{ asset('/plugins/sparkline/jquery.sparkline.min.js') }}" type="text/javascript"></script>
-    <!-- datepicker -->
-    <script src="{{ asset('/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
-    <!-- iCheck -->
-    <script src="{{ asset('/plugins/iCheck/icheck.min.js') }}" type="text/javascript"></script>
-    <!-- Slimscroll -->
-    <script src="{{ asset('/plugins/slimScroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
-    <!-- FastClick -->
-    <script src="{{ asset('/plugins/fastclick/fastclick.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('/plugins/adminLTE/dist/js/app.min.js') }}" type="text/javascript"></script>
+  <title>People</title>
 
-    @yield('scriptsrc')
+  <!-- Bootstrap core CSS -->
+  <link href="{{ asset('/plugins/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="{{ asset('/plugins/gentelella/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+  <!-- iCheck -->
+  <link href="{{ asset('/plugins/gentelella/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="{{ asset('/plugins/gentelella/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+  <!-- Custom Theme Style -->
+  <link href="{{ asset('/plugins/gentelella/build/css/custom.min.css') }}" rel="stylesheet">
 
-    <title>People</title>
+  <!--[if lt IE 9]>
+  <script src="../assets/js/ie8-responsive-file-warning.js"></script>
+  <![endif]-->
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  @yield('style')
+
 
 </head>
 
-<body class="skin-blue">
 
-    <div class="wrapper">
-        @if(Auth::user())
-          @include('includes.header')
-          @include('includes.sidebar')
-        @endif
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <h1>
-                @if(isset($main_title))
-                  {!! $main_title !!}
-                @endif
-                <small>
-                  @if(isset($second_title))
-                    {!! $second_title !!}
-                  @endif
-                </small>
-                </h1>
-                <ol class="breadcrumb">
-                    <i class="fa fa-dashboard"></i>
-                    @if(isset($url))
-                    @foreach ($url as $pos)
-                    <li><a href="{!! $pos['url'] !!}"> {!! $pos['name'] !!}</a></li>
-                    @endforeach
-                    @endif
-                </ol>
-            </section>
-            <!-- Main content -->
-            <section class="content">
-                @yield('content')
-            </section><!-- /.content -->
-        </div><!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-                <b>Version</b> 1.0
+<body class="nav-md footer_fixed">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- sidebar -->
+        <div class="col-md-3 left_col menu_fixed">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="{!!route('home')!!}" class="site_title"><i class="fa fa-paw"></i> <span>People</span></a>
             </div>
-            <strong>Copyright &copy; 2016 All rights Orange reserved.</strong>
-        </footer>
-    </div><!-- ./wrapper -->
 
+            <div class="clearfix"></div>
+
+            <br /><br />
+
+            <!-- sidebar menu -->
+            @if(Auth::user())
+              @include('includes.sidebar')
+            @endif
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            @if(Auth::user())
+              @include('includes.menu_footer')
+            @endif
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+        <!-- sidebar -->
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            @if(Auth::user())
+            @include('includes.top_navigation')
+            @endif
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            @yield('content')
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Orange copyright!
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="{{ asset('/plugins/gentelella/vendors/jquery/dist/jquery.min.js') }}" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('/plugins/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src="{{ asset('/plugins/gentelella/vendors/fastclick/lib/fastclick.js') }}" type="text/javascript"></script>
+    <!-- NProgress -->
+    <script src="{{ asset('/plugins/gentelella/vendors/nprogress/nprogress.js') }}" type="text/javascript"></script>
+    <!-- iCheck -->
+    <script src="{{ asset('/plugins/gentelella/vendors/iCheck/icheck.min.js') }}" type="text/javascript"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="{{ asset('/plugins/gentelella/build/js/custom.min.js') }}" type="text/javascript"></script>
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-23581568-13', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+    @yield('scriptsrc')
     @yield('script')
 
 </body>

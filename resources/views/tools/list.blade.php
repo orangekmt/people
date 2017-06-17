@@ -5,17 +5,20 @@
 <!-- Select2 -->
 <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
 <!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('/plugins/datatables.1.10.14/datatables.min.css') }}">
+<!-- <link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}"> -->
 <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
 @stop
 
 @section('scriptsrc')
 <!-- JS -->
-<!-- Select2 -->
-<script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
+
 <!-- DataTables -->
+<script src="{{ asset('/plugins/datatables.1.10.14/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
+<!-- Select2 -->
+<script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
 <!-- Bootbox -->
 <script src="{{ asset('/plugins/bootbox/bootbox.min.js') }}"></script>
 @stop
@@ -326,6 +329,18 @@
         },
         dataType: "JSON"
       },
+      // dom: 'Bfrtip',
+      // buttons: [
+      //       {
+      //           extend: 'copyHtml5',
+      //           exportOptions: {
+      //            columns: ':contains("Office")'
+      //           }
+      //       },
+      //       'excelHtml5',
+      //       'csvHtml5',
+      //       'pdfHtml5'
+      // ],
       columns: [
         { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
         { name: 'manager_name', data: 'manager_name', width: '150px' },

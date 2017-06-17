@@ -1,39 +1,69 @@
-@extends('layouts.app',['main_title' => 'User','second_title'=>'list','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app')
 
 @section('style')
     <!-- CSS -->
-    <!-- Select2 -->
-    <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
 @stop
 
 @section('scriptsrc')
     <!-- JS -->
-    <!-- Select2 -->
-    <script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
     <!-- DataTables -->
-    <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/plugins/datatables/handlebars.js') }}"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/jszip/dist/jszip.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/pdfmake/build/pdfmake.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/pdfmake/build/vfs_fonts.js') }}" type="text/javascript"></script>
+
     <!-- Bootbox -->
     <script src="{{ asset('/plugins/bootbox/bootbox.min.js') }}"></script>
 @stop
 
 @section('content')
-    <!-- table widget -->
-    <div class="box box-info">
 
-        <div class="box-header">
-            <i class="fa fa-cloud-download"></i>
-            <h3 class="box-title">User List</h3>
-            <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div><!-- /.box-tools -->
-        </div>
+<!-- Page title -->
+<div class="page-title">
+  <div class="title_left">
+    <h3>User</h3>
+  </div>
+</div>
+<div class="clearfix"></div>
+<!-- Page title -->
 
-        <div class="box-body">
+<!-- Window -->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>List</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
+
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible">
                 <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>
@@ -48,10 +78,10 @@
             @endif
             <div id="delete_message">
             </div>
-            <table id="userTable" class="display table-bordered table-hover table-responsive">
+            <table id="userTable" class="table table-striped table-hover table-bordered" width="100%">
                 <thead>
                     <tr>
-                        <th class="first_column"></th>
+
                         <th>ID</th>
                         <th>Name</th>
                         <th>Manager name</th>
@@ -73,7 +103,7 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th class="first_column"></th>
+
                         <th>ID</th>
                         <th>Name</th>
                         <th>Manager name</th>
@@ -90,69 +120,14 @@
                     </tr>
                 </tfoot>
             </table>
-            <script id="details-template" type="text/x-handlebars-template">
-            <table class="extra_info table-bordered">
-                <thead>
-                    <th width="20px"></th>
-                    <th width="100px"></th>
-                    <th></th>
-                </thead>
 
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Name</b>:</td>
-                    <td>@{{ name }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Manager name</b>:</td>
-                    <td>@{{ manager_name }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Email</b>:</td>
-                    <td>@{{ email }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Management code</b>:</td>
-                    <td>@{{ management_code }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Domain</b>:</td>
-                    <td>@{{ domain }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Region</b>:</td>
-                    <td>@{{ region }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Job role</b>:</td>
-                    <td>@{{ job_role }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>User type</b>:</td>
-                    <td>@{{ employee_type }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Is a Manager</b>:</td>
-                    <td>@{{ is_manager }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>From OTL</b>:</td>
-                    <td>@{{ from_otl }}</td>
-                </tr>
-            </table>
-            </script>
-        </div>
+      </div>
+      <!-- Window content -->
+
     </div>
+  </div>
+</div>
+<!-- Window -->
 
 @stop
 
@@ -177,7 +152,6 @@
 
 
         $(document).ready(function() {
-            var template = Handlebars.compile($("#details-template").html());
 
             $.ajaxSetup({
                 headers: {
@@ -206,22 +180,15 @@
                         }
                     },
                 columns: [
-                    {
-                        className:      'details-control',
-                        orderable:      false,
-                        searchable:     false,
-                        data:           null,
-                        defaultContent: ''
-                    },
-                    { name: 'users.id', data: 'id' },
+                    { name: 'users.id', data: 'id' , searchable: false , visible: false },
                     { name: 'users.name', data: 'name' },
                     { name: 'u2.name', data: 'manager_name' },
-                    { name: 'users.email', data: 'email' },
+                    { name: 'users.email', data: 'email' , searchable: false , visible: false },
                     { name: 'users.is_manager', data: 'is_manager'},
                     { name: 'users.region', data: 'region' },
                     { name: 'users.country', data: 'country' },
                     { name: 'users.domain', data: 'domain' },
-                    { name: 'users.management_code', data: 'management_code' },
+                    { name: 'users.management_code', data: 'management_code' , searchable: false , visible: false },
                     { name: 'users.job_role', data: 'job_role' },
                     { name: 'users.employee_type', data: 'employee_type' },
                     { name: 'users.from_otl', data: 'from_otl' },
@@ -244,15 +211,34 @@
                             };
                             actions += '</div>';
                             return actions;
-                        }
+                        },
+                        width: '70px'
                     }
                     ],
-                columnDefs: [
-                    {
-                        "targets": [1,4,5], "visible": false, "searchable": false
-                    }
-                    ],
-                order: [[2, 'asc']],
+                order: [[1, 'asc']],
+                dom: 'Bfrtip',
+                buttons: [
+                            {
+                    extend: "copy",
+                    className: "btn-sm"
+                  },
+                  {
+                    extend: "csv",
+                    className: "btn-sm"
+                  },
+                  {
+                    extend: "excel",
+                    className: "btn-sm"
+                  },
+                  {
+                    extend: "pdfHtml5",
+                    className: "btn-sm"
+                  },
+                  {
+                    extend: "print",
+                    className: "btn-sm"
+                  },
+                ],
                 initComplete: function () {
                     var columns = this.api().init().columns;
                     this.api().columns().every(function () {
@@ -276,22 +262,7 @@
                 }
             });
 
-            // Add event listener for opening and closing details
-            $('#userTable tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = userTable.row( tr );
 
-                if ( row.child.isShown() ) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( template(row.data()) ).show();
-                    tr.addClass('shown');
-                }
-            });
 
             $(document).on('click', '.buttonUpdate', function () {
                 window.location.href = "{!! route('userFormUpdate','') !!}/"+this.id;

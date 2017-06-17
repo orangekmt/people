@@ -1,25 +1,3 @@
-table {
-  margin: 0 auto;
-  width: 100%;
-  clear: both;
-  border-collapse: collapse;
-  table-layout: fixed;
-  word-wrap:break-word;
-}
-
-table.my_data {
-  font-size : 14px;
-  color : black;
-}
-
-.direct-chat .box-body {
-  font-size : 14px;
-    padding: 10px;
-}
-
-.direct-chat-info {
-  font-size : 14px !important;
-}
 
 td.details-control {
 background: url("../plugins/datatables/details_open.png") no-repeat center center;
@@ -28,14 +6,6 @@ cursor: pointer;
 tr.shown td.details-control {
     background: url("../plugins/datatables/details_close.png") no-repeat center center;
 }
-th {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-table .extra_info {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
 
 th.first_column {
   width: 15px;
@@ -43,28 +13,4 @@ th.first_column {
 
 th.last_column {
   width: 40px;
-}
-
-td.otl {
-  font-size : 16px;
-  color : green;
-}
-
-td.forecast {
-  font-size : 16px;
-  color : blue;
-}
-
-td.zero {
-  font-size : 10px;
-  color : grey;
-}
-
-td.too_high {
-  font-size : 16px;
-  color : red;
-}
-
-div.button_in_row {
-  padding-bottom: 5px;
 }

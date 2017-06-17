@@ -1,17 +1,40 @@
-@extends('layouts.app',['main_title' => 'Home','second_title'=>'','url'=>[['name'=>'home','url'=>'#']]])
+@extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
-
-                <div class="panel-body">
-                    You are logged in!
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Page title -->
+<div class="page-title">
+  <div class="title_left">
+    <h3>Home</h3>
+  </div>
 </div>
+<div class="clearfix"></div>
+<!-- Page title -->
+
+<!-- Window -->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>General<small>info</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
+        You are logged in!
+      </div>
+      <!-- Window content -->
+      
+    </div>
+  </div>
+</div>
+<!-- Window -->
+
 @endsection
