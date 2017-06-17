@@ -3,16 +3,16 @@
 @section('style')
 <!-- CSS -->
 <!-- Select2 -->
-<link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/plugins/gentelella/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="{{ asset('/css/chart.css') }}">
 @stop
 
 @section('scriptsrc')
 <!-- JS -->
 <!-- Select2 -->
-<script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/plugins/gentelella/vendors/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
 <!-- ChartJs -->
-<script src="{{ asset('/plugins/chartjs/Chart.bundle.js') }}"></script>
+<script src="{{ asset('/plugins/gentelella/vendors/Chart.js/dist/Chart.min.js') }}"></script>
 @stop
 
 @section('content')
@@ -87,7 +87,7 @@
 
       <!-- Window title -->
       <div class="x_title">
-        <h2>Tools</small></h2>
+        <h2>Chart</small></h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
         </ul>
@@ -97,10 +97,7 @@
 
       <!-- Window content -->
       <div class="x_content">
-        <br />
-        <div class="chart">
-          <canvas id="barChart" height="400"></canvas>
-        </div>
+          <canvas id="barChart"></canvas>
       </div>
       <!-- Window content -->
 
@@ -118,7 +115,6 @@
   var manager = [];
   var user = [];
   var myvar='';
-
   function ajaxDataPOST(){
     var obj = {
       'year[]': year,
@@ -127,7 +123,6 @@
     };
     return obj;
   };
-
   function ajaxdscvstotal(){
     var myarray = [
       myvar.dscvstotal[0].jan_com,
@@ -230,7 +225,6 @@
     ];
     return myarray;
   };
-
   window.chartColors = {
    red: 'rgb(255, 99, 132)',
    orange: 'rgb(255, 159, 64)',
@@ -242,9 +236,7 @@
    purple: 'rgb(153, 102, 255)',
    grey: 'rgb(201, 203, 207)'
   };
-
   $(document).ready(function() {
-
     //Init select2 boxes
     $("#year").select2({
       allowClear: false
@@ -258,48 +250,37 @@
       allowClear: false,
       disabled: {{ $user_select_disabled }}
     });
-
     $("#year option:selected").each(function()
     {
       // log the value and text of each option
       year.push($(this).val());
     });
-
     $("#manager option:selected").each(function()
     {
       // log the value and text of each option
       manager.push($(this).val());
     });
-
     $("#user option:selected").each(function()
     {
       // log the value and text of each option
       user.push($(this).val());
     });
-
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-
-
-
     function useReturnData(data){
         myvar = data;
         //console.log(myvar);
     };
-
     /* ChartJS
      * -------
      * Here we will create a few charts using ChartJS
      */
-
      var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-     
+
      var color = Chart.helpers.color;
-
-
      var barChartData = {
          labels: MONTHS,
          datasets: [
@@ -364,9 +345,7 @@
            data: []
           }
         ]
-
      };
-
      $.ajax({
          url:"{!! route('listOfLoadPerUserChartAjax') !!}",
          type:'POST',
@@ -380,24 +359,16 @@
            barChart.data.datasets[3].data = ajaxiscpresales();
            barChart.data.datasets[4].data = ajaxdscstarted();
            barChart.data.datasets[5].data = ajaxiscstarted();
-           console.log(barChart.data);
+           //console.log(barChart.data);
            barChart.update();
          }
        });
-
      //-------------
      //- BAR CHART -
      //-------------
      var barChartCanvas = $("#barChart").get(0).getContext("2d");
      var barChartOptions = {
         responsive: true,
-        legend: {
-            position: 'top',
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-          },
         title: {
             display: true,
             text: 'LoE Forecast vs Capacity'
@@ -416,7 +387,6 @@
                           labelString: '# Mandays'
                         },
                         stacked: true
-
                         }, {
                         type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                         display: true,
@@ -433,26 +403,18 @@
                     }],
                 }
       };
-
-
      barChart = new Chart(barChartCanvas, {
                 type: 'bar',
                 data: barChartData,
                 options: barChartOptions
             });
-
-
-
-
     $('#year').on('change', function() {
       year = [];
       $("#year option:selected").each(function()
       {
         // log the value and text of each option
         year.push($(this).val());
-
       });
-
       $.ajax({
           url:"{!! route('listOfLoadPerUserChartAjax') !!}",
           type:'POST',
@@ -470,14 +432,12 @@
           }
         });
     });
-
     $('#manager').on('change', function() {
       manager = [];
       $("#manager option:selected").each(function()
       {
         // log the value and text of each option
         manager.push($(this).val());
-
       });
       $.ajax({
           url:"{!! route('listOfLoadPerUserChartAjax') !!}",
@@ -496,14 +456,12 @@
           }
         });
     });
-
     $('#user').on('change', function() {
       user = [];
       $("#user option:selected").each(function()
       {
         // log the value and text of each option
         user.push($(this).val());
-
       });
       $.ajax({
           url:"{!! route('listOfLoadPerUserChartAjax') !!}",
@@ -522,7 +480,6 @@
           }
         });
     });
-
   } );
   </script>
   @stop
