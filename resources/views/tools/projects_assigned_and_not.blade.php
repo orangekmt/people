@@ -366,6 +366,36 @@
                 }
             });
 
+            $('#projectTable_unassigned').on('click', 'tbody td', function() {
+              var table = projectTable_unassigned;
+              var tr = $(this).closest('tr');
+              var row = table.row(tr);
+              //get the initialization options
+              var columns = table.settings().init().columns;
+              //get the index of the clicked cell
+              var colIndex = table.cell(this).index().column;
+              //console.log('you clicked on the column with the name '+columns[colIndex].name);
+              //console.log('the user id is '+row.data().user_id);
+              //console.log('the project id is '+row.data().project_id);
+              // If we click on the name, then we create a new project
+              window.location.href = "{!! route('toolsFormUpdate',[0,'','']) !!}/"+row.data().id+"/"+{{ $year }};
+            });
+
+            $('#projectTable_assigned').on('click', 'tbody td', function() {
+              var table = projectTable_assigned;
+              var tr = $(this).closest('tr');
+              var row = table.row(tr);
+              //get the initialization options
+              var columns = table.settings().init().columns;
+              //get the index of the clicked cell
+              var colIndex = table.cell(this).index().column;
+              //console.log('you clicked on the column with the name '+columns[colIndex].name);
+              //console.log('the user id is '+row.data().user_id);
+              //console.log('the project id is '+row.data().project_id);
+              // If we click on the name, then we create a new project
+              window.location.href = "{!! route('toolsFormUpdate',[0,'','']) !!}/"+row.data().id+"/"+{{ $year }};
+            });
+
             $('#new_project').on('click', function() {
               window.location.href = "{!! route('toolsFormCreate',$year) !!}";
             });

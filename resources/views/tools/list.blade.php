@@ -513,9 +513,9 @@
       var columns = table.settings().init().columns;
       //get the index of the clicked cell
       var colIndex = table.cell(this).index().column;
-      console.log('you clicked on the column with the name '+columns[colIndex].name);
-      console.log('the user id is '+row.data().user_id);
-      console.log('the project id is '+row.data().project_id);
+      //console.log('you clicked on the column with the name '+columns[colIndex].name);
+      //console.log('the user id is '+row.data().user_id);
+      //console.log('the project id is '+row.data().project_id);
       // If we click on the name, then we create a new project
       year = [];
       $("#year option:selected").each(function()
