@@ -1,4 +1,4 @@
-@extends('layouts.app',['main_title' => 'Dashboard','second_title'=>'activities','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app')
 
 @section('style')
 <!-- CSS -->
@@ -11,104 +11,104 @@
 <!-- JS -->
 <!-- Select2 -->
 <script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
-<!-- Bootbox -->
-<script src="{{ asset('/plugins/bootbox/bootbox.min.js') }}"></script>
 <!-- ChartJs -->
-<script src="{{ asset('/plugins/adminLTE/plugins/chartjs/Chart.bundle.min.js') }}"></script>
+<script src="{{ asset('/plugins/chartjs/Chart.bundle.js') }}"></script>
 @stop
 
 @section('content')
+<!-- Page title -->
+<div class="page-title">
+  <div class="title_left">
+    <h3>Load chart</h3>
+  </div>
+</div>
+<div class="clearfix"></div>
+<!-- Page title -->
+
+<!-- Window -->
 <div class="row">
-  <div class="col-md-12">
-    <div class="box box-primary">
-      <div class="box-header">
-        <i class="fa fa-wrench"></i>
-        <h3 class="box-title">Tools</h3>
-        <div class="box-tools pull-right">
-          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-        </div><!-- /.box-tools -->
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="form-group col-xs-2">
-            <label for="year" class="control-label">Year</label>
-            <select class="form-control select2" style="width: 100%;" id="year" name="year" data-placeholder="Select a year">
-              @foreach($years as $year)
-              <option value="{{ $year['id'] }}" {{ $year['selected'] }}>{{ $year['value'] }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="form-group col-xs-2">
-            <label for="manager" class="control-label">Manager</label>
-            <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
-              @foreach($manager_list as $key => $value)
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
 
-              <option value="{{ $key }}" <?php if ($key == $manager_selected) { echo 'selected'; }?>>{{ $value }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="form-group col-xs-2">
-            <label for="user" class="control-label">User</label>
-            <select class="form-control select2" style="width: 100%;" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
-              @foreach($user_list as $key => $value)
-
-              <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>Tools</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
       </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
+          <div class="row">
+            <div class="form-group col-xs-2">
+              <label for="year" class="control-label">Year</label>
+              <select class="form-control select2" style="width: 100%;" id="year" name="year" data-placeholder="Select a year">
+                @foreach($years as $year)
+                <option value="{{ $year['id'] }}" {{ $year['selected'] }}>{{ $year['value'] }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group col-xs-2">
+              <label for="manager" class="control-label">Manager</label>
+              <select class="form-control select2" style="width: 100%;" id="manager" name="manager" data-placeholder="Select a manager" multiple="multiple">
+                @foreach($manager_list as $key => $value)
+
+                <option value="{{ $key }}" <?php if ($key == $manager_selected) { echo 'selected'; }?>>{{ $value }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group col-xs-2">
+              <label for="user" class="control-label">User</label>
+              <select class="form-control select2" style="width: 100%;" id="user" name="user" data-placeholder="Select a user" multiple="multiple">
+                @foreach($user_list as $key => $value)
+
+                <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+      </div>
+      <!-- Window content -->
+
     </div>
   </div>
 </div>
+<!-- Window -->
+
+
+<!-- Window -->
 <div class="row">
-  <div class="col-md-12">
-    <!-- table widget -->
-    <div class="box box-info direct-chat direct-chat-info">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
 
-      <div class="box-header with-border">
-        <i class="fa fa-cloud-download"></i>
-        <h3 class="box-title">Chart</h3>
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Help" data-widget="chat-pane-toggle">
-            <i class="fa fa-question"></i>
-          </button>
-          <button class="btn btn-box-tool" data-widget="collapse">
-            <i class="fa fa-minus"></i>
-          </button>
-          </div><!-- /.box-tools -->
-        </div>
-
-        <div class="box-body">
-          <div style="direct-chat-messages">
-            <div class="chart">
-              <canvas id="barChart" height="400"></canvas>
-            </div>
-          </div>
-          <div class="direct-chat-contacts">
-            <ul class="contacts-list">
-              <li>
-
-                  <div class="contacts-list-info">
-                    <span class="contacts-list-name">
-
-                    </span>
-                    <span class="contacts-list-msg"></span>
-                  </div>
-                  <!-- /.contacts-list-info -->
-                </a>
-              </li>
-            </ul>
-            <!-- /.contatcts-list -->
-          </div>
-          <!-- /.direct-chat-pane -->
-        </div>
-
-
-
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>Tools</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
       </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
+        <div class="chart">
+          <canvas id="barChart" height="400"></canvas>
+        </div>
+      </div>
+      <!-- Window content -->
+
     </div>
   </div>
+</div>
+<!-- Window -->
+
   @stop
 
   @section('script')
@@ -120,14 +120,11 @@
   var myvar='';
 
   function ajaxDataPOST(){
-
     var obj = {
       'year[]': year,
       'manager[]': manager,
       'user[]': user
     };
-
-    console.log(obj);
     return obj;
   };
 
@@ -246,14 +243,6 @@
    grey: 'rgb(201, 203, 207)'
   };
 
-  // Here we are going to get from PHP the list of roles and their value for the logged in activities
-
-  var permissions = jQuery.parseJSON('{!! $perms !!}');
-
-  // Roles check finished.
-
-  //console.log(permissions);
-
   $(document).ready(function() {
 
     //Init select2 boxes
@@ -307,6 +296,7 @@
      */
 
      var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+     
      var color = Chart.helpers.color;
 
 
@@ -320,8 +310,7 @@
              borderColor: window.chartColors.orange,
              borderWidth: 3,
              fill: false,
-             data: [
-                    ]
+             data: []
           },
           {
           type: 'line',
@@ -332,8 +321,7 @@
            borderWidth: 3,
            fill: false,
            pointRadius: 0,
-           data: [
-                    ]
+           data: []
          },
           {
           type: 'bar',
@@ -343,8 +331,7 @@
            backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
            borderColor: window.chartColors.green,
            borderWidth: 1,
-           data: [
-           ]
+           data: []
           },
           {
           type: 'bar',
@@ -354,8 +341,7 @@
            backgroundColor: color(window.chartColors.green_light).alpha(0.5).rgbString(),
            borderColor: window.chartColors.green_light,
            borderWidth: 1,
-           data: [
-           ]
+           data: []
           },
           {
           type: 'bar',
@@ -365,8 +351,7 @@
            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
            borderColor: window.chartColors.blue,
            borderWidth: 1,
-           data: [
-           ]
+           data: []
           },
           {
           type: 'bar',
@@ -376,12 +361,29 @@
            backgroundColor: color(window.chartColors.blue_light).alpha(0.5).rgbString(),
            borderColor: window.chartColors.blue_light,
            borderWidth: 1,
-           data: [
-         ]
+           data: []
           }
         ]
 
      };
+
+     $.ajax({
+         url:"{!! route('listOfLoadPerUserChartAjax') !!}",
+         type:'POST',
+         data: ajaxDataPOST(),
+         dataType:"JSON",
+         success: function(data) {
+           useReturnData(data);
+           barChart.data.datasets[0].data = ajaxdscvstotal();
+           barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
+           barChart.data.datasets[2].data = ajaxdscpresales();
+           barChart.data.datasets[3].data = ajaxiscpresales();
+           barChart.data.datasets[4].data = ajaxdscstarted();
+           barChart.data.datasets[5].data = ajaxiscstarted();
+           console.log(barChart.data);
+           barChart.update();
+         }
+       });
 
      //-------------
      //- BAR CHART -
@@ -431,6 +433,8 @@
                     }],
                 }
       };
+
+
      barChart = new Chart(barChartCanvas, {
                 type: 'bar',
                 data: barChartData,
@@ -438,22 +442,7 @@
             });
 
 
-    $.ajax({
-        url:"{!! route('listOfLoadPerUserChartAjax') !!}",
-        type:'POST',
-        data: ajaxDataPOST(),
-        dataType:"JSON",
-        success: function(data) {
-          useReturnData(data);
-          barChart.data.datasets[0].data = ajaxdscvstotal();
-          barChart.data.datasets[1].data = ajaxtheoreticalCapacity();
-          barChart.data.datasets[2].data = ajaxdscpresales();
-          barChart.data.datasets[3].data = ajaxiscpresales();
-          barChart.data.datasets[4].data = ajaxdscstarted();
-          barChart.data.datasets[5].data = ajaxiscstarted();
-          barChart.update();
-        }
-      });
+
 
     $('#year').on('change', function() {
       year = [];
@@ -480,7 +469,6 @@
             barChart.update();
           }
         });
-      //activitiesTable.ajax.reload();
     });
 
     $('#manager').on('change', function() {
@@ -507,7 +495,6 @@
             barChart.update();
           }
         });
-      //activitiesTable.ajax.reload();
     });
 
     $('#user').on('change', function() {
@@ -534,7 +521,6 @@
             barChart.update();
           }
         });
-      //activitiesTable.ajax.reload();
     });
 
   } );

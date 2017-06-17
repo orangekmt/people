@@ -329,18 +329,6 @@
         },
         dataType: "JSON"
       },
-      // dom: 'Bfrtip',
-      // buttons: [
-      //       {
-      //           extend: 'copyHtml5',
-      //           exportOptions: {
-      //            columns: ':contains("Office")'
-      //           }
-      //       },
-      //       'excelHtml5',
-      //       'csvHtml5',
-      //       'pdfHtml5'
-      // ],
       columns: [
         { name: 'manager_id', data: 'manager_id' , searchable: false , visible: false},
         { name: 'manager_name', data: 'manager_name', width: '150px' },

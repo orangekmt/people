@@ -103,7 +103,7 @@ class OtlUploadController extends Controller
           $activity['task_hour'] = $row->original_time / config('options.time_trak')['hours_in_day'];
           $activity['from_otl'] = 1;
           $activityInDB = $this->activityRepository->getByOTL($activity['year'],$activity['month'],$userInDB->id,$projectInDB->id,$activity['from_otl']);
-          if (!$activityInDB){
+          if (!empty($activityInDB)){
             $this->activityRepository->create($activity);
             array_push($messages,['status'=>'add','msg'=>'Activity created in DB']);
           } else {

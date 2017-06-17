@@ -1,39 +1,67 @@
-@extends('layouts.app',['main_title' => 'Activity','second_title'=>'list','url'=>[['name'=>'home','url'=>route('home')],['name'=>'list','url'=>'#']]])
+@extends('layouts.app')
 
 @section('style')
     <!-- CSS -->
-    <!-- Select2 -->
-    <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
 @stop
 
 @section('scriptsrc')
     <!-- JS -->
-    <!-- Select2 -->
-    <script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
     <!-- DataTables -->
-    <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/plugins/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/plugins/datatables/handlebars.js') }}"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/jszip/dist/jszip.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/pdfmake/build/pdfmake.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/plugins/gentelella/vendors/pdfmake/build/vfs_fonts.js') }}" type="text/javascript"></script>
+
     <!-- Bootbox -->
     <script src="{{ asset('/plugins/bootbox/bootbox.min.js') }}"></script>
 @stop
 
 @section('content')
-    <!-- table widget -->
-    <div class="box box-info">
+<!-- Page title -->
+<div class="page-title">
+  <div class="title_left">
+    <h3>Activity</h3>
+  </div>
+</div>
+<div class="clearfix"></div>
+<!-- Page title -->
 
-        <div class="box-header">
-            <i class="fa fa-cloud-download"></i>
-            <h3 class="box-title">Activity List</h3>
-            <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div><!-- /.box-tools -->
-        </div>
+<!-- Window -->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
 
-        <div class="box-body">
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>List</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible">
                 <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button>
@@ -48,10 +76,9 @@
             @endif
             <div id="delete_message">
             </div>
-            <table id="activityTable" class="display table-bordered table-hover table-responsive">
+            <table id="activityTable" class="table table-striped table-hover table-bordered" width="100%">
                 <thead>
                     <tr>
-                        <th class="first_column"></th>
                         <th>ID</th>
                         <th>Year</th>
                         <th>Month</th>
@@ -66,7 +93,6 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th class="first_column"></th>
                         <th>ID</th>
                         <th>Year</th>
                         <th>Month</th>
@@ -78,49 +104,13 @@
                     </tr>
                 </tfoot>
             </table>
-            <script id="details-template" type="text/x-handlebars-template">
-            <table class="extra_info table-bordered">
-                <thead>
-                    <th width="20px"></th>
-                    <th width="100px"></th>
-                    <th></th>
-                </thead>
+      </div>
+      <!-- Window content -->
 
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Year</b>:</td>
-                    <td>@{{ year }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Month</b>:</td>
-                    <td>@{{ month }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>User name</b>:</td>
-                    <td>@{{ name }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Project name</b>:</td>
-                    <td>@{{ project_name }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Task hours</b>:</td>
-                    <td>@{{ task_hour }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>From OTL</b>:</td>
-                    <td>@{{ from_otl }}</td>
-                </tr>
-            </table>
-            </script>
-        </div>
     </div>
+  </div>
+</div>
+<!-- Window -->
 
 @stop
 
@@ -145,7 +135,6 @@
 
 
         $(document).ready(function() {
-            var template = Handlebars.compile($("#details-template").html());
 
             $.ajaxSetup({
                 headers: {
@@ -162,14 +151,7 @@
                         type: "GET",
                     },
                 columns: [
-                    {
-                        className:      'details-control',
-                        orderable:      false,
-                        searchable:     false,
-                        data:           null,
-                        defaultContent: ''
-                    },
-                    { name: 'activities.id', data: 'id' },
+                    { name: 'activities.id', data: 'id', searchable: false , visible: false },
                     { name: 'activities.year', data: 'year' },
                     { name: 'activities.month', data: 'month' },
                     { name: 'users.name', data: 'name'},
@@ -198,12 +180,39 @@
                         }
                     }
                     ],
-                columnDefs: [
-                    {
-                        "targets": [1], "visible": false, "searchable": false
-                    }
-                    ],
                 order: [[2, 'asc']],
+                lengthMenu: [
+                    [ 5, 10, 25, 50, -1 ],
+                    [ '5 rows', '10 rows', '25 rows', '50 rows', 'Show all' ]
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                  {
+                    extend: "pageLength",
+                    className: "btn-sm"
+                  },
+                  {
+                    extend: "csv",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 3, 4, 5, 6 ]
+                    }
+                  },
+                  {
+                    extend: "excel",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 3, 4, 5, 6 ]
+                    }
+                  },
+                  {
+                    extend: "print",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 3, 4, 5, 6 ]
+                    }
+                  },
+                ],
                 initComplete: function () {
                     var columns = this.api().init().columns;
                     this.api().columns().every(function () {
@@ -224,23 +233,6 @@
                           });
                         }
                     });
-                }
-            });
-
-            // Add event listener for opening and closing details
-            $('#activityTable tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = activityTable.row( tr );
-
-                if ( row.child.isShown() ) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( template(row.data()) ).show();
-                    tr.addClass('shown');
                 }
             });
 

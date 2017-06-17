@@ -216,27 +216,36 @@
                     }
                     ],
                 order: [[1, 'asc']],
+                lengthMenu: [
+                    [ 5, 10, 25, 50, -1 ],
+                    [ '5 rows', '10 rows', '25 rows', '50 rows', 'Show all' ]
+                ],
                 dom: 'Bfrtip',
                 buttons: [
-                            {
-                    extend: "copy",
+                  {
+                    extend: "pageLength",
                     className: "btn-sm"
                   },
                   {
                     extend: "csv",
-                    className: "btn-sm"
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 4, 5, 6, 7, 8, 9, 10, 11 ]
+                    }
                   },
                   {
                     extend: "excel",
-                    className: "btn-sm"
-                  },
-                  {
-                    extend: "pdfHtml5",
-                    className: "btn-sm"
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 4, 5, 6, 7, 8, 9, 10, 11 ]
+                    }
                   },
                   {
                     extend: "print",
-                    className: "btn-sm"
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [ 1, 2, 4, 5, 6, 7, 8, 9, 10, 11 ]
+                    }
                   },
                 ],
                 initComplete: function () {

@@ -1,12 +1,24 @@
 @extends('app')
 
 @section('content')
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Reset Password</div>
-				<div class="panel-body">
+<!-- Window -->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+
+      <!-- Window title -->
+      <div class="x_title">
+        <h2>Reset password</small></h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <!-- Window title -->
+
+      <!-- Window content -->
+      <div class="x_content">
+        <br />
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
 							<strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -51,9 +63,12 @@
 							</div>
 						</div>
 					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+      </div>
+      <!-- Window content -->
+
+    </div>
+  </div>
 </div>
+<!-- Window -->
+
 @endsection

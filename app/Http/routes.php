@@ -22,14 +22,15 @@ Route::get('logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController@logo
 // Registration will be deactivated by commenting out the routes
 //Route::get('register', 'Auth\AuthController@showRegistrationForm');
 //Route::post('register', 'Auth\AuthController@register');
-
 // Password Reset Routes...
 Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\PasswordController@reset');
+
 // All routes in this function will be protected by user needed to be logged in.
 Route::group(['middleware' => ['auth']], function() {
       Route::get('/home', ['uses'=>'HomeController@index','as'=>'home']);
+      Route::get('/', ['uses'=>'HomeController@index']);
 
       //OTL
       Route::get('otlupload', ['uses'=>'OtlUploadController@getForm','as'=>'otluploadform','middleware' => ['permission:otl-upload']]);
@@ -113,7 +114,6 @@ Route::group(['middleware' => ['auth']], function() {
       //  AJAX
       Route::post('listOfLoadPerUserAjax', ['uses'=>'ActivityController@listOfLoadPerUserAjax','as'=>'listOfLoadPerUserAjax','middleware' => ['permission:dashboard-view']]);
       Route::post('listOfLoadPerUserChartAjax', ['uses'=>'ActivityController@listOfLoadPerUserChartAjax','as'=>'listOfLoadPerUserChartAjax','middleware' => ['permission:dashboard-view']]);
-
 });
 
 //Route::get('test', ['uses'=>'ActivityController@test']);
