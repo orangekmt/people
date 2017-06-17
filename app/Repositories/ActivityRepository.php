@@ -54,13 +54,23 @@ class ActivityRepository
             ->where('month',   $inputs['month'])
             ->where('project_id', $inputs['project_id'])
             ->where('user_id', $inputs['user_id'])
+            ->where('from_otl', '1')
             ->first();
 
-    if (!isset($activity)){
-      $activity = new $this->activity;
+    if (!empty($activity)){
+      return $activity;
+    } else {
+      $activity = $this->activity
+              ->where('year', $inputs['year'])
+              ->where('month',   $inputs['month'])
+              ->where('project_id', $inputs['project_id'])
+              ->where('user_id', $inputs['user_id'])
+              ->first();
+      if (empty($activity)){
+        $activity = new $this->activity;
+      }
+      return $this->save($activity, $inputs);
     }
-
-    return $this->save($activity, $inputs);
   }
 
   private function save(Activity $activity, Array $inputs)
@@ -402,7 +412,7 @@ class ActivityRepository
     }
 
     unset($temp_table);
-    
+
     return $data;
   }
 

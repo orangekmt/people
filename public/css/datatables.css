@@ -1,16 +1,19 @@
-
-td.details-control {
-background: url("../plugins/datatables/details_open.png") no-repeat center center;
-cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url("../plugins/datatables/details_close.png") no-repeat center center;
+td.otl {
+  font-size : 16px;
+  color : green;
 }
 
-th.first_column {
-  width: 15px;
+td.forecast {
+  font-size : 16px;
+  color : blue;
 }
 
-th.last_column {
-  width: 40px;
+td.zero {
+  font-size : 10px;
+  color : grey;
+}
+
+td.too_high {
+  font-size : 16px;
+  color : red;
 }

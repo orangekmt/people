@@ -147,19 +147,26 @@ class PermissionTableSeeder extends Seeder
           [
             'id' => 22,
         		'name' => 'tools-activity-all-view',
-        		'display_name' => 'Tools Activity Edit',
-        		'description' => 'Tools Activity Edit'
+        		'display_name' => 'Tools Activity All View',
+        		'description' => 'Tools Activity All View'
+        	]
+          ,
+          [
+            'id' => 23,
+        		'name' => 'tools-activity-all-edit',
+        		'display_name' => 'Tools Activity All Edit',
+        		'description' => 'Tools Activity All Edit'
         	]
           ,
         	[
-            'id' => 23,
+            'id' => 24,
         		'name' => 'dashboard-view',
         		'display_name' => 'Dashboard View',
         		'description' => 'Dashboard View'
         	]
           ,
         	[
-            'id' => 24,
+            'id' => 25,
         		'name' => 'dashboard-all-view',
         		'display_name' => 'Dashboard View All',
         		'description' => 'Dashboard view for all users and managers'

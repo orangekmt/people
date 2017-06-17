@@ -68,12 +68,14 @@ class RoleTableSeeder extends Seeder
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (22,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (23,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (24,1);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (25,1);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (19,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (20,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (21,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (22,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (23,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (24,2);");
+        DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (25,2);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (19,3);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (20,3);");
         DB::statement("INSERT INTO `permission_role`(`permission_id`, `role_id`) VALUES (21,3);");

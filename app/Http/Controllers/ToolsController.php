@@ -86,7 +86,6 @@ class ToolsController extends Controller {
     $edit_project_name = '';
     $edit_otl_name = '';
     $user_selected = '';
-    $meta_activity_select_disabled = 'false';
     $project_type_select_disabled = 'false';
     $activity_type_select_disabled = 'false';
     $project_status_select_disabled = 'false';
@@ -144,7 +143,7 @@ class ToolsController extends Controller {
     // Here we setup all the disabled fields to be disabled
     $edit_project_name = '';
     $edit_otl_name = '';
-    $meta_activity_select_disabled = 'true';
+    $meta_activity_select_disabled = false;
     $project_type_select_disabled = 'true';
     $activity_type_select_disabled = 'true';
     $project_status_select_disabled = 'true';
@@ -204,12 +203,12 @@ class ToolsController extends Controller {
 
     // Here we find the information about the project
     $project = $this->projectRepository->getById($project_id);
-    $created_by_user_name = $this->userRepository->getById($project->created_by_user_id)->name;
+
+    $created_by_user_name = isset($project->created_by_user_id) ? $this->userRepository->getById($project->created_by_user_id)->name : 'Admin';
 
     // Here we can check what can be edited for this project
-    if (isset($project->created_by_user_id) && (Auth::user()->id == $project->created_by_user_id)) {
+    if ((isset($project->created_by_user_id) && (Auth::user()->id == $project->created_by_user_id)) || Entrust::can('tools-activity-all-edit')){
       $edit_project_name = '';
-      $meta_activity_select_disabled = 'false';
       $project_type_select_disabled = 'false';
       $activity_type_select_disabled = 'false';
       $project_status_select_disabled = 'false';
@@ -220,6 +219,7 @@ class ToolsController extends Controller {
 
     if ($project->otl_validated == 1) {
       $edit_otl_name = 'disabled';
+      $meta_activity_select_disabled = true;
     }
 
     $activities = [];

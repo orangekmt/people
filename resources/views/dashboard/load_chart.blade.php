@@ -4,7 +4,6 @@
 <!-- CSS -->
 <!-- Select2 -->
 <link href="{{ asset('/plugins/gentelella/vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="{{ asset('/css/chart.css') }}">
 @stop
 
 @section('scriptsrc')

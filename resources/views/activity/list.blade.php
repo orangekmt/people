@@ -177,7 +177,8 @@
                             };
                             actions += '</div>';
                             return actions;
-                        }
+                        },
+                        width: '70px'
                     }
                     ],
                 order: [[2, 'asc']],
