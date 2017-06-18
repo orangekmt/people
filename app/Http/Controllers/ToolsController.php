@@ -86,7 +86,7 @@ class ToolsController extends Controller {
     $edit_project_name = '';
     $edit_otl_name = '';
     $user_selected = '';
-    $meta_activity_select_disabled = 'flase';
+    $meta_activity_select_disabled = 'false';
     $project_type_select_disabled = 'false';
     $activity_type_select_disabled = 'false';
     $project_status_select_disabled = 'false';
@@ -120,6 +120,11 @@ class ToolsController extends Controller {
   public function postFormCreate(ToolsCreateRequest $request)
 	{
     $inputs = $request->all();
+
+    $start_end_date = explode('-',$inputs['estimated_date']);
+    $inputs['estimated_start_date'] = trim($start_end_date[0]);
+    $inputs['estimated_end_date'] = trim($start_end_date[1]);
+
     $project = $this->projectRepository->create($inputs);
 
     // Here I will test if a user has been selected or not
@@ -144,7 +149,7 @@ class ToolsController extends Controller {
     // Here we setup all the disabled fields to be disabled
     $edit_project_name = '';
     $edit_otl_name = '';
-    $meta_activity_select_disabled = false;
+    $meta_activity_select_disabled = 'false';
     $project_type_select_disabled = 'true';
     $activity_type_select_disabled = 'true';
     $project_status_select_disabled = 'true';
@@ -256,6 +261,10 @@ class ToolsController extends Controller {
 	public function postFormUpdate(ToolsUpdateRequest $request)
 	{
     $inputs = $request->all();
+
+    $start_end_date = explode('-',$inputs['estimated_date']);
+    $inputs['estimated_start_date'] = trim($start_end_date[0]);
+    $inputs['estimated_end_date'] = trim($start_end_date[1]);
 
     $project = $this->projectRepository->update($inputs['project_id'],$inputs);
 

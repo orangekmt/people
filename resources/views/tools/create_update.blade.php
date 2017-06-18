@@ -5,12 +5,18 @@
 <!-- Select2 -->
 <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="{{ asset('/css/forms.css') }}">
+<!-- bootstrap-daterangepicker -->
+<link href="{{ asset('/plugins/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
 @stop
 
 @section('scriptsrc')
 <!-- JS -->
 <!-- Select2 -->
 <script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{{ asset('/plugins/gentelella/vendors/moment/min/moment.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/plugins/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
+
 @stop
 
 @section('content')
@@ -70,32 +76,35 @@
 
 
             <div class="row">
-              <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
+              <div class="col-md-6">
+                <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
+                    <div class="col-md-1">
+                        {!! Form::label('year', 'year', ['class' => 'control-label']) !!}
+                    </div>
+                    <div class="col-md-11">
+                        {!! Form::select('year', config('select.year'), (isset($year)) ? $year : '', ['class' => 'form-control']) !!}
+                        {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group {!! $errors->has('user_id') ? 'has-error' : '' !!} col-md-12">
                   <div class="col-md-1">
-                      {!! Form::label('year', 'year', ['class' => 'control-label']) !!}
+                    {!! Form::label('user_id', 'User', ['class' => 'control-label']) !!}
                   </div>
                   <div class="col-md-11">
-                      {!! Form::select('year', config('select.year'), (isset($year)) ? $year : '', ['class' => 'form-control']) !!}
-                      {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
+                    <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" data-placeholder="Select a user to be assigned">
+                      <option value="" ></option>
+                      @foreach($user_list as $key => $value)
+                      <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
+                      @endforeach
+                    </select>
+                    {!! $errors->first('user_id', '<small class="help-block">:message</small>') !!}
                   </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group {!! $errors->has('user_id') ? 'has-error' : '' !!} col-md-12">
-                <div class="col-md-1">
-                  {!! Form::label('user_id', 'User', ['class' => 'control-label']) !!}
-                </div>
-                <div class="col-md-11">
-                  <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" data-placeholder="Select a user">
-                    <option value="" ></option>
-                    @foreach($user_list as $key => $value)
-                    <option value="{{ $key }}" <?php if ($key == $user_selected) { echo 'selected'; }?>>{{ $value }}</option>
-                    @endforeach
-                  </select>
-                  {!! $errors->first('user_id', '<small class="help-block">:message</small>') !!}
                 </div>
               </div>
             </div>
+
             <div class="row_months">
               <div class="col-md-12">
                 Number of days for each month.
@@ -120,6 +129,10 @@
               @endfor
               @endif
             </div>
+
+            <div class="clearfix"></div>
+            <div class="ln_solid"></div>
+
             <div class="row">
               <div class="col-md-6">
                 <div class="row">
@@ -303,24 +316,19 @@
               </div>
               <div class="col-md-6">
                 <div class="row">
-                  <div class="form-group {!! $errors->has('estimated_start_date') ? 'has-error' : '' !!} col-md-12">
+                  <div class="form-group {!! $errors->has('estimated_date') ? 'has-error' : '' !!} col-md-12">
                     <div class="col-md-3">
-                      {!! Form::label('estimated_start_date', 'Estimated start date', ['class' => 'control-label']) !!}
+                      {!! Form::label('estimated_date', 'Estimated start to end date', ['class' => 'control-label']) !!}
                     </div>
                     <div class="col-md-9">
-                      {!! Form::date('estimated_start_date', (isset($project)) ? $project->estimated_start_date : '', ['class' => 'form-control']) !!}
-                      {!! $errors->first('estimated_start_date', '<small class="help-block">:message</small>') !!}
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="form-group {!! $errors->has('estimated_end_date') ? 'has-error' : '' !!} col-md-12">
-                    <div class="col-md-3">
-                      {!! Form::label('estimated_end_date', 'Estimated end date', ['class' => 'control-label']) !!}
-                    </div>
-                    <div class="col-md-9">
-                      {!! Form::date('estimated_end_date', (isset($project)) ? $project->estimated_end_date : '', ['class' => 'form-control']) !!}
-                      {!! $errors->first('estimated_end_date', '<small class="help-block">:message</small>') !!}
+                      <div class="control-group">
+                        <div class="controls">
+                          <div class="input-prepend input-group">
+                            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                            <input type="text" style="width: 200px" name="estimated_date" id="estimated_date" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -416,6 +424,7 @@
               <div class="row"></div>
               <div class="row"></div>
             </div>
+            <div class="ln_solid"></div>
             <div class="row">
               <div class="col-md-offset-1 col-md-1">
                 <a href="javascript:history.back()" class="btn btn-primary">
@@ -424,9 +433,9 @@
               </div>
               <div class="col-md-offset-9 col-md-1">
                 @if($action == 'create')
-                {!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
+                {!! Form::submit('Create', ['class' => 'btn btn-success']) !!}
                 @elseif($action == 'update')
-                {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
+                {!! Form::submit('Update', ['class' => 'btn btn-success']) !!}
                 @endif
               </div>
             </div>
@@ -451,6 +460,20 @@
 var year;
 
 $(document).ready(function() {
+  // Now this is important so that we send the value of all disabled fields
+  // What it does is when you try to submit, it will remove the disabled property on all fields with disabled
+  jQuery(function ($) {
+    $('form').bind('submit', function () {
+      $(this).find(':input').prop('disabled', false);
+    });
+  });
+
+  // init DateRange picker
+  $('#estimated_date').daterangepicker({
+    locale: {
+    format: 'YYYY/MM/DD'
+    }
+  });
   //Init select2 boxes
   $("#user_id").select2({
     allowClear: true,
@@ -498,15 +521,6 @@ $(document).ready(function() {
         window.location.href = "{!! route('toolsFormUpdate',[$user_id,$project->id,'']) !!}"+"/"+year;
     });
   @endif
-
-  // Now this is important so that we send the value of all disabled fields
-  // What it does is when you try to submit, it will remove the disabled property on all fields with disabled
-  jQuery(function ($) {
-    $('form').bind('submit', function () {
-      $(this).find(':input').prop('disabled', false);
-    });
-  });
-
 
 });
 </script>

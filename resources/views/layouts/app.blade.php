@@ -84,7 +84,7 @@
 
 
         <div class="clearfix"></div>
-
+        </br></br>
         <!-- footer content -->
         <footer>
           <div class="pull-right">
