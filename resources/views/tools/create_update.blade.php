@@ -77,17 +77,6 @@
 
             <div class="row">
               <div class="col-md-6">
-                <div class="form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
-                    <div class="col-md-1">
-                        {!! Form::label('year', 'year', ['class' => 'control-label']) !!}
-                    </div>
-                    <div class="col-md-11">
-                        {!! Form::select('year', config('select.year'), (isset($year)) ? $year : '', ['class' => 'form-control']) !!}
-                        {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
-                    </div>
-                </div>
-              </div>
-              <div class="col-md-6">
                 <div class="form-group {!! $errors->has('user_id') ? 'has-error' : '' !!} col-md-12">
                   <div class="col-md-1">
                     {!! Form::label('user_id', 'User', ['class' => 'control-label']) !!}
@@ -103,14 +92,25 @@
                   </div>
                 </div>
               </div>
+              <div class="col-md-6">
+                <div class="user_selected form-group {!! $errors->has('year') ? 'has-error' : '' !!} col-md-12">
+                    <div class="col-md-1">
+                        {!! Form::label('year', 'year', ['class' => 'control-label']) !!}
+                    </div>
+                    <div class="col-md-11">
+                        {!! Form::select('year', config('select.year'), (isset($year)) ? $year : '', ['class' => 'form-control']) !!}
+                        {!! $errors->first('year', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+              </div>
             </div>
 
-            <div class="row_months">
+            <div class="row_months user_selected">
               <div class="col-md-12">
                 Number of days for each month.
               </div>
             </div>
-            <div class="row_months">
+            <div class="row_months user_selected">
               @if($action == 'create')
               @for($i = 1; $i <= 12; $i++)
               <div class="form-group {!! $errors->has('month['.$i.']') ? 'has-error' : '' !!} col-md-1">
@@ -326,7 +326,9 @@
                           <div class="input-prepend input-group">
                             <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                             <input type="text" style="width: 200px" name="estimated_date" id="estimated_date" class="form-control" />
+
                           </div>
+                          {!! $errors->first('estimated_date', '<small class="help-block">:message</small>') !!}
                         </div>
                       </div>
                     </div>
@@ -468,16 +470,47 @@ $(document).ready(function() {
     });
   });
 
+  if($('#user_id').val()===""){
+    console.log('empty');
+    $('.user_selected').hide();
+  }
+  else {
+    console.log('not empty');
+    $('.user_selected').show();
+  }
+
+  $('#user_id').change(function() {
+    if($(this).val()===""){
+      console.log('empty');
+      $('.user_selected').hide();
+    }
+    else {
+      console.log('not empty');
+      $('.user_selected').show();
+    }
+  });
+
   // init DateRange picker
   $('#estimated_date').daterangepicker({
     locale: {
-    format: 'YYYY/MM/DD'
-    }
+    format: 'YYYY-MM-DD'
+    },
+    showISOWeekNumbers: true,
+    showDropdowns: true
+    @if(isset($project->estimated_start_date))
+    ,
+    startDate: '{{ $project->estimated_start_date }}',
+    endDate: '{{ $project->estimated_end_date }}'
+    @endif
   });
   //Init select2 boxes
   $("#user_id").select2({
     allowClear: true,
     disabled: {{ $user_select_disabled }}
+  });
+
+  $("#year").select2({
+    allowClear: false
   });
 
   $("#meta_activity").select2({

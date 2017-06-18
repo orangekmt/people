@@ -120,8 +120,7 @@ class ToolsController extends Controller {
   public function postFormCreate(ToolsCreateRequest $request)
 	{
     $inputs = $request->all();
-
-    $start_end_date = explode('-',$inputs['estimated_date']);
+    $start_end_date = explode(' - ',$inputs['estimated_date']);
     $inputs['estimated_start_date'] = trim($start_end_date[0]);
     $inputs['estimated_end_date'] = trim($start_end_date[1]);
 
@@ -262,7 +261,7 @@ class ToolsController extends Controller {
 	{
     $inputs = $request->all();
 
-    $start_end_date = explode('-',$inputs['estimated_date']);
+    $start_end_date = explode(' - ',$inputs['estimated_date']);
     $inputs['estimated_start_date'] = trim($start_end_date[0]);
     $inputs['estimated_end_date'] = trim($start_end_date[1]);
 
