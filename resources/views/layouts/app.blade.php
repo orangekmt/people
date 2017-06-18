@@ -13,8 +13,6 @@
   <link href="{{ asset('/plugins/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
   <!-- NProgress -->
   <link href="{{ asset('/plugins/gentelella/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
-  <!-- iCheck -->
-  <link href="{{ asset('/plugins/gentelella/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
   <!-- Font Awesome -->
   <link href="{{ asset('/plugins/gentelella/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
   <!-- Custom Theme Style -->
@@ -84,6 +82,9 @@
         </div>
         <!-- /page content -->
 
+
+        <div class="clearfix"></div>
+
         <!-- footer content -->
         <footer>
           <div class="pull-right">
@@ -104,9 +105,6 @@
     <script src="{{ asset('/plugins/gentelella/vendors/fastclick/lib/fastclick.js') }}" type="text/javascript"></script>
     <!-- NProgress -->
     <script src="{{ asset('/plugins/gentelella/vendors/nprogress/nprogress.js') }}" type="text/javascript"></script>
-    <!-- iCheck -->
-    <script src="{{ asset('/plugins/gentelella/vendors/iCheck/icheck.min.js') }}" type="text/javascript"></script>
-
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('/plugins/gentelella/build/js/custom.min.js') }}" type="text/javascript"></script>
     <!-- Google Analytics -->
