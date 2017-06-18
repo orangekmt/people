@@ -31,6 +31,17 @@ class ActivityRepository
     return $this->activity->where('year', $year)->where('user_id', $user_id)->where('project_id', $project_id)->where('from_otl', $from_otl)->lists('task_hour','month');
   }
 
+  public function checkIfExists($inputs)
+  {
+    return $this->activity
+                    ->where('year', $inputs['year'])
+                    ->where('month', $inputs['month'])
+                    ->where('user_id', $inputs['user_id'])
+                    ->where('project_id', $inputs['project_id'])
+                    ->where('from_otl', $inputs['from_otl'])
+                    ->first();
+  }
+
   public function user_assigned_on_project($year,$user_id,$project_id)
   {
     return $this->activity->where('year', $year)->where('user_id', $user_id)->where('project_id', $project_id)->count();

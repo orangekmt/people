@@ -75,6 +75,7 @@ class OtlUploadController extends Controller
           $project_input['otl_validated'] = 1;
           $this->projectRepository->update($projectInDB->id,$project_input);
           if ($missing == 0) {
+            $activity = [];
             // Now we need to check if we need to update or create an activity
             $activity['year'] = $yearmonth[0];
             $activity['month'] = $yearmonth[1];
@@ -82,8 +83,8 @@ class OtlUploadController extends Controller
             $activity['project_id'] = $projectInDB->id;
             $activity['task_hour'] = $row->original_time / config('options.time_trak')['hours_in_day'];
             $activity['from_otl'] = 1;
-            $activityInDB = $this->activityRepository->getByOTL($activity['year'],$activity['month'],$userInDB->id,$projectInDB->id,$activity['from_otl']);
-            if (!empty($activityInDB)){
+            $activityInDB = $this->activityRepository->checkIfExists($activity);
+            if (!$activityInDB){
               $this->activityRepository->create($activity);
               array_push($messages,['status'=>'add','msg'=>'Activity created in DB']);
             } else {
