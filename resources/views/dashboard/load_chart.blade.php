@@ -366,6 +366,8 @@
      //- BAR CHART -
      //-------------
      var barChartCanvas = $("#barChart").get(0).getContext("2d");
+     var ctx = $('#barChart');
+     ctx.attr('height',120);
      var barChartOptions = {
         responsive: true,
         title: {
