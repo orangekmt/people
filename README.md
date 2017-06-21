@@ -7,11 +7,11 @@ For Linux Ubuntu
 ```
     sudo apt-get update
     sudo apt-get install apache2 php5 mysql-server libapache2-mod-php5 php5-mysql
-    ```
+```
 2) Install PHPmyadmin
 ```
     sudo apt-get install phpmyadmin
-    ```
+```
 3) Changed owner and group of www with
 ```
     sudo chgrp -R <user> /var/www/html/
